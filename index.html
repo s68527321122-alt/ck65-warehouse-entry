@@ -1,439 +1,315 @@
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <meta name="theme-color" content="#075985">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <meta name="theme-color" content="#f1f5f9">
   <title>บันทึกรายการสินค้า</title>
   <style>
     :root {
-      --primary: #075985;
-      --primary2: #0369a1;
-      --danger: #dc2626;
-      --success: #15803d;
-      --bg: #eef5f9;
-      --card: #ffffff;
-      --text: #0f172a;
+      --primary: #107c10;
+      --primary-dark: #0b5f0b;
+      --danger: #c50f1f;
+      --bg: #edf4f8;
+      --card: #fff;
+      --text: #111827;
       --muted: #64748b;
-      --border: #cbd5e1;
+      --border: #cbd5e1
     }
-    * { box-sizing: border-box; }
-    html, body { margin: 0; min-height: 100%; }
+
+    * {
+      box-sizing: border-box
+    }
+
     body {
+      margin: 0;
+      width: 100%;
       min-height: 100vh;
-      padding: 16px;
+      padding: 8px;
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: center;
+      background: var(--bg);
       font-family: "Segoe UI", Tahoma, Arial, sans-serif;
       color: var(--text);
-      background: linear-gradient(145deg, #e7f1f7, var(--bg));
+      overflow-x: hidden
     }
-    .app { width: 100%; max-width: 560px; }
+
+    .app {
+      width: 100%;
+      max-width: 480px
+    }
+
     .card {
-      overflow: hidden;
       background: var(--card);
-      border-radius: 18px;
-      box-shadow: 0 16px 38px rgba(15, 23, 42, .13);
+      border-radius: 14px;
+      box-shadow: 0 16px 40px rgba(15, 23, 42, .13);
+      overflow: hidden
     }
-    .header {
-      padding: 24px;
-      color: #fff;
-      background: linear-gradient(120deg, var(--primary), var(--primary2));
+
+    form {
+      padding: 18px
     }
-    .header h1 { margin: 0; font-size: 1.65rem; line-height: 1.2; }
-    .header p { margin: 7px 0 0; font-size: .94rem; opacity: .9; }
-    form { padding: 24px; }
-    .field { margin-bottom: 18px; }
-    label { display: block; margin-bottom: 7px; font-weight: 700; }
-    .required { color: var(--danger); }
+
+    .field {
+      margin-bottom: 14px
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 1rem;
+      font-weight: 700
+    }
+
+    .required {
+      color: var(--danger)
+    }
+
     input {
       width: 100%;
-      min-height: 50px;
-      padding: 10px 13px;
+      height: 48px;
+      min-height: 48px;
+      padding: 8px 12px;
       border: 1px solid var(--border);
-      border-radius: 10px;
-      outline: none;
+      border-radius: 9px;
       background: #fff;
       color: var(--text);
       font: inherit;
       font-size: 1rem;
+      outline: none
     }
+
     input:focus {
-      border-color: var(--primary2);
-      box-shadow: 0 0 0 3px rgba(3, 105, 161, .14);
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(16, 124, 16, .13)
     }
-    input.invalid { border-color: var(--danger); }
-    .help { margin-top: 6px; color: var(--muted); font-size: .8rem; }
-    .error { display: none; margin-top: 6px; color: var(--danger); font-size: .82rem; }
-    .scan-status {
+
+    input.invalid {
+      border-color: var(--danger)
+    }
+
+    .help {
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: .82rem
+    }
+
+    .error {
       display: none;
-      margin-bottom: 18px;
-      padding: 11px 13px;
-      border-radius: 9px;
-      color: #075985;
-      background: #e0f2fe;
-      font-size: .88rem;
+      margin-top: 7px;
+      color: var(--danger);
+      font-size: .84rem
     }
-    .buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    button {
-      min-height: 49px;
-      border: 0;
+
+    .status {
+      display: none;
+      margin-bottom: 12px;
+      padding: 9px 11px;
       border-radius: 10px;
-      cursor: pointer;
-      font: inherit;
-      font-weight: 700;
+      font-size: .92rem
     }
-    .clear { color: var(--text); background: #e7edf3; }
-    .submit { color: #fff; background: var(--primary2); }
-    .submit:disabled { opacity: .6; cursor: wait; }
+
+    .status.ok {
+      display: block;
+      color: #166534;
+      background: #dcfce7
+    }
+
+    .status.bad {
+      display: block;
+      color: #991b1b;
+      background: #fee2e2
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px
+    }
+
+    button {
+      height: 48px;
+      min-height: 48px;
+      border: 0;
+      border-radius: 9px;
+      font: inherit;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer
+    }
+
+    .clear {
+      background: #e5ebf1;
+      color: #111827
+    }
+
+    .submit {
+      background: var(--primary);
+      color: #fff
+    }
+
+    .submit:hover {
+      background: var(--primary-dark)
+    }
+
+    button:disabled {
+      opacity: .6;
+      cursor: wait
+    }
+
     .message {
       display: none;
-      margin: 0 24px 24px;
-      padding: 12px 14px;
-      border-radius: 10px;
-      font-size: .9rem;
+      margin: 0 18px 18px;
+      padding: 10px 12px;
+      border-radius: 10px
     }
-    .message.success { display: block; color: #166534; background: #dcfce7; }
-    .message.fail { display: block; color: #991b1b; background: #fee2e2; }
-    .footer { padding: 12px 0 0; color: var(--muted); text-align: center; font-size: .78rem; }
-    @media (max-width: 440px) {
-      body { padding: 9px; align-items: flex-start; }
-      .header { padding: 20px; }
-      .header h1 { font-size: 1.45rem; }
-      form { padding: 20px; }
-      .message { margin: 0 20px 20px; }
-      .buttons { grid-template-columns: 1fr; }
+
+    .message.success {
+      display: block;
+      color: #166534;
+      background: #dcfce7
+    }
+
+    .message.fail {
+      display: block;
+      color: #991b1b;
+      background: #fee2e2
+    }
+
+    .footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: .78rem;
+      padding: 12px
+    }
+
+    @media(max-width:480px) {
+      body {
+        padding: 6px;
+        align-items: flex-start
+      }
+
+      .card {
+        border-radius: 12px
+      }
+
+      form {
+        padding: 16px
+      }
+
+      .field {
+        margin-bottom: 13px
+      }
+
+      .buttons {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px
+      }
+
+      .message {
+        margin: 0 16px 16px
+      }
     }
   </style>
 </head>
+
 <body>
   <main class="app">
     <section class="card">
       <form id="itemForm" novalidate>
-        <div id="scanStatus" class="scan-status" role="status" aria-live="polite"></div>
+        <div id="scanStatus" class="status" role="status" aria-live="polite"></div>
         <div class="field">
           <label for="item">Item <span class="required">*</span></label>
-          <input id="item" name="Item" type="text" maxlength="11"
-                 inputmode="numeric" autocomplete="off" placeholder="Item"
-                 pattern="[0-9]{3}-[0-9]{4}-[0-9]{2}" required>
-          <div class="help">รองรับการสแกน เช่น [)&gt;06P846-2093-10Q48</div>
-          <div id="itemError" class="error">Item ต้องเป็นตัวเลขรูปแบบ 000-0000-00</div>
+          <input id="item" name="Item" type="text" maxlength="11" inputmode="numeric" autocomplete="off"
+            placeholder="546-2081-12" pattern="[0-9]{3}-[0-9]{4}-[0-9]{2}" required>
+          <div id="itemError" class="error">Item ต้องเป็นรูปแบบ 000-0000-00</div>
         </div>
-
         <div class="field">
           <label for="quantity">จำนวน <span class="required">*</span></label>
-          <input id="quantity" name="Quantity" type="number" min="0.01" step="0.01"
-                 inputmode="decimal" autocomplete="off" placeholder="กรอกจำนวน" required>
+          <input id="quantity" name="Quantity" type="number" min="0.01" step="0.01" inputmode="decimal"
+            autocomplete="off" placeholder="กรอกจำนวน" required>
           <div id="quantityError" class="error">กรุณากรอกจำนวนที่มากกว่า 0</div>
         </div>
-
         <div class="field">
           <label for="location">Location <span class="required">*</span></label>
-          <input id="location" name="Location" type="text" maxlength="100"
-                 autocomplete="off" placeholder="กรอกหรือสแกน Location" required>
+          <input id="location" name="Location" type="text" maxlength="100" autocomplete="off"
+            placeholder="กรอกหรือสแกน Location" required>
           <div id="locationError" class="error">กรุณากรอก Location</div>
         </div>
-
-        <div class="buttons">
-          <button type="reset" class="clear">ล้างข้อมูล</button>
-          <button type="submit" id="submitBtn" class="submit">ส่งข้อมูล</button>
-        </div>
+        <div class="buttons"><button type="reset" class="clear">ล้างข้อมูล</button><button type="submit" id="submitBtn"
+            class="submit">ส่งข้อมูล</button></div>
       </form>
-
       <div id="message" class="message" role="status" aria-live="polite"></div>
     </section>
   </main>
-
   <script>
     "use strict";
-
-    // ใส่ URL ของ Power Automate HTTP trigger ภายในเครื่องหมายคำพูด
+    // วาง URL จาก Power Automate: When an HTTP request is received
     const FLOW_URL = "https://default49d8b68c499440779e38e112c21fd0.e3.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/23/workflows/d0b605e33b984ea3a29d66e54a893417/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=BITU1_Uw-axN_haRw-M-caNHTYnB_wwS8sUpWDN1QY0";
-
-    const form = document.getElementById("itemForm");
-    const itemInput = document.getElementById("item");
-    const quantityInput = document.getElementById("quantity");
-    const locationInput = document.getElementById("location");
-    const submitBtn = document.getElementById("submitBtn");
-    const message = document.getElementById("message");
-    const scanStatus = document.getElementById("scanStatus");
-
+    const form = document.getElementById("itemForm"), itemInput = document.getElementById("item"), quantityInput = document.getElementById("quantity"), locationInput = document.getElementById("location"), submitBtn = document.getElementById("submitBtn"), message = document.getElementById("message"), scanStatus = document.getElementById("scanStatus");
     const ITEM_PATTERN = /^\d{3}-\d{4}-\d{2}$/;
-    let scanBuffer = "";
-    let scanTimer = null;
-    let scanStartedAt = 0;
-    let applyingScan = false;
-
-    function setInvalid(inputId, errorId, invalid) {
-      const input = document.getElementById(inputId);
-      const error = document.getElementById(errorId);
-      input.classList.toggle("invalid", invalid);
-      error.style.display = invalid ? "block" : "none";
+    let scanBuffer = "", scanTimer = null, scanStart = 0, isApplying = false;
+    function invalid(inputId, errorId, value) { document.getElementById(inputId).classList.toggle("invalid", value); document.getElementById(errorId).style.display = value ? "block" : "none" }
+    function status(text, type) { scanStatus.textContent = text; scanStatus.className = "status " + type }
+    function clean(value) { return String(value || "").replace(/[\x00-\x1F\x7F]/g, " ").replace(/\s+/g, " ").trim() }
+    function extract(value) {
+      const s = clean(value);
+      // แบบ P/Q เดิม ดึงเฉพาะ Item ไม่ดึงจำนวนหลัง Q
+      let m = s.match(/P(\d{3}-\d{4}-\d{2})(?:Q\d+(?:\.\d+)?)?/i);
+      if (m) return { item: m[1] };
+      // Item ปรากฏที่ใดก็ได้ เช่น ข้อมูลยาวตามด้วย 546-2081-12
+      const items = s.match(/\d{3}-\d{4}-\d{2}/g);
+      if (items && items.length) return { item: items[items.length - 1] };
+      // แบบ P + ตัวเลข 9 หลัก ไม่มีขีด
+      m = s.match(/P(\d{9})(?:Q\d+(?:\.\d+)?)?/i);
+      if (m) { const d = m[1]; return { item: d.slice(0, 3) + "-" + d.slice(3, 7) + "-" + d.slice(7, 9) } }
+      return null;
     }
-
-    function showScanStatus(text, success) {
-      scanStatus.textContent = text;
-      scanStatus.style.display = "block";
-      scanStatus.style.color = success ? "#166534" : "#991b1b";
-      scanStatus.style.background = success ? "#dcfce7" : "#fee2e2";
-    }
-
-    function cleanScannerText(value) {
-      return String(value || "")
-        .replace(/[\x00-\x1F\x7F]/g, "")
-        .replace(/\s+/g, "")
-        .trim();
-    }
-
-function extractScanData(value) {
-  const cleaned = String(value || "")
-    .replace(/[\x00-\x1F\x7F]/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-
-  /*
-   * รองรับรูปแบบเดิม:
-   * [)>06P846-2093-10Q48
-   *
-   * ใช้เฉพาะ Item หลัง P
-   * ไม่ดึงจำนวนหลัง Q
-   */
-  let match = cleaned.match(
-    /P(\d{3}-\d{4}-\d{2})(?:Q\d+(?:\.\d+)?)?/i
-  );
-
-  if (match) {
-    return {
-      item: match[1],
-      quantity: ""
-    };
-  }
-
-  /*
-   * รองรับข้อมูลใหม่ที่มี Item อยู่ท้ายข้อความ
-   * หรือ Item ถูกส่งมาเป็นบรรทัดถัดไป
-   */
-  const allItems = cleaned.match(/\d{3}-\d{4}-\d{2}/g);
-
-  if (allItems && allItems.length > 0) {
-    return {
-      item: allItems[allItems.length - 1],
-      quantity: ""
-    };
-  }
-
-  return null;
-}
-
     function applyScan(value) {
-      const result = extractScanData(value);
-      if (!result) return false;
-
-      applyingScan = true;
-      itemInput.value = result.item;
-      quantityInput.value = result.quantity;
-      setInvalid("item", "itemError", false);
-      setInvalid("quantity", "quantityError", false);
-      message.className = "message";
-      showScanStatus("สแกนสำเร็จ: Item " + result.item + " | จำนวน " + result.quantity, true);
-
-      setTimeout(function () {
-        applyingScan = false;
-        locationInput.focus();
-        locationInput.select();
-      }, 30);
-      return true;
+      const result = extract(value); if (!result) return false;
+      isApplying = true; itemInput.value = result.item;
+      // ไม่ใส่จำนวนจาก Barcode ผู้ใช้กรอกจำนวนเอง
+      invalid("item", "itemError", false); status("สแกนสำเร็จ: Item " + result.item, "ok");
+      setTimeout(() => { isApplying = false; quantityInput.focus(); quantityInput.select() }, 40); return true;
     }
-
-    function finishScan() {
-      clearTimeout(scanTimer);
-      const value = scanBuffer;
-      scanBuffer = "";
-      scanStartedAt = 0;
-
-      if (!value) return false;
-      const success = applyScan(value);
-      if (!success && /[PQ]/i.test(value)) {
-        showScanStatus("อ่าน Barcode ไม่ครบ กรุณาสแกนใหม่", false);
-        itemInput.value = "";
-        quantityInput.value = "";
-        itemInput.focus();
+    function finishScan() { clearTimeout(scanTimer); const value = scanBuffer; scanBuffer = ""; scanStart = 0; if (!value) return false; const ok = applyScan(value); if (!ok && value.length >= 8) { status("ไม่พบ Item รูปแบบ 000-0000-00 กรุณาสแกนใหม่", "bad"); itemInput.focus() } return ok }
+    // รองรับ CK65 Keyboard Wedge ทั้ง Enter/Tab และกรณีไม่มี Suffix
+    document.addEventListener("keydown", function (e) {
+      if (e.ctrlKey || e.altKey || e.metaKey) return;
+      if (e.key === "Enter" || e.key === "Tab") {
+        if (scanBuffer.length >= 8 && finishScan()) { e.preventDefault(); e.stopImmediatePropagation() } return;
       }
-      return success;
-    }
-
-    // CK65 Keyboard Wedge: เก็บอักขระทั้งชุดก่อนประมวลผล
-    document.addEventListener("keydown", function (event) {
-      if (event.ctrlKey || event.altKey || event.metaKey) return;
-
-      if (event.key === "Enter" || event.key === "Tab") {
-        if (scanBuffer.length >= 8) {
-          const success = finishScan();
-          if (success) {
-            event.preventDefault();
-            event.stopImmediatePropagation();
-          }
-        }
-        return;
-      }
-
-      if (event.key.length !== 1) return;
-
-      const now = Date.now();
-      if (!scanStartedAt || now - scanStartedAt > 500) {
-        scanBuffer = "";
-        scanStartedAt = now;
-      }
-
-      scanBuffer += event.key;
-      clearTimeout(scanTimer);
-
-      // ป้องกันอักขระ Barcode แสดงและถูกจัดรูปแบบในช่อง Item ทีละตัว
-      if (scanBuffer.includes("P") || scanBuffer.startsWith("[)>")) {
-        event.preventDefault();
-      }
-
-      // CK65 บางโปรไฟล์ไม่ส่ง Enter จึงประมวลผลหลังหยุดรับ 180 ms
-      scanTimer = setTimeout(finishScan, 180);
+      if (e.key.length !== 1) return;
+      const now = Date.now(); if (!scanStart || now - scanStart > 700) { scanBuffer = ""; scanStart = now }
+      scanBuffer += e.key; clearTimeout(scanTimer); scanTimer = setTimeout(finishScan, 220);
     }, true);
-
-    // รองรับ Wedge Method แบบ Standard/InputMethod ที่ส่งข้อความผ่าน input event
-    itemInput.addEventListener("beforeinput", function (event) {
-      const incoming = event.data || "";
-      if (/[\[\]\(\)>PQ]/i.test(incoming)) {
-        event.preventDefault();
-        scanBuffer += incoming;
-        clearTimeout(scanTimer);
-        scanTimer = setTimeout(finishScan, 180);
-      }
-    });
-
-    // รองรับการวาง Barcode เพื่อทดสอบ
-    itemInput.addEventListener("paste", function (event) {
-      const pasted = event.clipboardData.getData("text");
-      if (extractScanData(pasted)) {
-        event.preventDefault();
-        applyScan(pasted);
-      }
-    });
-
-    // การพิมพ์ Item ด้วยมือ
+    // รองรับ Standard/InputMethod หรือการสแกนลงช่อง Item
     itemInput.addEventListener("input", function () {
-      if (applyingScan) return;
-
+      if (isApplying) return;
       const current = itemInput.value;
-      if (extractScanData(current)) {
-        applyScan(current);
-        return;
-      }
-
-      // หากเป็นข้อมูลสแกนที่กำลังเข้ามา ห้ามนำ Header 06 มาจัดเป็น Item
-      if (/[PQ\[\]\(\)>]/i.test(current)) {
-        scanBuffer += current;
-        itemInput.value = "";
-        clearTimeout(scanTimer);
-        scanTimer = setTimeout(finishScan, 180);
-        return;
-      }
-
-      let digits = current.replace(/\D/g, "").slice(0, 9);
-      let formatted = digits.slice(0, 3);
-      if (digits.length > 3) formatted += "-" + digits.slice(3, 7);
-      if (digits.length > 7) formatted += "-" + digits.slice(7, 9);
-      itemInput.value = formatted;
-
-      setInvalid(
-        "item",
-        "itemError",
-        formatted.length > 0 && !ITEM_PATTERN.test(formatted)
-      );
+      const result = extract(current); if (result) { applyScan(current); return }
+      if (/[A-Za-z,>.\[\]()]/.test(current) || current.length > 11) { scanBuffer += current; itemInput.value = ""; clearTimeout(scanTimer); scanTimer = setTimeout(finishScan, 220); return }
+      let d = current.replace(/\D/g, "").slice(0, 9), f = d.slice(0, 3); if (d.length > 3) f += "-" + d.slice(3, 7); if (d.length > 7) f += "-" + d.slice(7, 9); itemInput.value = f; invalid("item", "itemError", f.length > 0 && !ITEM_PATTERN.test(f));
     });
-
-    function validateForm() {
-      const item = itemInput.value.trim();
-      const quantity = Number(quantityInput.value);
-      const location = locationInput.value.trim();
-      const itemInvalid = !ITEM_PATTERN.test(item);
-      const quantityInvalid = !Number.isFinite(quantity) || quantity <= 0;
-      const locationInvalid = !location;
-
-      setInvalid("item", "itemError", itemInvalid);
-      setInvalid("quantity", "quantityError", quantityInvalid);
-      setInvalid("location", "locationError", locationInvalid);
-      return !itemInvalid && !quantityInvalid && !locationInvalid;
-    }
-
-    function saveLocal(data) {
-      const key = "warehouseItemRecords";
-      const records = JSON.parse(localStorage.getItem(key) || "[]");
-      records.push(data);
-      localStorage.setItem(key, JSON.stringify(records));
-    }
-
-    function showMessage(text, type) {
-      message.textContent = text;
-      message.className = "message " + type;
-    }
-
-    form.addEventListener("reset", function () {
-      setTimeout(function () {
-        document.querySelectorAll("input").forEach(function (input) {
-          input.classList.remove("invalid");
-        });
-        document.querySelectorAll(".error").forEach(function (error) {
-          error.style.display = "none";
-        });
-        scanBuffer = "";
-        clearTimeout(scanTimer);
-        scanStatus.style.display = "none";
-        message.className = "message";
-        itemInput.focus();
-      }, 0);
-    });
-
-    form.addEventListener("submit", async function (event) {
-      event.preventDefault();
-      if (!validateForm()) return;
-
-      const data = {
-        Item: itemInput.value.trim(),
-        Quantity: Number(quantityInput.value),
-        Location: locationInput.value.trim(),
-        SubmittedAt: new Date().toISOString()
-      };
-
-      submitBtn.disabled = true;
-      submitBtn.textContent = "กำลังส่ง...";
-
+    itemInput.addEventListener("paste", function (e) { const v = e.clipboardData.getData("text"); if (extract(v)) { e.preventDefault(); applyScan(v) } });
+    function validate() { const item = itemInput.value.trim(), qty = Number(quantityInput.value), loc = locationInput.value.trim(); const a = !ITEM_PATTERN.test(item), b = !Number.isFinite(qty) || qty <= 0, c = !loc; invalid("item", "itemError", a); invalid("quantity", "quantityError", b); invalid("location", "locationError", c); return !a && !b && !c }
+    function saveLocal(data) { const key = "warehouseItemRecords", rows = JSON.parse(localStorage.getItem(key) || "[]"); rows.push(data); localStorage.setItem(key, JSON.stringify(rows)) }
+    function show(text, type) { message.textContent = text; message.className = "message " + type }
+    form.addEventListener("reset", () => setTimeout(() => { document.querySelectorAll("input").forEach(x => x.classList.remove("invalid")); document.querySelectorAll(".error").forEach(x => x.style.display = "none"); scanBuffer = ""; clearTimeout(scanTimer); scanStatus.className = "status"; message.className = "message"; itemInput.focus() }, 0));
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault(); if (!validate()) return;
+      const data = { Item: itemInput.value.trim(), Quantity: Number(quantityInput.value), Location: locationInput.value.trim(), SubmittedAt: new Date().toISOString() };
+      submitBtn.disabled = true; submitBtn.textContent = "กำลังส่ง...";
       try {
-        if (FLOW_URL) {
-          const response = await fetch(FLOW_URL, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data)
-          });
-          if (!response.ok) throw new Error("HTTP " + response.status);
-          showMessage("ส่งข้อมูลเข้า Microsoft Lists เรียบร้อยแล้ว", "success");
-        } else {
-          saveLocal(data);
-          showMessage("บันทึกไว้ในเครื่องแล้ว กรุณาใส่ FLOW_URL เพื่อส่งเข้า Microsoft Lists", "success");
-        }
-
+        if (FLOW_URL) { const r = await fetch(FLOW_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) }); if (!r.ok) throw new Error("HTTP " + r.status); show("ส่งข้อมูลเข้า Microsoft Lists เรียบร้อยแล้ว", "success") }
+        else { saveLocal(data); show("บันทึกในเครื่องแล้ว กรุณาใส่ FLOW_URL เพื่อส่งเข้า Microsoft Lists", "success") }
         form.reset();
-      } catch (error) {
-        saveLocal(data);
-        showMessage("ส่งออนไลน์ไม่สำเร็จ แต่บันทึกสำรองไว้ในเครื่องแล้ว", "fail");
-        console.error(error);
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.textContent = "ส่งข้อมูล";
-      }
+      } catch (err) { saveLocal(data); show("ส่งออนไลน์ไม่สำเร็จ แต่บันทึกสำรองในเครื่องแล้ว", "fail"); console.error(err) } finally { submitBtn.disabled = false; submitBtn.textContent = "ส่งข้อมูล" }
     });
-
-    window.addEventListener("load", function () {
-      itemInput.focus();
-    });
+    window.addEventListener("load", () => itemInput.focus());
   </script>
 </body>
+
 </html>
