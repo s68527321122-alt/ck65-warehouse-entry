@@ -111,8 +111,7 @@
   <main class="app">
     <section class="card">
       <header class="header">
-        <h1>บันทึกรายการสินค้า</h1>
-        <p>สแกน Barcode แล้วกรอก Location</p>
+
       </header>
 
       <form id="itemForm" novalidate>
@@ -121,7 +120,7 @@
         <div class="field">
           <label for="item">Item <span class="required">*</span></label>
           <input id="item" name="Item" type="text" maxlength="11"
-                 inputmode="numeric" autocomplete="off" placeholder="846-2093-10"
+                 inputmode="numeric" autocomplete="off" placeholder="Item"
                  pattern="[0-9]{3}-[0-9]{4}-[0-9]{2}" required>
           <div class="help">รองรับการสแกน เช่น [)&gt;06P846-2093-10Q48</div>
           <div id="itemError" class="error">Item ต้องเป็นตัวเลขรูปแบบ 000-0000-00</div>
