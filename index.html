@@ -186,26 +186,45 @@
         .trim();
     }
 
-    function extractScanData(value) {
-      const cleaned = cleanScannerText(value);
+function extractScanData(value) {
+  const cleaned = String(value || "")
+    .replace(/[\x00-\x1F\x7F]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 
-      // รูปแบบหลัก: [)>06P846-2093-10Q48
-      let match = cleaned.match(/P(\d{3}-\d{4}-\d{2})Q(\d+(?:\.\d+)?)/i);
+  /*
+   * รองรับรูปแบบเดิม:
+   * [)>06P846-2093-10Q48
+   *
+   * ใช้เฉพาะ Item หลัง P
+   * ไม่ดึงจำนวนหลัง Q
+   */
+  let match = cleaned.match(
+    /P(\d{3}-\d{4}-\d{2})(?:Q\d+(?:\.\d+)?)?/i
+  );
 
-      // สำรองสำหรับสแกนเนอร์ที่ตัดเครื่องหมายขีดออก
-      if (!match) {
-        const compact = cleaned.match(/P(\d{9})Q(\d+(?:\.\d+)?)/i);
-        if (compact) {
-          const digits = compact[1];
-          return {
-            item: digits.slice(0, 3) + "-" + digits.slice(3, 7) + "-" + digits.slice(7, 9),
-            quantity: compact[2]
-          };
-        }
-      }
+  if (match) {
+    return {
+      item: match[1],
+      quantity: ""
+    };
+  }
 
-      return match ? { item: match[1], quantity: match[2] } : null;
-    }
+  /*
+   * รองรับข้อมูลใหม่ที่มี Item อยู่ท้ายข้อความ
+   * หรือ Item ถูกส่งมาเป็นบรรทัดถัดไป
+   */
+  const allItems = cleaned.match(/\d{3}-\d{4}-\d{2}/g);
+
+  if (allItems && allItems.length > 0) {
+    return {
+      item: allItems[allItems.length - 1],
+      quantity: ""
+    };
+  }
+
+  return null;
+}
 
     function applyScan(value) {
       const result = extractScanData(value);
