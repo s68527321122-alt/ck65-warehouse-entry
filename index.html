@@ -1,159 +1,118 @@
 <!doctype html>
 <html lang="th">
-
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-    <title>บันทึกรายการสินค้า</title>
-    <style>
-        * {
-            box-sizing: border-box
-        }
-
-        body {
-            margin: 0;
-            background: #edf4f8;
-            font-family: Segoe UI, Tahoma, sans-serif;
-            color: #111827;
-            padding: 6px
-        }
-
-        .card {
-            max-width: 480px;
-            margin: 0 auto;
-            background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 10px 28px #0f172a20;
-            padding: 16px
-        }
-
-        .field {
-            margin-bottom: 13px
-        }
-
-        label {
-            display: block;
-            font-weight: 700;
-            margin-bottom: 5px
-        }
-
-        .req {
-            color: #c50f1f
-        }
-
-        input {
-            width: 100%;
-            height: 48px;
-            border: 1px solid #cbd5e1;
-            border-radius: 9px;
-            padding: 8px 12px;
-            font: inherit;
-            font-size: 16px;
-            outline: none
-        }
-
-        input:focus {
-            border-color: #107c10;
-            box-shadow: 0 0 0 3px #107c1022
-        }
-
-        .bad {
-            border-color: #c50f1f
-        }
-
-        .err {
-            display: none;
-            color: #c50f1f;
-            font-size: 12px;
-            margin-top: 4px
-        }
-
-        .status,
-        .msg {
-            display: none;
-            padding: 9px 11px;
-            border-radius: 9px;
-            margin-bottom: 12px;
-            font-size: 13px
-        }
-
-        .ok {
-            display: block;
-            background: #dcfce7;
-            color: #166534
-        }
-
-        .fail {
-            display: block;
-            background: #fee2e2;
-            color: #991b1b
-        }
-
-        .buttons {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px
-        }
-
-        button {
-            height: 48px;
-            border: 0;
-            border-radius: 9px;
-            font: inherit;
-            font-weight: 700
-        }
-
-        .clear {
-            background: #e5ebf1
-        }
-
-        .submit {
-            background: #107c10;
-            color: #fff
-        }
-
-        button:disabled {
-            opacity: .6
-        }
-    </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#edf4f8">
+<title>CK65 Warehouse Entry</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;min-height:100%}body{background:#edf4f8;font-family:"Segoe UI",Tahoma,Arial,sans-serif;color:#111827;padding:6px}.card{width:100%;max-width:480px;margin:0 auto;background:#fff;border-radius:12px;box-shadow:0 10px 28px rgba(15,23,42,.13);padding:16px}.hidden{display:none!important}.userbar{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px;padding:9px 11px;border-radius:9px;background:#f1f5f9;font-size:13px}.userbar strong{display:block;max-width:305px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.logout{height:34px;padding:0 12px;background:#64748b;color:#fff}.field{margin-bottom:13px}label{display:block;margin-bottom:5px;font-weight:700}.req{color:#c50f1f}input{width:100%;height:48px;border:1px solid #cbd5e1;border-radius:9px;padding:8px 12px;font:inherit;font-size:16px;outline:none;background:#fff}input:focus{border-color:#107c10;box-shadow:0 0 0 3px rgba(16,124,16,.13)}input.bad{border-color:#c50f1f;background:#fff7f7}input.valid{border-color:#107c10;background:#f0fdf4}.err{display:none;margin-top:4px;color:#c50f1f;font-size:12px}.status,.msg{display:none;padding:9px 11px;border-radius:9px;margin-bottom:12px;font-size:13px}.ok{display:block;background:#dcfce7;color:#166534}.fail{display:block;background:#fee2e2;color:#991b1b}.checking{display:block;background:#e0f2fe;color:#075985}.buttons{display:grid;grid-template-columns:1fr 1fr;gap:8px}button{height:48px;border:0;border-radius:9px;font:inherit;font-weight:700;cursor:pointer}.clear{background:#e5ebf1;color:#111827}.primary{background:#107c10;color:#fff}.login-btn{width:100%;background:#107c10;color:#fff}.password-wrap{position:relative}.password-wrap input{padding-right:72px}.showpass{position:absolute;right:5px;top:5px;width:62px;height:38px;background:#e5ebf1;font-size:12px}button:disabled{opacity:.6;cursor:wait}.login-title{font-size:20px;font-weight:750;text-align:center;margin:3px 0 16px}.login-note{font-size:12px;color:#64748b;text-align:center;margin-top:10px}.spinner{display:inline-block;width:13px;height:13px;margin-right:6px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;vertical-align:-2px;animation:spin .7s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+</style>
 </head>
-
 <body>
-    <main class="card">
-        <div id="status" class="status"></div>
-        <form id="form" novalidate>
-            <div class="field"><label>Item <span class="req">*</span></label><input id="item" maxlength="11"
-                    inputmode="numeric" placeholder="546-2081-12">
-                <div id="itemErr" class="err">Item ต้องเป็นรูปแบบ 000-0000-00</div>
-            </div>
-            <div class="field"><label>จำนวน <span class="req">*</span></label><input id="qty" type="number" min="0.01"
-                    step="0.01" inputmode="decimal" placeholder="กรอกจำนวน">
-                <div id="qtyErr" class="err">กรุณากรอกจำนวนที่มากกว่า 0</div>
-            </div>
-            <div class="field"><label>Location <span class="req">*</span></label><input id="loc" maxlength="100"
-                    placeholder="กรอกหรือสแกน Location">
-                <div id="locErr" class="err">กรุณากรอก Location</div>
-            </div>
-            <div class="buttons"><button class="clear" type="reset">ล้างข้อมูล</button><button class="submit" id="send"
-                    type="submit">ส่งข้อมูล</button></div>
-        </form>
-        <div id="msg" class="msg"></div>
-    </main>
-    <script>"use strict";
-        const FLOW_URL = "https://default49d8b68c499440779e38e112c21fd0.e3.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/23/workflows/d0b605e33b984ea3a29d66e54a893417/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=BITU1_Uw-axN_haRw-M-caNHTYnB_wwS8sUpWDN1QY0";
-        const form = document.querySelector("#form"), item = document.querySelector("#item"), qty = document.querySelector("#qty"), loc = document.querySelector("#loc"), statusBox = document.querySelector("#status"), msg = document.querySelector("#msg"), send = document.querySelector("#send");
-        const ITEM = /^\d{3}-\d{4}-\d{2}$/; let buffer = "", timer = 0, started = 0, applying = false;
-        function clean(v) { return String(v || "").replace(/[\x00-\x1f\x7f]/g, " ").replace(/\s+/g, " ").trim() }
-        function extract(v) { const s = clean(v); let m = s.match(/P(\d{3}-\d{4}-\d{2})(?:Q\d+(?:\.\d+)?)?/i); if (m) return m[1]; const found = s.match(/\d{3}-\d{4}-\d{2}/g); if (found) return found[found.length - 1]; m = s.match(/^(\d)(\d{7})(?=,)/); if (m) { const d = m[1] + "4" + m[2]; return d.slice(0, 3) + "-" + d.slice(3, 7) + "-" + d.slice(7, 9) } m = s.match(/P(\d{9})(?:Q\d+(?:\.\d+)?)?/i); if (m) { const d = m[1]; return d.slice(0, 3) + "-" + d.slice(3, 7) + "-" + d.slice(7, 9) } return "" }
-        function showStatus(t, ok) { statusBox.textContent = t; statusBox.className = "status " + (ok ? "ok" : "fail") }
-        function apply(v) { const x = extract(v); if (!x) return false; applying = true; item.value = x; showStatus("สแกนสำเร็จ: Item " + x, true); setTimeout(() => { applying = false; qty.focus(); qty.select() }, 30); return true }
-        function finish() { clearTimeout(timer); const v = buffer; buffer = ""; started = 0; if (!v) return false; const ok = apply(v); if (!ok && v.length > 7) showStatus("ไม่พบ Item กรุณาสแกนใหม่", false); return ok }
-        document.addEventListener("keydown", e => { if (e.ctrlKey || e.altKey || e.metaKey) return; if (e.key === "Enter" || e.key === "Tab") { if (buffer.length > 7 && finish()) { e.preventDefault(); e.stopImmediatePropagation() } return } if (e.key.length !== 1) return; const now = Date.now(); if (!started || now - started > 700) { buffer = ""; started = now } buffer += e.key; clearTimeout(timer); timer = setTimeout(finish, 220) }, true);
-        item.addEventListener("input", () => { if (applying) return; const cur = item.value, x = extract(cur); if (x) { apply(cur); return } if (/[A-Za-z,>.\[\]()]/.test(cur) || cur.length > 11) { buffer += cur; item.value = ""; clearTimeout(timer); timer = setTimeout(finish, 220); return } let d = cur.replace(/\D/g, "").slice(0, 9), f = d.slice(0, 3); if (d.length > 3) f += "-" + d.slice(3, 7); if (d.length > 7) f += "-" + d.slice(7); item.value = f });
-        item.addEventListener("paste", e => { const v = e.clipboardData.getData("text"); if (extract(v)) { e.preventDefault(); apply(v) } });
-        function setBad(el, err, b) { el.classList.toggle("bad", b); err.style.display = b ? "block" : "none" }
-        form.addEventListener("reset", () => setTimeout(() => { statusBox.className = "status"; msg.className = "msg"; document.querySelectorAll(".err").forEach(x => x.style.display = "none"); item.focus() }, 0));
-        form.addEventListener("submit", async e => { e.preventDefault(); const q = Number(qty.value), a = !ITEM.test(item.value), b = !Number.isFinite(q) || q <= 0, c = !loc.value.trim(); setBad(item, itemErr, a); setBad(qty, qtyErr, b); setBad(loc, locErr, c); if (a || b || c) return; const data = { Item: item.value, Quantity: q, Location: loc.value.trim(), SubmittedAt: new Date().toISOString() }; send.disabled = true; send.textContent = "กำลังส่ง..."; try { if (FLOW_URL) { const r = await fetch(FLOW_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) }); if (!r.ok) throw Error(r.status); msg.textContent = "ส่งข้อมูลเรียบร้อยแล้ว" } else { const rows = JSON.parse(localStorage.getItem("warehouseItemRecords") || "[]"); rows.push(data); localStorage.setItem("warehouseItemRecords", JSON.stringify(rows)); msg.textContent = "บันทึกในเครื่องแล้ว กรุณาใส่ FLOW_URL" } msg.className = "msg ok"; form.reset() } catch (x) { msg.textContent = "ส่งไม่สำเร็จ"; msg.className = "msg fail" } finally { send.disabled = false; send.textContent = "ส่งข้อมูล" } }); window.addEventListener("load", () => item.focus());</script>
-</body>
+<main class="card">
+  <section id="loginPanel">
+    <div class="login-title">ลงชื่อเข้าใช้</div>
+    <div id="loginStatus" class="status" role="status" aria-live="polite"></div>
+    <form id="loginForm" novalidate>
+      <div class="field">
+        <label for="username">Username <span class="req">*</span></label>
+        <input id="username" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="กรอก Username">
+        <div id="usernameErr" class="err">กรุณากรอก Username</div>
+      </div>
+      <div class="field">
+        <label for="password">Password <span class="req">*</span></label>
+        <div class="password-wrap">
+          <input id="password" type="password" autocomplete="current-password" placeholder="กรอก Password">
+          <button id="showPassword" class="showpass" type="button">แสดง</button>
+        </div>
+        <div id="passwordErr" class="err">กรุณากรอก Password</div>
+      </div>
+      <button id="loginButton" class="login-btn" type="submit">เข้าสู่ระบบ</button>
+    </form>
+    <div class="login-note">บัญชีสำหรับระบบ CK65 เท่านั้น</div>
+  </section>
 
-</html>
+  <section id="entryPanel" class="hidden">
+    <div class="userbar">
+      <div>ผู้ใช้งาน: <strong id="signedInUser"></strong></div>
+      <button id="logoutButton" class="logout" type="button">ออก</button>
+    </div>
+    <div id="scanStatus" class="status" role="status" aria-live="polite"></div>
+    <form id="entryForm" novalidate>
+      <div class="field">
+        <label for="item">Item <span class="req">*</span></label>
+        <input id="item" maxlength="11" inputmode="numeric" autocomplete="off" placeholder="546-2081-12">
+        <div id="itemErr" class="err">Item ต้องเป็นรูปแบบ 000-0000-00</div>
+      </div>
+      <div class="field">
+        <label for="quantity">จำนวน <span class="req">*</span></label>
+        <input id="quantity" type="number" min="0.01" step="0.01" inputmode="decimal" autocomplete="off" placeholder="กรอกจำนวน">
+        <div id="quantityErr" class="err">กรุณากรอกจำนวนที่มากกว่า 0</div>
+      </div>
+      <div class="field">
+        <label for="location">Location <span class="req">*</span></label>
+        <input id="location" maxlength="100" autocomplete="off" placeholder="กรอกหรือสแกน Location">
+        <div id="locationErr" class="err">กรุณากรอก Location</div>
+      </div>
+      <div class="buttons">
+        <button class="clear" type="reset">ล้างข้อมูล</button>
+        <button id="sendButton" class="primary" type="submit">ตรวจสอบและส่ง</button>
+      </div>
+    </form>
+    <div id="entryMessage" class="msg" role="status" aria-live="polite"></div>
+  </section>
+</main>
+<script>
+"use strict";
+
+/* URL Flow 1: ตรวจสอบ Username/Password จาก CK65_Users */
+const LOGIN_FLOW_URL = "https://default49d8b68c499440779e38e112c21fd0.e3.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/10/workflows/12eb496a14694a46be3f7baac94776af/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=5AzPaEhlQITweSyxj7iF8hZ2jn8YYYO6two1_hirDpI";
+/* URL Flow 2: ตรวจสอบ Item และ Create item */
+const ENTRY_FLOW_URL = "https://default49d8b68c499440779e38e112c21fd0.e3.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/23/workflows/d0b605e33b984ea3a29d66e54a893417/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=BITU1_Uw-axN_haRw-M-caNHTYnB_wwS8sUpWDN1QY0";
+
+const loginPanel=document.querySelector("#loginPanel"),entryPanel=document.querySelector("#entryPanel"),loginForm=document.querySelector("#loginForm"),entryForm=document.querySelector("#entryForm"),username=document.querySelector("#username"),password=document.querySelector("#password"),loginButton=document.querySelector("#loginButton"),loginStatus=document.querySelector("#loginStatus"),showPassword=document.querySelector("#showPassword"),signedInUser=document.querySelector("#signedInUser"),logoutButton=document.querySelector("#logoutButton"),item=document.querySelector("#item"),quantity=document.querySelector("#quantity"),locationInput=document.querySelector("#location"),scanStatus=document.querySelector("#scanStatus"),entryMessage=document.querySelector("#entryMessage"),sendButton=document.querySelector("#sendButton");
+const ITEM_PATTERN=/^\d{3}-\d{4}-\d{2}$/;
+let currentUser=null,scanBuffer="",scanTimer=0,scanStarted=0,isApplying=false;
+
+function setInvalid(el,errorId,bad){el.classList.toggle("bad",bad);document.querySelector(errorId).style.display=bad?"block":"none"}
+function setStatus(el,text,type){el.textContent=text;el.className="status "+type}
+function clearStatus(el){el.textContent="";el.className="status"}
+async function readJson(response){try{return await response.json()}catch{return{valid:false,message:"Power Automate ไม่ได้ส่ง JSON กลับมา"}}}
+
+showPassword.addEventListener("click",()=>{const hidden=password.type==="password";password.type=hidden?"text":"password";showPassword.textContent=hidden?"ซ่อน":"แสดง";password.focus()});
+
+function openEntry(user){currentUser={username:user.username,displayName:user.displayName||user.username};sessionStorage.setItem("ck65User",JSON.stringify(currentUser));signedInUser.textContent=currentUser.displayName;loginPanel.classList.add("hidden");entryPanel.classList.remove("hidden");password.value="";setTimeout(()=>item.focus(),50)}
+function logout(){currentUser=null;sessionStorage.removeItem("ck65User");entryForm.reset();entryPanel.classList.add("hidden");loginPanel.classList.remove("hidden");clearStatus(loginStatus);username.focus()}
+logoutButton.addEventListener("click",logout);
+
+loginForm.addEventListener("submit",async e=>{
+ e.preventDefault();const u=username.value.trim(),p=password.value;setInvalid(username,"#usernameErr",!u);setInvalid(password,"#passwordErr",!p);if(!u||!p)return;
+ if(!LOGIN_FLOW_URL){setStatus(loginStatus,"ยังไม่ได้กำหนด LOGIN_FLOW_URL","fail");return}
+ loginButton.disabled=true;loginButton.innerHTML='<span class="spinner"></span>กำลังตรวจสอบ';setStatus(loginStatus,"กำลังตรวจสอบบัญชีจาก Microsoft Lists...","checking");
+ try{const response=await fetch(LOGIN_FLOW_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"login",username:u,password:p})});const result=await readJson(response);if(!response.ok)throw new Error(result.message||"HTTP "+response.status);if(result.valid===true){setStatus(loginStatus,result.message||"เข้าสู่ระบบสำเร็จ","ok");openEntry({username:u,displayName:result.displayName||u})}else{password.value="";setStatus(loginStatus,result.message||"ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง","fail");password.focus()}}
+ catch(err){setStatus(loginStatus,"เชื่อมต่อระบบลงชื่อเข้าใช้ไม่สำเร็จ: "+err.message,"fail")}
+ finally{loginButton.disabled=false;loginButton.textContent="เข้าสู่ระบบ"}
+});
+
+function clean(v){return String(v||"").replace(/[\x00-\x1f\x7f]/g," ").replace(/\s+/g," ").trim()}
+function extractItem(v){const s=clean(v);let m=s.match(/P(\d{3}-\d{4}-\d{2})(?:Q\d+(?:\.\d+)?)?/i);if(m)return m[1];const found=s.match(/\d{3}-\d{4}-\d{2}/g);if(found)return found[found.length-1];m=s.match(/^(\d)(\d{7})(?=,)/);if(m){const d=m[1]+"4"+m[2];return d.slice(0,3)+"-"+d.slice(3,7)+"-"+d.slice(7,9)}m=s.match(/P(\d{9})(?:Q\d+(?:\.\d+)?)?/i);if(m){const d=m[1];return d.slice(0,3)+"-"+d.slice(3,7)+"-"+d.slice(7,9)}return""}
+function applyScan(v){const value=extractItem(v);if(!value)return false;isApplying=true;item.value=value;item.classList.remove("bad","valid");setStatus(scanStatus,"อ่าน Item ได้: "+value,"ok");setTimeout(()=>{isApplying=false;quantity.focus();quantity.select()},30);return true}
+function finishScan(){clearTimeout(scanTimer);const value=scanBuffer;scanBuffer="";scanStarted=0;if(!value)return false;const valid=applyScan(value);if(!valid&&value.length>7)setStatus(scanStatus,"ไม่พบ Item กรุณาสแกนใหม่","fail");return valid}
+document.addEventListener("keydown",e=>{if(entryPanel.classList.contains("hidden")||e.ctrlKey||e.altKey||e.metaKey)return;if(e.key==="Enter"||e.key==="Tab"){if(scanBuffer.length>7&&finishScan()){e.preventDefault();e.stopImmediatePropagation()}return}if(e.key.length!==1)return;const now=Date.now();if(!scanStarted||now-scanStarted>700){scanBuffer="";scanStarted=now}scanBuffer+=e.key;clearTimeout(scanTimer);scanTimer=setTimeout(finishScan,220)},true);
+item.addEventListener("input",()=>{item.classList.remove("valid");if(isApplying)return;const current=item.value,x=extractItem(current);if(x){applyScan(current);return}if(/[A-Za-z,>.\[\]()]/.test(current)||current.length>11){scanBuffer+=current;item.value="";clearTimeout(scanTimer);scanTimer=setTimeout(finishScan,220);return}let digits=current.replace(/\D/g,"").slice(0,9),formatted=digits.slice(0,3);if(digits.length>3)formatted+="-"+digits.slice(3,7);if(digits.length>7)formatted+="-"+digits.slice(7);item.value=formatted});
+item.addEventListener("paste",e=>{const value=e.clipboardData.getData("text");if(extractItem(value)){e.preventDefault();applyScan(value)}});
+
+entryForm.addEventListener("reset",()=>setTimeout(()=>{clearStatus(scanStatus);entryMessage.className="msg";document.querySelectorAll("#entryPanel .err").forEach(x=>x.style.display="none");document.querySelectorAll("#entryPanel input").forEach(x=>x.classList.remove("bad","valid"));item.focus()},0));
+entryForm.addEventListener("submit",async e=>{
+ e.preventDefault();if(!currentUser){logout();return}const q=Number(quantity.value),badItem=!ITEM_PATTERN.test(item.value),badQty=!Number.isFinite(q)||q<=0,badLoc=!locationInput.value.trim();setInvalid(item,"#itemErr",badItem);setInvalid(quantity,"#quantityErr",badQty);setInvalid(locationInput,"#locationErr",badLoc);if(badItem||badQty||badLoc)return;
+ if(!ENTRY_FLOW_URL){setStatus(scanStatus,"ยังไม่ได้กำหนด ENTRY_FLOW_URL","fail");return}
+ const payload={Item:item.value,Quantity:q,Location:locationInput.value.trim(),UserName:currentUser.displayName,UserLogin:currentUser.username,SubmittedAt:new Date().toISOString()};sendButton.disabled=true;sendButton.innerHTML='<span class="spinner"></span>กำลังตรวจสอบ';setStatus(scanStatus,"กำลังตรวจสอบ Item จาก Microsoft Lists...","checking");
+ try{const response=await fetch(ENTRY_FLOW_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});const result=await readJson(response);if(!response.ok)throw new Error(result.message||"HTTP "+response.status);if(result.valid===false){item.classList.add("bad");setStatus(scanStatus,result.message||"ไม่พบ Item นี้ใน Microsoft Lists","fail");item.focus();return}item.classList.add("valid");entryMessage.textContent=result.message||"ตรวจสอบและบันทึกข้อมูลเรียบร้อยแล้ว";entryMessage.className="msg ok";entryForm.reset()}
+ catch(err){setStatus(scanStatus,"เชื่อมต่อ Power Automate ไม่สำเร็จ: "+err.message,"fail")}
+ finally{sendButton.disabled=false;sendButton.textContent="ตรวจสอบและส่ง"}
+});
+
+window.addEventListener("load",()=>{let saved=null;try{saved=JSON.parse(sessionStorage.getItem("ck65User")||"null")}catch{}if(saved&&saved.username)openEntry(saved);else username.focus()});
+</script>
+</body></html>
