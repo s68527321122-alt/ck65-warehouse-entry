@@ -69,7 +69,7 @@
 /* URL Flow 1: ตรวจสอบ Username/Password จาก CK65_Users */
 const LOGIN_FLOW_URL = "https://default49d8b68c499440779e38e112c21fd0.e3.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/10/workflows/12eb496a14694a46be3f7baac94776af/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=5AzPaEhlQITweSyxj7iF8hZ2jn8YYYO6two1_hirDpI";
 /* URL Flow 2: ตรวจสอบ Item และ Create item */
-const ENTRY_FLOW_URL = "https://default49d8b68c499440779e38e112c21fd0.e3.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/23/workflows/d0b605e33b984ea3a29d66e54a893417/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=BITU1_Uw-axN_haRw-M-caNHTYnB_wwS8sUpWDN1QY0";
+let ENTRY_FLOW_URL = ""; // รับจาก result.flowUrl ซึ่งมาจาก varUrl ใน Login Flow
 
 const loginPanel=document.querySelector("#loginPanel"),entryPanel=document.querySelector("#entryPanel"),loginForm=document.querySelector("#loginForm"),entryForm=document.querySelector("#entryForm"),username=document.querySelector("#username"),password=document.querySelector("#password"),loginButton=document.querySelector("#loginButton"),loginStatus=document.querySelector("#loginStatus"),showPassword=document.querySelector("#showPassword"),signedInUser=document.querySelector("#signedInUser"),logoutButton=document.querySelector("#logoutButton"),item=document.querySelector("#item"),quantity=document.querySelector("#quantity"),locationInput=document.querySelector("#location"),scanStatus=document.querySelector("#scanStatus"),entryMessage=document.querySelector("#entryMessage"),sendButton=document.querySelector("#sendButton");
 const ITEM_PATTERN=/^\d{3}-\d{4}-\d{2}$/;
@@ -82,15 +82,15 @@ async function readJson(response){try{return await response.json()}catch{return{
 
 showPassword.addEventListener("click",()=>{const hidden=password.type==="password";password.type=hidden?"text":"password";showPassword.textContent=hidden?"ซ่อน":"แสดง";password.focus()});
 
-function openEntry(user){currentUser={username:user.username,displayName:user.displayName||user.username};sessionStorage.setItem("ck65User",JSON.stringify(currentUser));signedInUser.textContent=currentUser.displayName;loginPanel.classList.add("hidden");entryPanel.classList.remove("hidden");password.value="";setTimeout(()=>item.focus(),50)}
-function logout(){currentUser=null;sessionStorage.removeItem("ck65User");entryForm.reset();entryPanel.classList.add("hidden");loginPanel.classList.remove("hidden");clearStatus(loginStatus);username.focus()}
+function openEntry(user){currentUser={username:user.username,displayName:user.displayName||user.username,role:user.role||"User",flowUrl:user.flowUrl||""};ENTRY_FLOW_URL=currentUser.flowUrl;sessionStorage.setItem("ck65User",JSON.stringify(currentUser));signedInUser.textContent=currentUser.displayName;loginPanel.classList.add("hidden");entryPanel.classList.remove("hidden");password.value="";setTimeout(()=>item.focus(),50)}
+function logout(){currentUser=null;ENTRY_FLOW_URL="";sessionStorage.removeItem("ck65User");entryForm.reset();entryPanel.classList.add("hidden");loginPanel.classList.remove("hidden");clearStatus(loginStatus);username.focus()}
 logoutButton.addEventListener("click",logout);
 
 loginForm.addEventListener("submit",async e=>{
  e.preventDefault();const u=username.value.trim(),p=password.value;setInvalid(username,"#usernameErr",!u);setInvalid(password,"#passwordErr",!p);if(!u||!p)return;
  if(!LOGIN_FLOW_URL){setStatus(loginStatus,"ยังไม่ได้กำหนด LOGIN_FLOW_URL","fail");return}
  loginButton.disabled=true;loginButton.innerHTML='<span class="spinner"></span>กำลังตรวจสอบ';setStatus(loginStatus,"กำลังตรวจสอบบัญชีจาก Microsoft Lists...","checking");
- try{const response=await fetch(LOGIN_FLOW_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"login",username:u,password:p})});const result=await readJson(response);if(!response.ok)throw new Error(result.message||"HTTP "+response.status);if(result.valid===true){setStatus(loginStatus,result.message||"เข้าสู่ระบบสำเร็จ","ok");openEntry({username:u,displayName:result.displayName||u})}else{password.value="";setStatus(loginStatus,result.message||"ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง","fail");password.focus()}}
+ try{const response=await fetch(LOGIN_FLOW_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({appName:"CK65url",employeeId:u,password:p})});const result=await readJson(response);if(!response.ok)throw new Error(result.message||"HTTP "+response.status);if(result.valid===true||result.authorized===true){if(!result.flowUrl)throw new Error("Login Flow ไม่ได้ส่ง flowUrl จาก varUrl กลับมา");setStatus(loginStatus,result.message||"เข้าสู่ระบบสำเร็จ","ok");openEntry({username:u,displayName:result.displayName||u,role:result.role||"User",flowUrl:result.flowUrl})}else{password.value="";setStatus(loginStatus,result.message||"ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง","fail");password.focus()}}
  catch(err){setStatus(loginStatus,"เชื่อมต่อระบบลงชื่อเข้าใช้ไม่สำเร็จ: "+err.message,"fail")}
  finally{loginButton.disabled=false;loginButton.textContent="เข้าสู่ระบบ"}
 });
