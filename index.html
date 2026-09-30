@@ -42,7 +42,7 @@
     <form id="entryForm" novalidate>
       <div class="field">
         <label for="item">Item <span class="req">*</span></label>
-        <input id="item" maxlength="11" inputmode="numeric" autocomplete="off" placeholder="กรอกพาร์ท">
+        <input id="item" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="กรอกหรือสแกนพาร์ท">
         <div id="itemErr" class="err">Item ต้องเป็นรูปแบบ 000-0000-00</div>
       </div>
       <div class="field">
@@ -113,7 +113,7 @@ function applyScan(v){
  item.value=data.item;
  item.classList.remove("bad","valid");
  if(data.quantity)quantity.value=data.quantity;
- if(locationInput.value&&clean(locationInput.value).includes(data.item))locationInput.value="";
+ if(locationInput.value&&(/P\s*\d/i.test(locationInput.value)||clean(locationInput.value).includes(data.item)))locationInput.value="";
  setStatus(scanStatus,"อ่าน Data Matrix ได้: "+data.item+(data.quantity?" | จำนวน "+data.quantity:""),"ok");
  setTimeout(()=>{isApplying=false;(data.quantity?locationInput:quantity).focus();if(!data.quantity)quantity.select()},50);
  return true;
@@ -135,7 +135,7 @@ document.addEventListener("keydown",e=>{
  if(e.key.length!==1)return;
  if(!scanStarted||now-scanStarted>160){scanBuffer=""}
  scanStarted=now;scanBuffer+=e.key;
- clearTimeout(scanTimer);scanTimer=setTimeout(finishScan,320);
+ clearTimeout(scanTimer);scanTimer=setTimeout(finishScan,500);
 },true);
 [item,quantity,locationInput].forEach(el=>el.addEventListener("input",()=>{
  if(isApplying)return;
@@ -143,7 +143,7 @@ document.addEventListener("keydown",e=>{
  if(/[Pp][\s\d-]{7,}|[Qq]\s*\d+|[)>\x1d\x1e\x1d]/.test(raw)){
   clearTimeout(scanTimer);scanBuffer+=raw;
   if(el!==item)el.value="";
-  scanTimer=setTimeout(finishScan,120);
+  scanTimer=setTimeout(finishScan,500);
  }
 }));
 item.addEventListener("input",()=>{
