@@ -7,6 +7,8 @@
 <title>CK65 Warehouse Entry</title>
 <style>
 *{box-sizing:border-box}html,body{margin:0;width:100%;min-height:100%}body{background:#edf4f8;font-family:"Segoe UI",Tahoma,Arial,sans-serif;color:#111827;padding:6px}.card{width:100%;max-width:480px;margin:0 auto;background:#fff;border-radius:12px;box-shadow:0 10px 28px rgba(15,23,42,.13);padding:16px}.hidden{display:none!important}.userbar{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px;padding:9px 11px;border-radius:9px;background:#f1f5f9;font-size:13px}.userbar strong{display:block;max-width:305px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.logout{height:34px;padding:0 12px;background:#64748b;color:#fff}.field{margin-bottom:13px}label{display:block;margin-bottom:5px;font-weight:700}.req{color:#c50f1f}input{width:100%;height:48px;border:1px solid #cbd5e1;border-radius:9px;padding:8px 12px;font:inherit;font-size:16px;outline:none;background:#fff}input:focus{border-color:#107c10;box-shadow:0 0 0 3px rgba(16,124,16,.13)}input.bad{border-color:#c50f1f;background:#fff7f7}input.valid{border-color:#107c10;background:#f0fdf4}.err{display:none;margin-top:4px;color:#c50f1f;font-size:12px}.status,.msg{display:none;padding:9px 11px;border-radius:9px;margin-bottom:12px;font-size:13px}.ok{display:block;background:#dcfce7;color:#166534}.fail{display:block;background:#fee2e2;color:#991b1b}.checking{display:block;background:#e0f2fe;color:#075985}.buttons{display:grid;grid-template-columns:1fr 1fr;gap:8px}button{height:48px;border:0;border-radius:9px;font:inherit;font-weight:700;cursor:pointer}.clear{background:#e5ebf1;color:#111827}.primary{background:#107c10;color:#fff}.login-btn{width:100%;background:#107c10;color:#fff}.password-wrap{position:relative}.password-wrap input{padding-right:72px}.showpass{position:absolute;right:5px;top:5px;width:62px;height:38px;background:#e5ebf1;font-size:12px}button:disabled{opacity:.6;cursor:wait}.login-title{font-size:20px;font-weight:750;text-align:center;margin:3px 0 16px}.login-note{font-size:12px;color:#64748b;text-align:center;margin-top:10px}.spinner{display:inline-block;width:13px;height:13px;margin-right:6px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;vertical-align:-2px;animation:spin .7s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+
+select,textarea{width:100%;border:1px solid #cbd5e1;border-radius:9px;padding:8px 12px;font:inherit;font-size:16px;outline:none;background:#fff}select{height:48px}textarea{min-height:86px;resize:vertical}select:focus,textarea:focus{border-color:#107c10;box-shadow:0 0 0 3px rgba(16,124,16,.13)}.panel-title{font-size:19px;font-weight:800;margin:0 0 13px}.dhl-title{color:#d40511}.dhl-primary{background:#d40511;color:#fff}.dhl-file-list{list-style:none;padding:0;margin:7px 0}.dhl-file-list li{display:flex;justify-content:space-between;gap:8px;background:#f8fafc;padding:7px 9px;border-radius:7px;margin-top:5px;font-size:12px}.file-remove{height:auto;padding:0;background:transparent;color:#b91c1c}.home{height:34px;padding:0 10px;background:#2563eb;color:#fff}.user-actions{display:flex;gap:5px}.file-note{font-size:12px;color:#64748b;margin-top:4px}
 </style>
 </head>
 <body>
@@ -28,9 +30,32 @@
         </div>
         <div id="passwordErr" class="err">กรุณากรอก Password</div>
       </div>
+      <div class="field">
+        <label for="appSelect">เลือก App <span class="req">*</span></label>
+        <select id="appSelect">
+          <option value="CK65url">📦 CK65 Warehouse Entry</option>
+          <option value="DHLurl">🚚 DHL Material Inspection</option>
+        </select>
+      </div>
       <button id="loginButton" class="login-btn" type="submit">เข้าสู่ระบบ</button>
     </form>
     <div class="login-note">บัญชีสำหรับระบบ CK65 เท่านั้น</div>
+  </section>
+
+  <section id="dhlPanel" class="hidden">
+    <div class="userbar"><div>ผู้ใช้งาน: <strong id="dhlSignedInUser"></strong></div><button id="dhlLogoutButton" class="logout" type="button">ออก</button></div>
+    <div class="panel-title dhl-title">🚚 ตรวจสอบพัสดุ DHL</div>
+    <div id="dhlStatus" class="status" role="status" aria-live="polite"></div>
+    <form id="dhlForm" novalidate>
+      <div class="field"><label for="waybill">WAYBILL <span class="req">*</span></label><input id="waybill" autocomplete="off" inputmode="numeric" placeholder="Enter or scan WAYBILL"><div id="waybillErr" class="err">กรุณากรอก WAYBILL</div></div>
+      <div class="field"><label for="packingSlip">Packing Slip (Invoice)</label><textarea id="packingSlip" placeholder="Enter one or multiple invoice numbers"></textarea></div>
+      <div class="field"><label for="dhlAttachments">Attachments <span class="req">*</span></label><input id="dhlAttachments" type="file" multiple accept="image/*,.pdf"><div class="file-note">รองรับรูปภาพและ PDF สูงสุด 8 MB ต่อไฟล์</div><div id="dhlAttachmentsErr" class="err">กรุณาแนบไฟล์อย่างน้อย 1 ไฟล์</div><ul id="dhlFileList" class="dhl-file-list"></ul></div>
+      <div class="field"><label for="dhlInspectionStatus">Status</label><select id="dhlInspectionStatus"><option value="In Process">🔵 In Process</option><option value="Completed">✅ Completed</option><option value="Issue Found">🔴 Issue Found</option></select></div>
+      <div class="field"><label for="dhlRemark">Remark</label><textarea id="dhlRemark" placeholder="Remark / Inspection details"></textarea></div>
+      <div class="field"><label for="dhlMail">Mail</label><input id="dhlMail" type="email" autocomplete="email" placeholder="Enter a name or email address"><div id="dhlMailErr" class="err">รูปแบบอีเมลไม่ถูกต้อง</div></div>
+      <div class="buttons"><button class="clear" type="reset">ล้างข้อมูล</button><button id="dhlSendButton" class="dhl-primary" type="submit">Submit / บันทึก</button></div>
+    </form>
+    <div id="dhlMessage" class="msg" role="status" aria-live="polite"></div>
   </section>
 
   <section id="entryPanel" class="hidden">
@@ -69,9 +94,12 @@
 /* URL Flow 1: ตรวจสอบ Username/Password จาก CK65_Users */
 const LOGIN_FLOW_URL = "https://default49d8b68c499440779e38e112c21fd0.e3.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/10/workflows/12eb496a14694a46be3f7baac94776af/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=5AzPaEhlQITweSyxj7iF8hZ2jn8YYYO6two1_hirDpI";
 /* URL Flow 2: ตรวจสอบ Item และ Create item */
-let ENTRY_FLOW_URL = ""; // รับจาก result.flowUrl ซึ่งมาจาก varUrl ใน Login Flow
+let ENTRY_FLOW_URL = "";
+let DHL_FLOW_URL = ""; // รับจาก result.flowUrl ซึ่งมาจาก varUrl ใน Login Flow
 
 const loginPanel=document.querySelector("#loginPanel"),entryPanel=document.querySelector("#entryPanel"),loginForm=document.querySelector("#loginForm"),entryForm=document.querySelector("#entryForm"),username=document.querySelector("#username"),password=document.querySelector("#password"),loginButton=document.querySelector("#loginButton"),loginStatus=document.querySelector("#loginStatus"),showPassword=document.querySelector("#showPassword"),signedInUser=document.querySelector("#signedInUser"),logoutButton=document.querySelector("#logoutButton"),item=document.querySelector("#item"),quantity=document.querySelector("#quantity"),locationInput=document.querySelector("#location"),scanStatus=document.querySelector("#scanStatus"),entryMessage=document.querySelector("#entryMessage"),sendButton=document.querySelector("#sendButton");
+const appSelect=document.querySelector("#appSelect"),dhlPanel=document.querySelector("#dhlPanel"),dhlForm=document.querySelector("#dhlForm"),dhlSignedInUser=document.querySelector("#dhlSignedInUser"),dhlLogoutButton=document.querySelector("#dhlLogoutButton"),waybill=document.querySelector("#waybill"),dhlAttachments=document.querySelector("#dhlAttachments"),dhlFileList=document.querySelector("#dhlFileList"),dhlStatus=document.querySelector("#dhlStatus"),dhlMessage=document.querySelector("#dhlMessage"),dhlSendButton=document.querySelector("#dhlSendButton");
+let dhlFiles=[];
 const ITEM_PATTERN=/^\d{3}-\d{4}-\d{2}$/;
 let currentUser=null,scanBuffer="",scanTimer=0,scanStarted=0,isApplying=false;
 
@@ -82,15 +110,25 @@ async function readJson(response){try{return await response.json()}catch{return{
 
 showPassword.addEventListener("click",()=>{const hidden=password.type==="password";password.type=hidden?"text":"password";showPassword.textContent=hidden?"ซ่อน":"แสดง";password.focus()});
 
-function openEntry(user){currentUser={username:user.username,displayName:user.displayName||user.username,role:user.role||"User",flowUrl:user.flowUrl||""};ENTRY_FLOW_URL=currentUser.flowUrl;sessionStorage.setItem("ck65User",JSON.stringify(currentUser));signedInUser.textContent=currentUser.displayName;loginPanel.classList.add("hidden");entryPanel.classList.remove("hidden");password.value="";setTimeout(()=>item.focus(),50)}
-function logout(){currentUser=null;ENTRY_FLOW_URL="";sessionStorage.removeItem("ck65User");entryForm.reset();entryPanel.classList.add("hidden");loginPanel.classList.remove("hidden");clearStatus(loginStatus);username.focus()}
+function openEntry(user){currentUser={username:user.username,displayName:user.displayName||user.username,role:user.role||"User",flowUrl:user.flowUrl||""};ENTRY_FLOW_URL=currentUser.flowUrl;sessionStorage.setItem("warehouseAppUser",JSON.stringify({...currentUser,appName:"CK65url"}));signedInUser.textContent=currentUser.displayName;loginPanel.classList.add("hidden");entryPanel.classList.remove("hidden");password.value="";setTimeout(()=>item.focus(),50)}
+
+function openDhl(user){currentUser={username:user.username,displayName:user.displayName||user.username,role:user.role||"User",flowUrl:user.flowUrl||""};DHL_FLOW_URL=currentUser.flowUrl;sessionStorage.setItem("warehouseAppUser",JSON.stringify({...currentUser,appName:"DHLurl"}));dhlSignedInUser.textContent=currentUser.displayName;loginPanel.classList.add("hidden");entryPanel.classList.add("hidden");dhlPanel.classList.remove("hidden");password.value="";setTimeout(()=>waybill.focus(),50)}
+function dhlLogout(){currentUser=null;DHL_FLOW_URL="";sessionStorage.removeItem("warehouseAppUser");dhlForm.reset();dhlFiles=[];renderDhlFiles();dhlPanel.classList.add("hidden");entryPanel.classList.add("hidden");loginPanel.classList.remove("hidden");clearStatus(loginStatus);username.focus()}
+dhlLogoutButton.addEventListener("click",dhlLogout);
+function renderDhlFiles(){dhlFileList.innerHTML="";dhlFiles.forEach((f,i)=>{const li=document.createElement("li"),span=document.createElement("span"),btn=document.createElement("button");span.textContent=f.name+" ("+(f.size/1024/1024).toFixed(2)+" MB)";btn.type="button";btn.className="file-remove";btn.textContent="✕";btn.onclick=()=>{dhlFiles.splice(i,1);renderDhlFiles()};li.append(span,btn);dhlFileList.append(li)})}
+function fileToBase64(file){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(String(r.result).split(",")[1]||"");r.onerror=reject;r.readAsDataURL(file)})}
+dhlAttachments.addEventListener("change",()=>{for(const f of dhlAttachments.files){if(!dhlFiles.some(x=>x.name===f.name&&x.size===f.size))dhlFiles.push(f)}dhlAttachments.value="";renderDhlFiles()});
+dhlForm.addEventListener("reset",()=>setTimeout(()=>{dhlFiles=[];renderDhlFiles();clearStatus(dhlStatus);dhlMessage.className="msg";waybill.focus()},0));
+dhlForm.addEventListener("submit",async e=>{e.preventDefault();const mail=document.querySelector("#dhlMail").value.trim(),badWaybill=!waybill.value.trim(),badFiles=!dhlFiles.length,badMail=mail&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail);setInvalid(waybill,"#waybillErr",badWaybill);document.querySelector("#dhlAttachmentsErr").style.display=badFiles?"block":"none";setInvalid(document.querySelector("#dhlMail"),"#dhlMailErr",badMail);if(badWaybill||badFiles||badMail)return;if(dhlFiles.some(f=>f.size>8*1024*1024)){setStatus(dhlStatus,"ไฟล์แต่ละไฟล์ต้องไม่เกิน 8 MB","fail");return}dhlSendButton.disabled=true;dhlSendButton.innerHTML='<span class="spinner"></span>กำลังส่ง';setStatus(dhlStatus,"กำลังเตรียมและส่งข้อมูล...","checking");try{const files=await Promise.all(dhlFiles.map(async f=>({fileName:f.name,contentType:f.type||"application/octet-stream",contentBytes:await fileToBase64(f)})));const payload={action:"CreateDHLInspection",waybill:waybill.value.trim(),packingSlip:document.querySelector("#packingSlip").value.trim(),status:document.querySelector("#dhlInspectionStatus").value,remark:document.querySelector("#dhlRemark").value.trim(),mail,verifiedBy:currentUser.displayName,verifiedByLogin:currentUser.username,verifiedDate:new Date().toISOString(),attachments:files};const response=await fetch(DHL_FLOW_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});const result=await readJson(response);if(!response.ok||result.success===false)throw new Error(result.message||"HTTP "+response.status);dhlMessage.textContent=result.message||"บันทึกข้อมูลเรียบร้อยแล้ว";dhlMessage.className="msg ok";dhlForm.reset()}catch(err){setStatus(dhlStatus,"บันทึกไม่สำเร็จ: "+err.message,"fail")}finally{dhlSendButton.disabled=false;dhlSendButton.textContent="Submit / บันทึก"}});
+
+function logout(){currentUser=null;ENTRY_FLOW_URL="";sessionStorage.removeItem("warehouseAppUser");entryForm.reset();entryPanel.classList.add("hidden");loginPanel.classList.remove("hidden");clearStatus(loginStatus);username.focus()}
 logoutButton.addEventListener("click",logout);
 
 loginForm.addEventListener("submit",async e=>{
  e.preventDefault();const u=username.value.trim(),p=password.value;setInvalid(username,"#usernameErr",!u);setInvalid(password,"#passwordErr",!p);if(!u||!p)return;
  if(!LOGIN_FLOW_URL){setStatus(loginStatus,"ยังไม่ได้กำหนด LOGIN_FLOW_URL","fail");return}
  loginButton.disabled=true;loginButton.innerHTML='<span class="spinner"></span>กำลังตรวจสอบ';setStatus(loginStatus,"กำลังตรวจสอบบัญชีจาก Microsoft Lists...","checking");
- try{const response=await fetch(LOGIN_FLOW_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({appName:"CK65url",employeeId:u,password:p})});const result=await readJson(response);if(!response.ok)throw new Error(result.message||"HTTP "+response.status);if(result.valid===true||result.authorized===true){if(!result.flowUrl)throw new Error("Login Flow ไม่ได้ส่ง flowUrl จาก varUrl กลับมา");setStatus(loginStatus,result.message||"เข้าสู่ระบบสำเร็จ","ok");openEntry({username:u,displayName:result.displayName||u,role:result.role||"User",flowUrl:result.flowUrl})}else{password.value="";setStatus(loginStatus,result.message||"ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง","fail");password.focus()}}
+ try{const response=await fetch(LOGIN_FLOW_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({appName:appSelect.value,employeeId:u,password:p})});const result=await readJson(response);if(!response.ok)throw new Error(result.message||"HTTP "+response.status);if(result.valid===true||result.authorized===true){if(!result.flowUrl)throw new Error("Login Flow ไม่ได้ส่ง flowUrl จาก varUrl กลับมา");setStatus(loginStatus,result.message||"เข้าสู่ระบบสำเร็จ","ok");(appSelect.value==="DHLurl"?openDhl:openEntry)({username:u,displayName:result.displayName||u,role:result.role||"User",flowUrl:result.dhlFlowUrl||result.flowUrl})}else{password.value="";setStatus(loginStatus,result.message||"ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง","fail");password.focus()}}
  catch(err){setStatus(loginStatus,"เชื่อมต่อระบบลงชื่อเข้าใช้ไม่สำเร็จ: "+err.message,"fail")}
  finally{loginButton.disabled=false;loginButton.textContent="เข้าสู่ระบบ"}
 });
@@ -167,6 +205,6 @@ entryForm.addEventListener("submit",async e=>{
  finally{sendButton.disabled=false;sendButton.textContent="ตรวจสอบและส่ง"}
 });
 
-window.addEventListener("load",()=>{let saved=null;try{saved=JSON.parse(sessionStorage.getItem("ck65User")||"null")}catch{}if(saved&&saved.username)openEntry(saved);else username.focus()});
+window.addEventListener("load",()=>{let saved=null;try{saved=JSON.parse(sessionStorage.getItem("warehouseAppUser")||"null")}catch{}if(saved&&saved.username){if(saved.appName==="DHLurl")openDhl(saved);else openEntry(saved)}else username.focus()});
 </script>
 </body></html>
