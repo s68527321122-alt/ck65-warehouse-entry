@@ -4,207 +4,66 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="theme-color" content="#edf4f8">
-<title>CK65 Warehouse Entry</title>
+<title>Warehouse Apps | CK65 & DHL</title>
 <style>
-*{box-sizing:border-box}html,body{margin:0;width:100%;min-height:100%}body{background:#edf4f8;font-family:"Segoe UI",Tahoma,Arial,sans-serif;color:#111827;padding:6px}.card{width:100%;max-width:480px;margin:0 auto;background:#fff;border-radius:12px;box-shadow:0 10px 28px rgba(15,23,42,.13);padding:16px}.hidden{display:none!important}.userbar{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px;padding:9px 11px;border-radius:9px;background:#f1f5f9;font-size:13px}.userbar strong{display:block;max-width:305px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.logout{height:34px;padding:0 12px;background:#64748b;color:#fff}.field{margin-bottom:13px}label{display:block;margin-bottom:5px;font-weight:700}.req{color:#c50f1f}input{width:100%;height:48px;border:1px solid #cbd5e1;border-radius:9px;padding:8px 12px;font:inherit;font-size:16px;outline:none;background:#fff}input:focus{border-color:#107c10;box-shadow:0 0 0 3px rgba(16,124,16,.13)}input.bad{border-color:#c50f1f;background:#fff7f7}input.valid{border-color:#107c10;background:#f0fdf4}.err{display:none;margin-top:4px;color:#c50f1f;font-size:12px}.status,.msg{display:none;padding:9px 11px;border-radius:9px;margin-bottom:12px;font-size:13px}.ok{display:block;background:#dcfce7;color:#166534}.fail{display:block;background:#fee2e2;color:#991b1b}.checking{display:block;background:#e0f2fe;color:#075985}.buttons{display:grid;grid-template-columns:1fr 1fr;gap:8px}button{height:48px;border:0;border-radius:9px;font:inherit;font-weight:700;cursor:pointer}.clear{background:#e5ebf1;color:#111827}.primary{background:#107c10;color:#fff}.login-btn{width:100%;background:#107c10;color:#fff}.password-wrap{position:relative}.password-wrap input{padding-right:72px}.showpass{position:absolute;right:5px;top:5px;width:62px;height:38px;background:#e5ebf1;font-size:12px}button:disabled{opacity:.6;cursor:wait}.login-title{font-size:20px;font-weight:750;text-align:center;margin:3px 0 16px}.login-note{font-size:12px;color:#64748b;text-align:center;margin-top:10px}.spinner{display:inline-block;width:13px;height:13px;margin-right:6px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;vertical-align:-2px;animation:spin .7s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
-
-select,textarea{width:100%;border:1px solid #cbd5e1;border-radius:9px;padding:8px 12px;font:inherit;font-size:16px;outline:none;background:#fff}select{height:48px}textarea{min-height:86px;resize:vertical}select:focus,textarea:focus{border-color:#107c10;box-shadow:0 0 0 3px rgba(16,124,16,.13)}.panel-title{font-size:19px;font-weight:800;margin:0 0 13px}.dhl-title{color:#d40511}.dhl-primary{background:#d40511;color:#fff}.dhl-file-list{list-style:none;padding:0;margin:7px 0}.dhl-file-list li{display:flex;justify-content:space-between;gap:8px;background:#f8fafc;padding:7px 9px;border-radius:7px;margin-top:5px;font-size:12px}.file-remove{height:auto;padding:0;background:transparent;color:#b91c1c}.home{height:34px;padding:0 10px;background:#2563eb;color:#fff}.user-actions{display:flex;gap:5px}.file-note{font-size:12px;color:#64748b;margin-top:4px}
+*{box-sizing:border-box}html,body{margin:0;width:100%;min-height:100%}body{background:#edf4f8;font-family:"Segoe UI",Tahoma,Arial,sans-serif;color:#111827;padding:7px}.card{width:100%;max-width:500px;margin:0 auto;background:#fff;border-radius:12px;box-shadow:0 10px 28px rgba(15,23,42,.13);padding:16px}.hidden{display:none!important}.field{margin-bottom:13px}label{display:block;margin-bottom:5px;font-weight:700}.req{color:#c50f1f}input,select,textarea{width:100%;border:1px solid #cbd5e1;border-radius:9px;padding:9px 12px;font:inherit;font-size:16px;outline:none;background:#fff}input,select{height:48px}textarea{min-height:85px;resize:vertical}input:focus,select:focus,textarea:focus{border-color:#107c10;box-shadow:0 0 0 3px rgba(16,124,16,.13)}.bad{border-color:#c50f1f!important;background:#fff7f7}.err{display:none;margin-top:4px;color:#c50f1f;font-size:12px}.status,.msg{display:none;padding:9px 11px;border-radius:9px;margin-bottom:12px;font-size:13px}.ok{display:block;background:#dcfce7;color:#166534}.fail{display:block;background:#fee2e2;color:#991b1b}.checking{display:block;background:#e0f2fe;color:#075985}.buttons{display:grid;grid-template-columns:1fr 1fr;gap:8px}button{height:46px;border:0;border-radius:9px;font:inherit;font-weight:700;cursor:pointer}.primary{background:#107c10;color:#fff}.dhl-primary{background:#d40511;color:#fff}.clear{background:#ececec;color:#111827}.login-btn{width:100%;background:#107c10;color:#fff}.userbar{display:flex;align-items:center;justify-content:space-between;gap:7px;background:#f1f5f9;padding:9px;border-radius:9px;margin-bottom:13px;font-size:12px}.userline{display:flex;align-items:center;gap:4px;min-width:0;white-space:nowrap;overflow:hidden}.userline strong{overflow:hidden;text-overflow:ellipsis}.dhl-title{color:#d40511;font-weight:800}.divider{color:#94a3b8}.logout{height:34px;background:#64748b;color:#fff;padding:0 10px}.login-title{text-align:center;font-size:20px;font-weight:800;margin:2px 0 16px}.file-list{list-style:none;margin:7px 0 0;padding:0;font-size:12px}.file-list li{display:flex;justify-content:space-between;gap:8px;background:#f8fafc;padding:7px 9px;border-radius:7px;margin-top:5px}.remove-file{height:auto;padding:0;background:transparent;color:#b91c1c}.placeholder-file{height:auto;padding:12px}.spinner{display:inline-block;width:13px;height:13px;margin-right:6px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;vertical-align:-2px;animation:spin .7s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}button:disabled{opacity:.6;cursor:wait}@media(max-width:440px){.userbar{font-size:11px}.userline{gap:3px}.logout{padding:0 8px}.buttons{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
 <main class="card">
-  <section id="loginPanel">
-    <div class="login-title">ลงชื่อเข้าใช้</div>
-    <div id="loginStatus" class="status" role="status" aria-live="polite"></div>
-    <form id="loginForm" novalidate>
-      <div class="field">
-        <label for="username">Username <span class="req">*</span></label>
-        <input id="username" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="กรอก Username">
-        <div id="usernameErr" class="err">กรุณากรอก Username</div>
-      </div>
-      <div class="field">
-        <label for="password">Password <span class="req">*</span></label>
-        <div class="password-wrap">
-          <input id="password" type="password" autocomplete="current-password" placeholder="กรอก Password">
-          <button id="showPassword" class="showpass" type="button">แสดง</button>
-        </div>
-        <div id="passwordErr" class="err">กรุณากรอก Password</div>
-      </div>
-      <div class="field">
-        <label for="appSelect">เลือก App <span class="req">*</span></label>
-        <select id="appSelect">
-          <option value="CK65url">📦 CK65 Warehouse Entry</option>
-          <option value="DHLurl">🚚 DHL Material Inspection</option>
-        </select>
-      </div>
-      <button id="loginButton" class="login-btn" type="submit">เข้าสู่ระบบ</button>
-    </form>
-    <div class="login-note">บัญชีสำหรับระบบ CK65 เท่านั้น</div>
-  </section>
+<section id="loginPanel">
+  <div class="login-title">ลงชื่อเข้าใช้</div>
+  <div id="loginStatus" class="status" role="status"></div>
+  <form id="loginForm" novalidate>
+    <div class="field"><label for="appSelect">เลือก App</label><select id="appSelect"><option value="CK65url">📦 CK65 Warehouse Entry</option><option value="DHLurl">🚚 DHL Material Inspection</option></select></div>
+    <div class="field"><label for="username">Username <span class="req">*</span></label><input id="username" autocomplete="username" autocapitalize="none"><div id="usernameErr" class="err">กรุณากรอก Username</div></div>
+    <div class="field"><label for="password">Password <span class="req">*</span></label><input id="password" type="password" autocomplete="current-password"><div id="passwordErr" class="err">กรุณากรอก Password</div></div>
+    <button id="loginButton" class="login-btn" type="submit">เข้าสู่ระบบ</button>
+  </form>
+</section>
 
-  <section id="dhlPanel" class="hidden">
-    <div class="userbar"><div>ผู้ใช้งาน: <strong id="dhlSignedInUser"></strong></div><button id="dhlLogoutButton" class="logout" type="button">ออก</button></div>
-    <div class="panel-title dhl-title">🚚 ตรวจสอบพัสดุ DHL</div>
-    <div id="dhlStatus" class="status" role="status" aria-live="polite"></div>
-    <form id="dhlForm" novalidate>
-      <div class="field"><label for="waybill">WAYBILL <span class="req">*</span></label><input id="waybill" autocomplete="off" inputmode="numeric" placeholder="Enter or scan WAYBILL"><div id="waybillErr" class="err">กรุณากรอก WAYBILL</div></div>
-      <div class="field"><label for="packingSlip">Packing Slip (Invoice)</label><textarea id="packingSlip" placeholder="Enter one or multiple invoice numbers"></textarea></div>
-      <div class="field"><label for="dhlAttachments">Attachments <span class="req">*</span></label><input id="dhlAttachments" type="file" multiple accept="image/*,.pdf"><div class="file-note">รองรับรูปภาพและ PDF สูงสุด 8 MB ต่อไฟล์</div><div id="dhlAttachmentsErr" class="err">กรุณาแนบไฟล์อย่างน้อย 1 ไฟล์</div><ul id="dhlFileList" class="dhl-file-list"></ul></div>
-      <div class="field"><label for="dhlInspectionStatus">Status</label><select id="dhlInspectionStatus"><option value="In Process">🔵 In Process</option><option value="Completed">✅ Completed</option><option value="Issue Found">🔴 Issue Found</option></select></div>
-      <div class="field"><label for="dhlRemark">Remark</label><textarea id="dhlRemark" placeholder="Remark / Inspection details"></textarea></div>
-      <div class="field"><label for="dhlMail">Mail</label><input id="dhlMail" type="email" autocomplete="email" placeholder="Enter a name or email address"><div id="dhlMailErr" class="err">รูปแบบอีเมลไม่ถูกต้อง</div></div>
-      <div class="buttons"><button class="clear" type="reset">ล้างข้อมูล</button><button id="dhlSendButton" class="dhl-primary" type="submit">Submit / บันทึก</button></div>
-    </form>
-    <div id="dhlMessage" class="msg" role="status" aria-live="polite"></div>
-  </section>
+<section id="ckPanel" class="hidden">
+  <div class="userbar"><div class="userline"><span>📦 CK65 Warehouse Entry</span><span class="divider">|</span><span>User:</span><strong id="ckUser"></strong></div><button class="logout" data-logout type="button">ออก</button></div>
+  <div id="ckStatus" class="status" role="status"></div>
+  <form id="ckForm" novalidate>
+    <div class="field"><label for="item">Item <span class="req">*</span></label><input id="item" autocomplete="off" placeholder="000-0000-00"><div id="itemErr" class="err">Item ต้องเป็นรูปแบบ 000-0000-00</div></div>
+    <div class="field"><label for="quantity">จำนวน <span class="req">*</span></label><input id="quantity" type="number" min="0.01" step="0.01" inputmode="decimal"><div id="quantityErr" class="err">จำนวนต้องมากกว่า 0</div></div>
+    <div class="field"><label for="location">Location <span class="req">*</span></label><input id="location" autocomplete="off"><div id="locationErr" class="err">กรุณากรอก Location</div></div>
+    <div class="buttons"><button class="clear" type="reset">ล้าง</button><button id="ckSend" class="primary" type="submit">ตรวจสอบและส่ง</button></div>
+  </form>
+</section>
 
-  <section id="entryPanel" class="hidden">
-    <div class="userbar">
-      <div>ผู้ใช้งาน: <strong id="signedInUser"></strong></div>
-      <button id="logoutButton" class="logout" type="button">ออก</button>
-    </div>
-    <div id="scanStatus" class="status" role="status" aria-live="polite"></div>
-    <form id="entryForm" novalidate>
-      <div class="field">
-        <label for="item">Item <span class="req">*</span></label>
-        <input id="item" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="กรอกหรือสแกนพาร์ท">
-        <div id="itemErr" class="err">Item ต้องเป็นรูปแบบ 000-0000-00</div>
-      </div>
-      <div class="field">
-        <label for="quantity">จำนวน <span class="req">*</span></label>
-        <input id="quantity" type="number" min="0.01" step="0.01" inputmode="decimal" autocomplete="off" placeholder="กรอกจำนวน">
-        <div id="quantityErr" class="err">กรุณากรอกจำนวนที่มากกว่า 0</div>
-      </div>
-      <div class="field">
-        <label for="location">Location <span class="req">*</span></label>
-        <input id="location" maxlength="100" autocomplete="off" placeholder="กรอกหรือสแกน Location">
-        <div id="locationErr" class="err">กรุณากรอก Location</div>
-      </div>
-      <div class="buttons">
-        <button class="clear" type="reset">ล้างข้อมูล</button>
-        <button id="sendButton" class="primary" type="submit">ตรวจสอบและส่ง</button>
-      </div>
-    </form>
-    <div id="entryMessage" class="msg" role="status" aria-live="polite"></div>
-  </section>
+<section id="dhlPanel" class="hidden">
+  <div class="userbar"><div class="userline"><span class="dhl-title">🚚 ตรวจสอบพัสดุ DHL</span><span class="divider">|</span><span>User:</span><strong id="dhlUser"></strong></div><button class="logout" data-logout type="button">ออก</button></div>
+  <div id="dhlStatus" class="status" role="status"></div>
+  <form id="dhlForm" novalidate>
+    <div class="field"><input id="waybill" autocomplete="off" inputmode="numeric" placeholder="WAYBILL" aria-label="WAYBILL"><div id="waybillErr" class="err">กรุณากรอก WAYBILL</div></div>
+    <div class="field"><textarea id="packingSlip" placeholder="Packing Slip (Invoice)" aria-label="Packing Slip (Invoice)"></textarea></div>
+    <div class="field"><input id="attachments" class="placeholder-file" type="file" multiple accept="image/*,.pdf" aria-label="Attachments"><div id="attachmentsErr" class="err">กรุณาแนบไฟล์อย่างน้อย 1 ไฟล์</div><ul id="fileList" class="file-list"></ul></div>
+    <div class="field"><label for="remark">Remark</label><input id="remark" list="remarks" autocomplete="off" placeholder="เลือกหรือพิมพ์เพิ่ม"><datalist id="remarks"><option value="PART"></option><option value="Tools Crib"></option><option value="SURACHET"></option><option value="SAENGJAN"></option><option value="BOWORN"></option><option value="KANYALUCK"></option><option value="SCROLL/ SARINYA"></option><option value="WEERAWUT"></option><option value="SAMIT"></option><option value="CHALERMCHAI"></option><option value="THANPISA"></option><option value="ITTIRIT"></option><option value="WISANU"></option><option value="SAKDA"></option><option value="Jiravat"></option></datalist></div>
+    <div class="buttons"><button class="clear" type="reset">ล้าง</button><button id="dhlSend" class="dhl-primary" type="submit">Submit / บันทึก</button></div>
+  </form>
+</section>
 </main>
 <script>
 "use strict";
-
-/* URL Flow 1: ตรวจสอบ Username/Password จาก CK65_Users */
-const LOGIN_FLOW_URL = "https://default49d8b68c499440779e38e112c21fd0.e3.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/10/workflows/12eb496a14694a46be3f7baac94776af/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=5AzPaEhlQITweSyxj7iF8hZ2jn8YYYO6two1_hirDpI";
-/* URL Flow 2: ตรวจสอบ Item และ Create item */
-let ENTRY_FLOW_URL = "";
-let DHL_FLOW_URL = ""; // รับจาก result.flowUrl ซึ่งมาจาก varUrl ใน Login Flow
-
-const loginPanel=document.querySelector("#loginPanel"),entryPanel=document.querySelector("#entryPanel"),loginForm=document.querySelector("#loginForm"),entryForm=document.querySelector("#entryForm"),username=document.querySelector("#username"),password=document.querySelector("#password"),loginButton=document.querySelector("#loginButton"),loginStatus=document.querySelector("#loginStatus"),showPassword=document.querySelector("#showPassword"),signedInUser=document.querySelector("#signedInUser"),logoutButton=document.querySelector("#logoutButton"),item=document.querySelector("#item"),quantity=document.querySelector("#quantity"),locationInput=document.querySelector("#location"),scanStatus=document.querySelector("#scanStatus"),entryMessage=document.querySelector("#entryMessage"),sendButton=document.querySelector("#sendButton");
-const appSelect=document.querySelector("#appSelect"),dhlPanel=document.querySelector("#dhlPanel"),dhlForm=document.querySelector("#dhlForm"),dhlSignedInUser=document.querySelector("#dhlSignedInUser"),dhlLogoutButton=document.querySelector("#dhlLogoutButton"),waybill=document.querySelector("#waybill"),dhlAttachments=document.querySelector("#dhlAttachments"),dhlFileList=document.querySelector("#dhlFileList"),dhlStatus=document.querySelector("#dhlStatus"),dhlMessage=document.querySelector("#dhlMessage"),dhlSendButton=document.querySelector("#dhlSendButton");
-let dhlFiles=[];
-const ITEM_PATTERN=/^\d{3}-\d{4}-\d{2}$/;
-let currentUser=null,scanBuffer="",scanTimer=0,scanStarted=0,isApplying=false;
-
-function setInvalid(el,errorId,bad){el.classList.toggle("bad",bad);document.querySelector(errorId).style.display=bad?"block":"none"}
+const LOGIN_FLOW_URL='https://default49d8b68c499440779e38e112c21fd0.e3.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/10/workflows/12eb496a14694a46be3f7baac94776af/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=5AzPaEhlQITweSyxj7iF8hZ2jn8YYYO6two1_hirDpI';
+let currentUser=null,appFlowUrl="",selectedFiles=[];
+const $=s=>document.querySelector(s);
 function setStatus(el,text,type){el.textContent=text;el.className="status "+type}
 function clearStatus(el){el.textContent="";el.className="status"}
-async function readJson(response){try{return await response.json()}catch{return{valid:false,message:"Power Automate ไม่ได้ส่ง JSON กลับมา"}}}
-
-showPassword.addEventListener("click",()=>{const hidden=password.type==="password";password.type=hidden?"text":"password";showPassword.textContent=hidden?"ซ่อน":"แสดง";password.focus()});
-
-function openEntry(user){currentUser={username:user.username,displayName:user.displayName||user.username,role:user.role||"User",flowUrl:user.flowUrl||""};ENTRY_FLOW_URL=currentUser.flowUrl;sessionStorage.setItem("warehouseAppUser",JSON.stringify({...currentUser,appName:"CK65url"}));signedInUser.textContent=currentUser.displayName;loginPanel.classList.add("hidden");entryPanel.classList.remove("hidden");password.value="";setTimeout(()=>item.focus(),50)}
-
-function openDhl(user){currentUser={username:user.username,displayName:user.displayName||user.username,role:user.role||"User",flowUrl:user.flowUrl||""};DHL_FLOW_URL=currentUser.flowUrl;sessionStorage.setItem("warehouseAppUser",JSON.stringify({...currentUser,appName:"DHLurl"}));dhlSignedInUser.textContent=currentUser.displayName;loginPanel.classList.add("hidden");entryPanel.classList.add("hidden");dhlPanel.classList.remove("hidden");password.value="";setTimeout(()=>waybill.focus(),50)}
-function dhlLogout(){currentUser=null;DHL_FLOW_URL="";sessionStorage.removeItem("warehouseAppUser");dhlForm.reset();dhlFiles=[];renderDhlFiles();dhlPanel.classList.add("hidden");entryPanel.classList.add("hidden");loginPanel.classList.remove("hidden");clearStatus(loginStatus);username.focus()}
-dhlLogoutButton.addEventListener("click",dhlLogout);
-function renderDhlFiles(){dhlFileList.innerHTML="";dhlFiles.forEach((f,i)=>{const li=document.createElement("li"),span=document.createElement("span"),btn=document.createElement("button");span.textContent=f.name+" ("+(f.size/1024/1024).toFixed(2)+" MB)";btn.type="button";btn.className="file-remove";btn.textContent="✕";btn.onclick=()=>{dhlFiles.splice(i,1);renderDhlFiles()};li.append(span,btn);dhlFileList.append(li)})}
-function fileToBase64(file){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(String(r.result).split(",")[1]||"");r.onerror=reject;r.readAsDataURL(file)})}
-dhlAttachments.addEventListener("change",()=>{for(const f of dhlAttachments.files){if(!dhlFiles.some(x=>x.name===f.name&&x.size===f.size))dhlFiles.push(f)}dhlAttachments.value="";renderDhlFiles()});
-dhlForm.addEventListener("reset",()=>setTimeout(()=>{dhlFiles=[];renderDhlFiles();clearStatus(dhlStatus);dhlMessage.className="msg";waybill.focus()},0));
-dhlForm.addEventListener("submit",async e=>{e.preventDefault();const mail=document.querySelector("#dhlMail").value.trim(),badWaybill=!waybill.value.trim(),badFiles=!dhlFiles.length,badMail=mail&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail);setInvalid(waybill,"#waybillErr",badWaybill);document.querySelector("#dhlAttachmentsErr").style.display=badFiles?"block":"none";setInvalid(document.querySelector("#dhlMail"),"#dhlMailErr",badMail);if(badWaybill||badFiles||badMail)return;if(dhlFiles.some(f=>f.size>8*1024*1024)){setStatus(dhlStatus,"ไฟล์แต่ละไฟล์ต้องไม่เกิน 8 MB","fail");return}dhlSendButton.disabled=true;dhlSendButton.innerHTML='<span class="spinner"></span>กำลังส่ง';setStatus(dhlStatus,"กำลังเตรียมและส่งข้อมูล...","checking");try{const files=await Promise.all(dhlFiles.map(async f=>({fileName:f.name,contentType:f.type||"application/octet-stream",contentBytes:await fileToBase64(f)})));const payload={action:"CreateDHLInspection",waybill:waybill.value.trim(),packingSlip:document.querySelector("#packingSlip").value.trim(),status:document.querySelector("#dhlInspectionStatus").value,remark:document.querySelector("#dhlRemark").value.trim(),mail,verifiedBy:currentUser.displayName,verifiedByLogin:currentUser.username,verifiedDate:new Date().toISOString(),attachments:files};const response=await fetch(DHL_FLOW_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});const result=await readJson(response);if(!response.ok||result.success===false)throw new Error(result.message||"HTTP "+response.status);dhlMessage.textContent=result.message||"บันทึกข้อมูลเรียบร้อยแล้ว";dhlMessage.className="msg ok";dhlForm.reset()}catch(err){setStatus(dhlStatus,"บันทึกไม่สำเร็จ: "+err.message,"fail")}finally{dhlSendButton.disabled=false;dhlSendButton.textContent="Submit / บันทึก"}});
-
-function logout(){currentUser=null;ENTRY_FLOW_URL="";sessionStorage.removeItem("warehouseAppUser");entryForm.reset();entryPanel.classList.add("hidden");loginPanel.classList.remove("hidden");clearStatus(loginStatus);username.focus()}
-logoutButton.addEventListener("click",logout);
-
-loginForm.addEventListener("submit",async e=>{
- e.preventDefault();const u=username.value.trim(),p=password.value;setInvalid(username,"#usernameErr",!u);setInvalid(password,"#passwordErr",!p);if(!u||!p)return;
- if(!LOGIN_FLOW_URL){setStatus(loginStatus,"ยังไม่ได้กำหนด LOGIN_FLOW_URL","fail");return}
- loginButton.disabled=true;loginButton.innerHTML='<span class="spinner"></span>กำลังตรวจสอบ';setStatus(loginStatus,"กำลังตรวจสอบบัญชีจาก Microsoft Lists...","checking");
- try{const response=await fetch(LOGIN_FLOW_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({appName:appSelect.value,employeeId:u,password:p})});const result=await readJson(response);if(!response.ok)throw new Error(result.message||"HTTP "+response.status);if(result.valid===true||result.authorized===true){if(!result.flowUrl)throw new Error("Login Flow ไม่ได้ส่ง flowUrl จาก varUrl กลับมา");setStatus(loginStatus,result.message||"เข้าสู่ระบบสำเร็จ","ok");(appSelect.value==="DHLurl"?openDhl:openEntry)({username:u,displayName:result.displayName||u,role:result.role||"User",flowUrl:result.dhlFlowUrl||result.flowUrl})}else{password.value="";setStatus(loginStatus,result.message||"ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง","fail");password.focus()}}
- catch(err){setStatus(loginStatus,"เชื่อมต่อระบบลงชื่อเข้าใช้ไม่สำเร็จ: "+err.message,"fail")}
- finally{loginButton.disabled=false;loginButton.textContent="เข้าสู่ระบบ"}
-});
-
-function clean(v){return String(v||"").replace(/[\x00-\x1f\x7f]/g," ").replace(/\s+/g," ").trim()}
-function formatItemDigits(d){return d.slice(0,3)+"-"+d.slice(3,7)+"-"+d.slice(7,9)}
-function extractScan(v){
- const s=clean(v);
- let m=s.match(/P\s*(\d{3})[\s-]?(\d{4})[\s-]?(\d{2})/i);
- if(!m)m=s.match(/(?:^|\D)(\d{3})[\s-]?(\d{4})[\s-]?(\d{2})(?:\D|$)/);
- const itemValue=m?m[1]+"-"+m[2]+"-"+m[3]:"";
- const q=s.match(/Q\s*([0-9]+(?:\.[0-9]+)?)/i);
- return{item:itemValue,quantity:q?q[1]:"",raw:s};
-}
-function extractItem(v){return extractScan(v).item}
-function applyScan(v){
- const data=extractScan(v);console.log("Raw Data Matrix:",JSON.stringify(v),data);
- if(!data.item)return false;
- isApplying=true;
- item.value=data.item;
- item.classList.remove("bad","valid");
- if(data.quantity)quantity.value=data.quantity;
- if(locationInput.value&&(/P\s*\d/i.test(locationInput.value)||clean(locationInput.value).includes(data.item)))locationInput.value="";
- setStatus(scanStatus,"อ่าน Data Matrix ได้: "+data.item+(data.quantity?" | จำนวน "+data.quantity:""),"ok");
- setTimeout(()=>{isApplying=false;(data.quantity?locationInput:quantity).focus();if(!data.quantity)quantity.select()},50);
- return true;
-}
-function finishScan(){
- clearTimeout(scanTimer);const value=scanBuffer;scanBuffer="";scanStarted=0;
- if(!value)return false;
- const valid=applyScan(value);
- if(!valid&&clean(value).length>7)setStatus(scanStatus,"ไม่พบ Item กรุณาสแกนใหม่","fail");
- return valid;
-}
-document.addEventListener("keydown",e=>{
- if(entryPanel.classList.contains("hidden")||e.ctrlKey||e.altKey||e.metaKey)return;
- const now=Date.now();
- if(e.key==="Enter"||e.key==="Tab"){
-  if(scanBuffer.length>3){e.preventDefault();e.stopImmediatePropagation();clearTimeout(scanTimer);scanTimer=setTimeout(finishScan,60)}
-  return;
- }
- if(e.key.length!==1)return;
- if(!scanStarted||now-scanStarted>160){scanBuffer=""}
- scanStarted=now;scanBuffer+=e.key;
- clearTimeout(scanTimer);scanTimer=setTimeout(finishScan,500);
-},true);
-[item,quantity,locationInput].forEach(el=>el.addEventListener("input",()=>{
- if(isApplying)return;
- const raw=el.value;
- if(/[Pp][\s\d-]{7,}|[Qq]\s*\d+|[)>\x1d\x1e\x1d]/.test(raw)){
-  clearTimeout(scanTimer);scanBuffer+=raw;
-  if(el!==item)el.value="";
-  scanTimer=setTimeout(finishScan,500);
- }
-}));
-item.addEventListener("input",()=>{
- item.classList.remove("valid");if(isApplying)return;
- const current=item.value,x=extractItem(current);
- if(x){applyScan(current);return}
- let digits=current.replace(/\D/g,"").slice(0,9),formatted=digits.slice(0,3);
- if(digits.length>3)formatted+="-"+digits.slice(3,7);
- if(digits.length>7)formatted+="-"+digits.slice(7);
- if(!/[A-Za-z,>.\[\]()]/.test(current))item.value=formatted;
-});
-item.addEventListener("paste",e=>{const value=e.clipboardData.getData("text");if(extractItem(value)){e.preventDefault();applyScan(value)}});
-
-entryForm.addEventListener("reset",()=>setTimeout(()=>{clearStatus(scanStatus);entryMessage.className="msg";document.querySelectorAll("#entryPanel .err").forEach(x=>x.style.display="none");document.querySelectorAll("#entryPanel input").forEach(x=>x.classList.remove("bad","valid"));item.focus()},0));
-entryForm.addEventListener("submit",async e=>{
- e.preventDefault();if(!currentUser){logout();return}const q=Number(quantity.value),badItem=!ITEM_PATTERN.test(item.value),badQty=!Number.isFinite(q)||q<=0,badLoc=!locationInput.value.trim();setInvalid(item,"#itemErr",badItem);setInvalid(quantity,"#quantityErr",badQty);setInvalid(locationInput,"#locationErr",badLoc);if(badItem||badQty||badLoc)return;
- if(!ENTRY_FLOW_URL){setStatus(scanStatus,"ยังไม่ได้กำหนด ENTRY_FLOW_URL","fail");return}
- const payload={Item:item.value,Quantity:q,Location:locationInput.value.trim(),UserName:currentUser.displayName,UserLogin:currentUser.username,SubmittedAt:new Date().toISOString()};sendButton.disabled=true;sendButton.innerHTML='<span class="spinner"></span>กำลังตรวจสอบ';setStatus(scanStatus,"กำลังตรวจสอบ Item จาก Microsoft Lists...","checking");
- try{const response=await fetch(ENTRY_FLOW_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});const result=await readJson(response);if(!response.ok)throw new Error(result.message||"HTTP "+response.status);if(result.valid===false){item.classList.add("bad");setStatus(scanStatus,result.message||"ไม่พบ Item นี้ใน Microsoft Lists","fail");item.focus();return}item.classList.add("valid");entryMessage.textContent=result.message||"ตรวจสอบและบันทึกข้อมูลเรียบร้อยแล้ว";entryMessage.className="msg ok";entryForm.reset()}
- catch(err){setStatus(scanStatus,"เชื่อมต่อ Power Automate ไม่สำเร็จ: "+err.message,"fail")}
- finally{sendButton.disabled=false;sendButton.textContent="ตรวจสอบและส่ง"}
-});
-
-window.addEventListener("load",()=>{let saved=null;try{saved=JSON.parse(sessionStorage.getItem("warehouseAppUser")||"null")}catch{}if(saved&&saved.username){if(saved.appName==="DHLurl")openDhl(saved);else openEntry(saved)}else username.focus()});
+function setInvalid(el,errorId,isBad){el.classList.toggle("bad",isBad);$(errorId).style.display=isBad?"block":"none"}
+async function readJson(response){const text=await response.text();if(!text)return{};try{return JSON.parse(text)}catch{throw new Error("Flow ตอบกลับไม่ใช่ JSON (HTTP "+response.status+")")}}
+function openApp(appName,user,flowUrl){currentUser=user;appFlowUrl=flowUrl;sessionStorage.setItem("warehouseAppUser",JSON.stringify({...user,appName,flowUrl}));$("#loginPanel").classList.add("hidden");$("#ckPanel").classList.toggle("hidden",appName!=="CK65url");$("#dhlPanel").classList.toggle("hidden",appName!=="DHLurl");$("#ckUser").textContent=user.displayName;$("#dhlUser").textContent=user.displayName;setTimeout(()=>appName==="DHLurl"?$("#waybill").focus():$("#item").focus(),50)}
+function logout(){sessionStorage.removeItem("warehouseAppUser");currentUser=null;appFlowUrl="";$("#ckPanel").classList.add("hidden");$("#dhlPanel").classList.add("hidden");$("#loginPanel").classList.remove("hidden");$("#password").value="";$("#username").focus()}
+document.querySelectorAll("[data-logout]").forEach(b=>b.addEventListener("click",logout));
+$("#loginForm").addEventListener("submit",async e=>{e.preventDefault();const employeeId=$("#username").value.trim(),password=$("#password").value,appName=$("#appSelect").value;setInvalid($("#username"),"#usernameErr",!employeeId);setInvalid($("#password"),"#passwordErr",!password);if(!employeeId||!password)return;const button=$("#loginButton"),controller=new AbortController(),timer=setTimeout(()=>controller.abort(),30000);button.disabled=true;button.innerHTML='<span class="spinner"></span>กำลังตรวจสอบ';setStatus($("#loginStatus"),"กำลังตรวจสอบ "+appName+"...","checking");try{const response=await fetch(LOGIN_FLOW_URL,{method:"POST",mode:"cors",cache:"no-store",redirect:"follow",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify({appName,employeeId,password}),signal:controller.signal});const result=await readJson(response);if(!response.ok)throw new Error(result.message||"HTTP "+response.status);if(result.valid!==true&&result.authorized!==true)throw new Error(result.message||"ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง");const flowUrl=appName==="DHLurl"?(result.dhlFlowUrl||result.flowUrl):(result.ck65FlowUrl||result.flowUrl);if(!flowUrl)throw new Error("Login Flow ไม่ได้ส่ง URL สำหรับ "+appName);openApp(appName,{username:employeeId,displayName:result.displayName||employeeId,role:result.role||"User"},flowUrl)}catch(err){let message=err.name==="AbortError"?"หมดเวลารอ Login Flow หลังจาก 30 วินาที":err.message;if(["Load failed","Failed to fetch","NetworkError when attempting to fetch resource."].includes(message))message="Browser ติดต่อ Login Flow ไม่ได้ กรุณาตรวจ URL, Run history, CORS หรือเครือข่าย";setStatus($("#loginStatus"),"เชื่อมต่อระบบลงชื่อเข้าใช้ไม่สำเร็จ: "+message,"fail")}finally{clearTimeout(timer);button.disabled=false;button.textContent="เข้าสู่ระบบ"}});
+$("#ckForm").addEventListener("submit",async e=>{e.preventDefault();const Item=$("#item").value.trim(),Quantity=Number($("#quantity").value),Location=$("#location").value.trim();const badItem=!/^\d{3}-\d{4}-\d{2}$/.test(Item),badQty=!Number.isFinite(Quantity)||Quantity<=0,badLoc=!Location;setInvalid($("#item"),"#itemErr",badItem);setInvalid($("#quantity"),"#quantityErr",badQty);setInvalid($("#location"),"#locationErr",badLoc);if(badItem||badQty||badLoc)return;const button=$("#ckSend");button.disabled=true;setStatus($("#ckStatus"),"กำลังส่งข้อมูล...","checking");try{const response=await fetch(appFlowUrl,{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify({Item,Quantity,Location,UserName:currentUser.displayName,UserLogin:currentUser.username,SubmittedAt:new Date().toISOString()})});const result=await readJson(response);if(!response.ok||result.valid===false)throw new Error(result.message||"HTTP "+response.status);setStatus($("#ckStatus"),result.message||"บันทึกเรียบร้อยแล้ว","ok")}catch(err){setStatus($("#ckStatus"),"บันทึกไม่สำเร็จ: "+err.message,"fail")}finally{button.disabled=false}});
+function renderFiles(){const list=$("#fileList");list.innerHTML="";selectedFiles.forEach((file,index)=>{const li=document.createElement("li"),name=document.createElement("span"),remove=document.createElement("button");name.textContent=file.name+" ("+(file.size/1048576).toFixed(2)+" MB)";remove.type="button";remove.className="remove-file";remove.textContent="✕";remove.onclick=()=>{selectedFiles.splice(index,1);renderFiles()};li.append(name,remove);list.append(li)})}
+$("#attachments").addEventListener("change",e=>{for(const file of e.target.files){if(!selectedFiles.some(x=>x.name===file.name&&x.size===file.size))selectedFiles.push(file)}e.target.value="";renderFiles()});
+function toBase64(file){return new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(String(reader.result).split(",")[1]||"");reader.onerror=reject;reader.readAsDataURL(file)})}
+$("#dhlForm").addEventListener("reset",()=>setTimeout(()=>{selectedFiles=[];renderFiles();clearStatus($("#dhlStatus"));$("#waybill").focus()},0));
+$("#dhlForm").addEventListener("submit",async e=>{e.preventDefault();const waybill=$("#waybill").value.trim(),badWaybill=!waybill,badFiles=!selectedFiles.length;setInvalid($("#waybill"),"#waybillErr",badWaybill);$("#attachmentsErr").style.display=badFiles?"block":"none";if(badWaybill||badFiles)return;if(selectedFiles.some(file=>file.size>8*1024*1024)){setStatus($("#dhlStatus"),"ไฟล์แต่ละไฟล์ต้องไม่เกิน 8 MB","fail");return}const button=$("#dhlSend");button.disabled=true;button.innerHTML='<span class="spinner"></span>กำลังส่ง';setStatus($("#dhlStatus"),"กำลังส่งข้อมูล...","checking");try{const attachments=await Promise.all(selectedFiles.map(async file=>({fileName:file.name,contentType:file.type||"application/octet-stream",contentBytes:await toBase64(file)})));const payload={action:"CreateDHLInspection",waybill,packingSlip:$("#packingSlip").value.trim(),remark:$("#remark").value.trim(),verifiedBy:currentUser.displayName,verifiedByLogin:currentUser.username,verifiedDate:new Date().toISOString(),attachments};const response=await fetch(appFlowUrl,{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify(payload)});const result=await readJson(response);if(!response.ok||result.success===false)throw new Error(result.message||"HTTP "+response.status);setStatus($("#dhlStatus"),result.message||"บันทึกข้อมูล DHL เรียบร้อยแล้ว","ok");$("#dhlForm").reset()}catch(err){setStatus($("#dhlStatus"),"บันทึกไม่สำเร็จ: "+err.message,"fail")}finally{button.disabled=false;button.textContent="Submit / บันทึก"}});
+window.addEventListener("load",()=>{let saved=null;try{saved=JSON.parse(sessionStorage.getItem("warehouseAppUser")||"null")}catch{}if(saved&&saved.username)openApp(saved.appName,saved,saved.flowUrl);else $("#username").focus()});
 </script>
 </body></html>
