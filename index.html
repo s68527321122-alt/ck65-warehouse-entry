@@ -741,7 +741,133 @@
       text-align: center;
       color: #64748b
     }
-  .packing-table-wrap{margin:8px 0;overflow-x:auto;border:1px solid #f2d46b;border-radius:8px;background:#fff}.packing-table{width:100%;border-collapse:collapse;font-size:12px}.packing-table th,.packing-table td{padding:7px 8px;border-bottom:1px solid #f5e6aa;text-align:left;vertical-align:top}.packing-table th{background:#fff3b0;color:#713f12;font-weight:800}.packing-table th:first-child,.packing-table td:first-child{width:52px;text-align:center}.packing-table tr:last-child td{border-bottom:0}.dhl-info{margin-top:7px;color:#713f12;font-size:12px}.dhl-info div+div{margin-top:3px}</style>
+  
+    /* Login: remove outer decorative frame */
+    #loginPanel {
+      margin: 0;
+      padding: 24px 0;
+      min-height: calc(100vh - 44px);
+      overflow: visible;
+      border-radius: 0;
+      background: transparent
+    }
+
+    #loginPanel::before,
+    #loginPanel::after {
+      display: none
+    }
+
+    @media(max-width:520px) {
+      #loginPanel {
+        min-height: calc(100vh - 32px);
+        padding: 20px 0;
+        border-radius: 0;
+        background: transparent
+      }
+    }
+  
+    /* Login: remove inner card frame */
+    .login-shell {
+      background: transparent;
+      border: 0;
+      border-radius: 0;
+      box-shadow: none
+    }
+  
+    /* Small screen responsive improvements */
+    html,body{overflow-x:hidden}
+    .login-shell,#loginPanel,.card{min-width:0}
+    #loginPanel input,.dhl-field input,.dhl-field textarea{max-width:100%}
+    .packing-table-wrap{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+    .dhl-modalbox{max-width:calc(100vw - 20px)}
+
+    @media(max-width:390px){
+      body{padding:0}
+      .card{width:100%;padding:10px}
+      #loginPanel{padding:10px 0;min-height:100vh}
+      .login-shell{max-width:100%;padding:12px 6px 14px}
+      .brand{margin-bottom:10px}
+      .logo-wrap{width:64px;height:64px;margin-bottom:8px;border-radius:16px}
+      .company-logo{width:42px;height:42px}
+      .app-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;margin-bottom:12px}
+      .app-card{min-width:0;height:76px;padding:6px 2px;border-radius:10px}
+      .app-icon{width:40px;height:33px}
+      .app-name{font-size:9px;line-height:1.1;overflow-wrap:anywhere}
+      #loginPanel input{height:46px;font-size:15px}
+      .field{margin-bottom:10px}
+      .login-btn{height:48px}
+      .login-note{margin-top:10px;font-size:10px}
+      .dhl-bar{gap:5px;padding:8px;font-size:11px}
+      .dhl-user{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+      .dhl-field{margin-bottom:10px}
+      .dhl-actions{grid-template-columns:1fr;gap:6px}
+      .dhl-actions button{width:100%;height:44px}
+      .dhl-modal{padding:8px}
+      .dhl-modalbox{width:100%;max-width:100%;max-height:94vh;border-radius:12px}
+      .dhl-modalhead{padding:10px;font-size:13px}
+      .dhl-search{grid-template-columns:minmax(0,1fr) auto;gap:5px;padding:8px}
+      .dhl-search input{min-width:0;font-size:14px}
+      .dhl-search button{padding:0 9px;font-size:12px}
+      .dhl-showlatest{grid-column:1/-1}
+      .dhl-results{max-height:64vh;padding:0 8px 8px}
+      .dhl-row{padding:9px 7px}
+    }
+
+    @media(max-width:340px){
+      .card{padding:8px}
+      .login-shell{padding-left:2px;padding-right:2px}
+      .app-grid{gap:4px}
+      .app-card{height:72px}
+      .app-icon{width:36px;height:30px}
+      .app-name{font-size:8px}
+      #loginPanel label{font-size:12px}
+      #loginPanel input{font-size:14px;padding-left:38px}
+      .input-icon{left:12px;font-size:15px}
+      .showpass{width:38px}
+      .dhl-search{grid-template-columns:1fr}
+      .dhl-search button,.dhl-showlatest{grid-column:1}
+    }
+  
+    /* Copeland horizontal logo */
+    .logo-wrap{width:190px;height:72px;padding:10px 14px;border-radius:16px}
+    .company-logo{width:100%;height:100%;object-fit:contain;display:block}
+    @media(max-width:390px){.logo-wrap{width:170px;height:64px;padding:9px 12px}}
+    @media(max-width:340px){.logo-wrap{width:150px;height:58px;padding:8px 10px}}
+  
+    /* Copeland logo reduced by 50 percent */
+    .logo-wrap{width:95px;height:36px;padding:5px 7px;border-radius:8px}
+    @media(max-width:390px){.logo-wrap{width:85px;height:32px;padding:4px 6px}}
+    @media(max-width:340px){.logo-wrap{width:75px;height:29px;padding:4px 5px}}
+  
+    /* Clean login without visible field labels */
+    .app-grid{margin-top:0}
+    #loginForm>.field{margin-bottom:12px}
+    .brand{margin-bottom:10px}
+  
+    /* Login background fits content */
+    body{min-height:100%;background:#edf4f8}
+    .card{min-height:0}
+    #loginPanel{
+      min-height:0;
+      height:auto;
+      justify-content:flex-start;
+      padding:12px 0;
+      margin:0;
+      background:#fff
+    }
+    .login-shell{
+      height:auto;
+      min-height:0;
+      margin:0 auto;
+      padding-bottom:14px
+    }
+    @media(max-width:520px){
+      body{min-height:100%;background:#edf4f8}
+      .card{min-height:0;padding:10px}
+      #loginPanel{min-height:0;height:auto;padding:10px 0}
+      .login-shell{min-height:0;height:auto;padding-bottom:12px}
+    }
+  </style>
 </head>
 
 <body>
@@ -750,14 +876,12 @@
       <div class="login-shell">
         <div class="brand">
           <div class="logo-wrap">
-            <img src="https://www.copeland.com/49ea62/contentassets/e08202be2dff44d1bcda93f0dae74605/favicon.ico"
-              alt="Copeland logo" class="company-logo">
+            <img src="data:image/png;base64,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" alt="Copeland" class="company-logo">
           </div>
         </div>
         <div id="loginStatus" class="status" role="status" aria-live="polite"></div>
         <form id="loginForm" novalidate>
-          <span class="app-label" id="appLabel">เลือก App <span class="req">*</span></span>
-          <div class="app-grid" role="radiogroup" aria-labelledby="appLabel">
+          <div class="app-grid" role="radiogroup" aria-label="เลือก App">
             <button class="app-card" type="button" role="radio" aria-checked="false" data-app="DHLurl"><span
                 class="app-check">✓</span><span class="app-icon"><svg viewBox="0 0 64 64" aria-hidden="true">
                   <path d="M7 15h31v29H7z" fill="#FFCC00" />
@@ -790,7 +914,6 @@
           </div>
           <div id="appErr" class="app-error">กรุณาเลือก App</div>
           <div class="field">
-            <label for="username">Username <span class="req">*</span></label>
             <div class="input-wrap">
               <span class="input-icon" aria-hidden="true">👤</span>
               <input id="username" autocomplete="username" autocapitalize="none" spellcheck="false"
@@ -799,7 +922,6 @@
             <div id="usernameErr" class="err">กรุณากรอก Username</div>
           </div>
           <div class="field">
-            <label for="password">Password <span class="req">*</span></label>
             <div class="password-wrap input-wrap">
               <span class="input-icon" aria-hidden="true">🔒</span>
               <input id="password" type="password" autocomplete="current-password" placeholder="กรอก Password">
@@ -809,7 +931,6 @@
           </div>
           <button id="loginButton" class="login-btn" type="submit">เข้าสู่ระบบ</button>
         </form>
-        <div class="login-note"><span aria-hidden="true">🔐</span> บัญชีสำหรับระบบ CK65 เท่านั้น</div>
       </div>
     </section>
 
@@ -993,8 +1114,8 @@
     });
     item?.addEventListener("paste", e => { const value = e.clipboardData.getData("text"); if (extractItem(value)) { e.preventDefault(); applyScan(value) } });
 
-    entryForm.addEventListener("reset", () => setTimeout(() => { clearStatus(scanStatus); entryMessage.className = "msg"; document.querySelectorAll("#entryPanel .err").forEach(x => x.style.display = "none"); document.querySelectorAll("#entryPanel input").forEach(x => x.classList.remove("bad", "valid")); item.focus() }, 0));
-    entryForm.addEventListener("submit", async e => {
+    entryForm?.addEventListener("reset", () => setTimeout(() => { clearStatus(scanStatus); entryMessage.className = "msg"; document.querySelectorAll("#entryPanel .err").forEach(x => x.style.display = "none"); document.querySelectorAll("#entryPanel input").forEach(x => x.classList.remove("bad", "valid")); item.focus() }, 0));
+    entryForm?.addEventListener("submit", async e => {
       e.preventDefault(); if (!currentUser) { logout(); return } const q = Number(quantity.value), badItem = !ITEM_PATTERN.test(item.value), badQty = !Number.isFinite(q) || q <= 0, badLoc = !locationInput.value.trim(); setInvalid(item, "#itemErr", badItem); setInvalid(quantity, "#quantityErr", badQty); setInvalid(locationInput, "#locationErr", badLoc); if (badItem || badQty || badLoc) return;
       if (!ENTRY_FLOW_URL) { setStatus(scanStatus, "ยังไม่ได้กำหนด ENTRY_FLOW_URL", "fail"); return }
       const payload = { Item: item.value, Quantity: q, Location: locationInput.value.trim(), UserName: currentUser.displayName, UserLogin: currentUser.username, SubmittedAt: new Date().toISOString() }; sendButton.disabled = true; sendButton.innerHTML = '<span class="spinner"></span>กำลังตรวจสอบ'; setStatus(scanStatus, "กำลังตรวจสอบ Item จาก Microsoft Lists...", "checking");
