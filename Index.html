@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#edf4f8">
+<title>CK65 Warehouse Entry</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;min-height:100%}body{background:#edf4f8;font-family:"Segoe UI",Tahoma,Arial,sans-serif;color:#111827;padding:6px}.card{width:100%;max-width:480px;margin:0 auto;background:#fff;border-radius:12px;box-shadow:0 10px 28px rgba(15,23,42,.13);padding:16px}.hidden{display:none!important}.userbar{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px;padding:9px 11px;border-radius:9px;background:#f1f5f9;font-size:13px}.userbar strong{display:block;max-width:305px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.logout{height:34px;padding:0 12px;background:#64748b;color:#fff}.field{margin-bottom:13px}label{display:block;margin-bottom:5px;font-weight:700}.req{color:#c50f1f}input{width:100%;height:48px;border:1px solid #cbd5e1;border-radius:9px;padding:8px 12px;font:inherit;font-size:16px;outline:none;background:#fff}input:focus{border-color:#107c10;box-shadow:0 0 0 3px rgba(16,124,16,.13)}input.bad{border-color:#c50f1f;background:#fff7f7}input.valid{border-color:#107c10;background:#f0fdf4}.err{display:none;margin-top:4px;color:#c50f1f;font-size:12px}.status,.msg{display:none;padding:9px 11px;border-radius:9px;margin-bottom:12px;font-size:13px}.ok{display:block;background:#dcfce7;color:#166534}.fail{display:block;background:#fee2e2;color:#991b1b}.checking{display:block;background:#e0f2fe;color:#075985}.buttons{display:grid;grid-template-columns:1fr 1fr;gap:8px}button{height:48px;border:0;border-radius:9px;font:inherit;font-weight:700;cursor:pointer}.clear{background:#e5ebf1;color:#111827}.primary{background:#107c10;color:#fff}.login-btn{width:100%;background:#107c10;color:#fff}.password-wrap{position:relative}.password-wrap input{padding-right:72px}.showpass{position:absolute;right:5px;top:5px;width:62px;height:38px;background:#e5ebf1;font-size:12px}button:disabled{opacity:.6;cursor:wait}.login-title{font-size:20px;font-weight:750;text-align:center;margin:3px 0 16px}.login-note{font-size:12px;color:#64748b;text-align:center;margin-top:10px}.spinner{display:inline-block;width:13px;height:13px;margin-right:6px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;vertical-align:-2px;animation:spin .7s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<main class="card">
+  <section id="loginPanel">
+    <div class="login-title">ลงชื่อเข้าใช้</div>
+    <div id="loginStatus" class="status" role="status" aria-live="polite"></div>
+    <form id="loginForm" novalidate>
+      <div class="field">
+        <label for="username">Username <span class="req">*</span></label>
+        <input id="username" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="กรอก Username">
+        <div id="usernameErr" class="err">กรุณากรอก Username</div>
+      </div>
+      <div class="field">
+        <label for="password">Password <span class="req">*</span></label>
+        <div class="password-wrap">
+          <input id="password" type="password" autocomplete="current-password" placeholder="กรอก Password">
+          <button id="showPassword" class="showpass" type="button">แสดง</button>
+        </div>
+        <div id="passwordErr" class="err">กรุณากรอก Password</div>
+      </div>
+      <button id="loginButton" class="login-btn" type="submit">เข้าสู่ระบบ</button>
+    </form>
+    <div class="login-note">บัญชีสำหรับระบบ CK65 เท่านั้น</div>
+  </section>
+
+  <section id="entryPanel" class="hidden">
+    <div class="userbar">
+      <div>ผู้ใช้งาน: <strong id="signedInUser"></strong></div>
+      <button id="logoutButton" class="logout" type="button">ออก</button>
+    </div>
+    <div id="scanStatus" class="status" role="status" aria-live="polite"></div>
+    <form id="entryForm" novalidate>
+      <div class="field">
+        <label for="item">Item <span class="req">*</span></label>
+        <input id="item" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="กรอกหรือสแกนพาร์ท">
+        <div id="itemErr" class="err">Item ต้องเป็นรูปแบบ 000-0000-00</div>
+      </div>
+      <div class="field">
+        <label for="quantity">จำนวน <span class="req">*</span></label>
+        <input id="quantity" type="number" min="0.01" step="0.01" inputmode="decimal" autocomplete="off" placeholder="กรอกจำนวน">
+        <div id="quantityErr" class="err">กรุณากรอกจำนวนที่มากกว่า 0</div>
+      </div>
+      <div class="field">
+        <label for="location">Location <span class="req">*</span></label>
+        <input id="location" maxlength="100" autocomplete="off" placeholder="กรอกหรือสแกน Location">
+        <div id="locationErr" class="err">กรุณากรอก Location</div>
+      </div>
+      <div class="buttons">
+        <button class="clear" type="reset">ล้างข้อมูล</button>
+        <button id="sendButton" class="primary" type="submit">ตรวจสอบและส่ง</button>
+      </div>
+    </form>
+    <div id="entryMessage" class="msg" role="status" aria-live="polite"></div>
+  </section>
+</main>
+<script>
+"use strict";
+
+/* URL Flow 1: ตรวจสอบ Username/Password จาก CK65_Users */
+const LOGIN_FLOW_URL = "https://default49d8b68c499440779e38e112c21fd0.e3.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/10/workflows/12eb496a14694a46be3f7baac94776af/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=5AzPaEhlQITweSyxj7iF8hZ2jn8YYYO6two1_hirDpI";
+/* URL Flow 2: ตรวจสอบ Item และ Create item */
+let ENTRY_FLOW_URL = ""; // รับจาก result.flowUrl ซึ่งมาจาก varUrl ใน Login Flow
+
+const loginPanel=document.querySelector("#loginPanel"),entryPanel=document.querySelector("#entryPanel"),loginForm=document.querySelector("#loginForm"),entryForm=document.querySelector("#entryForm"),username=document.querySelector("#username"),password=document.querySelector("#password"),loginButton=document.querySelector("#loginButton"),loginStatus=document.querySelector("#loginStatus"),showPassword=document.querySelector("#showPassword"),signedInUser=document.querySelector("#signedInUser"),logoutButton=document.querySelector("#logoutButton"),item=document.querySelector("#item"),quantity=document.querySelector("#quantity"),locationInput=document.querySelector("#location"),scanStatus=document.querySelector("#scanStatus"),entryMessage=document.querySelector("#entryMessage"),sendButton=document.querySelector("#sendButton");
+const ITEM_PATTERN=/^\d{3}-\d{4}-\d{2}$/;
+let currentUser=null,scanBuffer="",scanTimer=0,scanStarted=0,isApplying=false;
+
+function setInvalid(el,errorId,bad){el.classList.toggle("bad",bad);document.querySelector(errorId).style.display=bad?"block":"none"}
+function setStatus(el,text,type){el.textContent=text;el.className="status "+type}
+function clearStatus(el){el.textContent="";el.className="status"}
+async function readJson(response){try{return await response.json()}catch{return{valid:false,message:"Power Automate ไม่ได้ส่ง JSON กลับมา"}}}
+
+showPassword.addEventListener("click",()=>{const hidden=password.type==="password";password.type=hidden?"text":"password";showPassword.textContent=hidden?"ซ่อน":"แสดง";password.focus()});
+
+function openEntry(user){currentUser={username:user.username,displayName:user.displayName||user.username,role:user.role||"User",flowUrl:user.flowUrl||""};ENTRY_FLOW_URL=currentUser.flowUrl;sessionStorage.setItem("ck65User",JSON.stringify(currentUser));signedInUser.textContent=currentUser.displayName;loginPanel.classList.add("hidden");entryPanel.classList.remove("hidden");password.value="";setTimeout(()=>item.focus(),50)}
+function logout(){currentUser=null;ENTRY_FLOW_URL="";sessionStorage.removeItem("ck65User");entryForm.reset();entryPanel.classList.add("hidden");loginPanel.classList.remove("hidden");clearStatus(loginStatus);username.focus()}
+logoutButton.addEventListener("click",logout);
+
+loginForm.addEventListener("submit",async e=>{
+ e.preventDefault();const u=username.value.trim(),p=password.value;setInvalid(username,"#usernameErr",!u);setInvalid(password,"#passwordErr",!p);if(!u||!p)return;
+ if(!LOGIN_FLOW_URL){setStatus(loginStatus,"ยังไม่ได้กำหนด LOGIN_FLOW_URL","fail");return}
+ loginButton.disabled=true;loginButton.innerHTML='<span class="spinner"></span>กำลังตรวจสอบ';setStatus(loginStatus,"กำลังตรวจสอบบัญชีจาก Microsoft Lists...","checking");
+ try{const response=await fetch(LOGIN_FLOW_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({appName:"CK65url",employeeId:u,password:p})});const result=await readJson(response);if(!response.ok)throw new Error(result.message||"HTTP "+response.status);if(result.valid===true||result.authorized===true){if(!result.flowUrl)throw new Error("Login Flow ไม่ได้ส่ง flowUrl จาก varUrl กลับมา");setStatus(loginStatus,result.message||"เข้าสู่ระบบสำเร็จ","ok");openEntry({username:u,displayName:result.displayName||u,role:result.role||"User",flowUrl:result.flowUrl})}else{password.value="";setStatus(loginStatus,result.message||"ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง","fail");password.focus()}}
+ catch(err){setStatus(loginStatus,"เชื่อมต่อระบบลงชื่อเข้าใช้ไม่สำเร็จ: "+err.message,"fail")}
+ finally{loginButton.disabled=false;loginButton.textContent="เข้าสู่ระบบ"}
+});
+
+function clean(v){return String(v||"").replace(/[\x00-\x1f\x7f]/g," ").replace(/\s+/g," ").trim()}
+function formatItemDigits(d){return d.slice(0,3)+"-"+d.slice(3,7)+"-"+d.slice(7,9)}
+function extractScan(v){
+ const s=clean(v);
+ let m=s.match(/P\s*(\d{3})[\s-]?(\d{4})[\s-]?(\d{2})/i);
+ if(!m)m=s.match(/(?:^|\D)(\d{3})[\s-]?(\d{4})[\s-]?(\d{2})(?:\D|$)/);
+ const itemValue=m?m[1]+"-"+m[2]+"-"+m[3]:"";
+ const q=s.match(/Q\s*([0-9]+(?:\.[0-9]+)?)/i);
+ return{item:itemValue,quantity:q?q[1]:"",raw:s};
+}
+function extractItem(v){return extractScan(v).item}
+function applyScan(v){
+ const data=extractScan(v);console.log("Raw Data Matrix:",JSON.stringify(v),data);
+ if(!data.item)return false;
+ isApplying=true;
+ item.value=data.item;
+ item.classList.remove("bad","valid");
+ if(data.quantity)quantity.value=data.quantity;
+ if(locationInput.value&&(/P\s*\d/i.test(locationInput.value)||clean(locationInput.value).includes(data.item)))locationInput.value="";
+ setStatus(scanStatus,"อ่าน Data Matrix ได้: "+data.item+(data.quantity?" | จำนวน "+data.quantity:""),"ok");
+ setTimeout(()=>{isApplying=false;(data.quantity?locationInput:quantity).focus();if(!data.quantity)quantity.select()},50);
+ return true;
+}
+function finishScan(){
+ clearTimeout(scanTimer);const value=scanBuffer;scanBuffer="";scanStarted=0;
+ if(!value)return false;
+ const valid=applyScan(value);
+ if(!valid&&clean(value).length>7)setStatus(scanStatus,"ไม่พบ Item กรุณาสแกนใหม่","fail");
+ return valid;
+}
+document.addEventListener("keydown",e=>{
+ if(entryPanel.classList.contains("hidden")||e.ctrlKey||e.altKey||e.metaKey)return;
+ const now=Date.now();
+ if(e.key==="Enter"||e.key==="Tab"){
+  if(scanBuffer.length>3){e.preventDefault();e.stopImmediatePropagation();clearTimeout(scanTimer);scanTimer=setTimeout(finishScan,60)}
+  return;
+ }
+ if(e.key.length!==1)return;
+ if(!scanStarted||now-scanStarted>160){scanBuffer=""}
+ scanStarted=now;scanBuffer+=e.key;
+ clearTimeout(scanTimer);scanTimer=setTimeout(finishScan,500);
+},true);
+[item,quantity,locationInput].forEach(el=>el.addEventListener("input",()=>{
+ if(isApplying)return;
+ const raw=el.value;
+ if(/[Pp][\s\d-]{7,}|[Qq]\s*\d+|[)>\x1d\x1e\x1d]/.test(raw)){
+  clearTimeout(scanTimer);scanBuffer+=raw;
+  if(el!==item)el.value="";
+  scanTimer=setTimeout(finishScan,500);
+ }
+}));
+item.addEventListener("input",()=>{
+ item.classList.remove("valid");if(isApplying)return;
+ const current=item.value,x=extractItem(current);
+ if(x){applyScan(current);return}
+ let digits=current.replace(/\D/g,"").slice(0,9),formatted=digits.slice(0,3);
+ if(digits.length>3)formatted+="-"+digits.slice(3,7);
+ if(digits.length>7)formatted+="-"+digits.slice(7);
+ if(!/[A-Za-z,>.\[\]()]/.test(current))item.value=formatted;
+});
+item.addEventListener("paste",e=>{const value=e.clipboardData.getData("text");if(extractItem(value)){e.preventDefault();applyScan(value)}});
+
+entryForm.addEventListener("reset",()=>setTimeout(()=>{clearStatus(scanStatus);entryMessage.className="msg";document.querySelectorAll("#entryPanel .err").forEach(x=>x.style.display="none");document.querySelectorAll("#entryPanel input").forEach(x=>x.classList.remove("bad","valid"));item.focus()},0));
+entryForm.addEventListener("submit",async e=>{
+ e.preventDefault();if(!currentUser){logout();return}const q=Number(quantity.value),badItem=!ITEM_PATTERN.test(item.value),badQty=!Number.isFinite(q)||q<=0,badLoc=!locationInput.value.trim();setInvalid(item,"#itemErr",badItem);setInvalid(quantity,"#quantityErr",badQty);setInvalid(locationInput,"#locationErr",badLoc);if(badItem||badQty||badLoc)return;
+ if(!ENTRY_FLOW_URL){setStatus(scanStatus,"ยังไม่ได้กำหนด ENTRY_FLOW_URL","fail");return}
+ const payload={Item:item.value,Quantity:q,Location:locationInput.value.trim(),UserName:currentUser.displayName,UserLogin:currentUser.username,SubmittedAt:new Date().toISOString()};sendButton.disabled=true;sendButton.innerHTML='<span class="spinner"></span>กำลังตรวจสอบ';setStatus(scanStatus,"กำลังตรวจสอบ Item จาก Microsoft Lists...","checking");
+ try{const response=await fetch(ENTRY_FLOW_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});const result=await readJson(response);if(!response.ok)throw new Error(result.message||"HTTP "+response.status);if(result.valid===false){item.classList.add("bad");setStatus(scanStatus,result.message||"ไม่พบ Item นี้ใน Microsoft Lists","fail");item.focus();return}item.classList.add("valid");entryMessage.textContent=result.message||"ตรวจสอบและบันทึกข้อมูลเรียบร้อยแล้ว";entryMessage.className="msg ok";entryForm.reset()}
+ catch(err){setStatus(scanStatus,"เชื่อมต่อ Power Automate ไม่สำเร็จ: "+err.message,"fail")}
+ finally{sendButton.disabled=false;sendButton.textContent="ตรวจสอบและส่ง"}
+});
+
+window.addEventListener("load",()=>{let saved=null;try{saved=JSON.parse(sessionStorage.getItem("ck65User")||"null")}catch{}if(saved&&saved.username)openEntry(saved);else username.focus()});
+</script>
+</body></html>
