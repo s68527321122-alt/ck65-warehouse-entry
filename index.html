@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#edf4f8">
   <title>CK65 Warehouse Entry</title>
   <link href="https://www.copeland.com/49ea62/contentassets/e08202be2dff44d1bcda93f0dae74605/favicon.ico" rel="icon"
@@ -61,6 +61,14 @@
       white-space: nowrap
     }
 
+    .userbar > div {
+      min-width: 0
+    }
+
+    .userbar .logout {
+      flex-shrink: 0
+    }
+
     .logout {
       height: 34px;
       padding: 0 12px;
@@ -80,6 +88,18 @@
 
     .req {
       color: #c50f1f
+    }
+
+    #entryForm label {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+      border: 0
     }
 
     input {
@@ -572,9 +592,12 @@
     }
 
     .dhl-user {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap
+      min-width: 0;
+      overflow-wrap: anywhere
+    }
+
+    .dhl-bar .logout {
+      flex-shrink: 0
     }
 
     .dhl-field {
@@ -582,6 +605,7 @@
     }
 
     .dhl-field textarea {
+      display: block;
       width: 100%;
       min-height: 76px;
       border: 1px solid #cbd5e1;
@@ -609,6 +633,10 @@
       margin: 8px 0 0
     }
 
+    .dhl-files:empty {
+      margin: 0
+    }
+
     .dhl-files li {
       display: flex;
       align-items: center;
@@ -621,11 +649,15 @@
       font-size: 12px
     }
 
+    .dhl-files li span {
+      min-width: 0;
+      overflow-wrap: anywhere
+    }
+
     .dhl-remove {
       height: auto;
       padding: 3px 7px;
-      background: #fee2e2;
-      color: #991b1b
+      flex-shrink: 0
     }
 
     .dhl-actions {
@@ -640,12 +672,12 @@
     }
 
     .dhl-latest {
-      background: #FFCC00;
-      color: #713f12
+      background: #dbeafe;
+      color: #1e3a8a
     }
 
     .dhl-submit {
-      background: #D40511;
+      background: #15803d;
       color: #fff
     }
 
@@ -667,7 +699,9 @@
     .dhl-modalbox {
       width: min(100%, 520px);
       max-height: 88vh;
-      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      overflow: auto;
       background: #fff;
       border-radius: 15px;
       box-shadow: 0 22px 55px #0005
@@ -703,18 +737,81 @@
     .dhl-search button {
       height: 42px;
       padding: 0 12px;
-      background: #107c10;
+      background: #1d4ed8;
       color: #fff
     }
 
-    .dhl-showlatest {
+    .dhl-search .dhl-showlatest {
       grid-column: 1/-1;
-      background: #FFCC00 !important;
-      color: #713f12 !important
+      background: #dbeafe;
+      color: #1e3a8a
+    }
+
+    #dhlPanel .logout,
+    .dhl-close {
+      background: #e2e8f0;
+      color: #1e293b
+    }
+
+    #dhlPanel .clear {
+      background: #b91c1c;
+      color: #fff
+    }
+
+    .dhl-remove {
+      background: #ffe4e6;
+      color: #9f1239
+    }
+
+    #dhlAttach::file-selector-button {
+      background: #dbeafe;
+      color: #1e3a8a;
+      border: 0;
+      border-radius: 5px;
+      padding: 4px 8px;
+      font: inherit;
+      font-size: 13px;
+      cursor: pointer
+    }
+
+    #dhlPanel button:focus-visible,
+    .dhl-modal button:focus-visible,
+    #dhlAttach:focus-visible {
+      outline: 3px solid #60a5fa;
+      outline-offset: 2px
+    }
+
+    @media (hover: hover) {
+      .dhl-search button:not(.dhl-showlatest):not(:disabled):hover {
+        background: #1e40af
+      }
+
+      .dhl-submit:not(:disabled):hover {
+        background: #166534
+      }
+
+      .dhl-latest:not(:disabled):hover,
+      .dhl-search .dhl-showlatest:not(:disabled):hover {
+        background: #bfdbfe
+      }
+
+      #dhlPanel .logout:not(:disabled):hover,
+      .dhl-close:not(:disabled):hover {
+        background: #cbd5e1
+      }
+
+      #dhlPanel .clear:not(:disabled):hover {
+        background: #991b1b
+      }
+
+      .dhl-remove:not(:disabled):hover {
+        background: #fecdd3
+      }
     }
 
     .dhl-results {
-      max-height: 58vh;
+      min-height: 48px;
+      flex: 1 1 auto;
       overflow: auto;
       padding: 0 12px 12px
     }
@@ -722,7 +819,8 @@
     .dhl-row {
       padding: 10px;
       border-bottom: 1px solid #fde68a;
-      background: #fffbeb
+      background: #fffbeb;
+      overflow-wrap: anywhere
     }
 
     .dhl-row strong {
@@ -741,7 +839,7 @@
       text-align: center;
       color: #64748b
     }
-  
+
     /* Login: remove outer decorative frame */
     #loginPanel {
       margin: 0;
@@ -765,7 +863,7 @@
         background: transparent
       }
     }
-  
+
     /* Login: remove inner card frame */
     .login-shell {
       background: transparent;
@@ -773,99 +871,697 @@
       border-radius: 0;
       box-shadow: none
     }
-  
+
     /* Small screen responsive improvements */
-    html,body{overflow-x:hidden}
-    .login-shell,#loginPanel,.card{min-width:0}
-    #loginPanel input,.dhl-field input,.dhl-field textarea{max-width:100%}
-    .packing-table-wrap{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
-    .dhl-modalbox{max-width:calc(100vw - 20px)}
-
-    @media(max-width:390px){
-      body{padding:0}
-      .card{width:100%;padding:10px}
-      #loginPanel{padding:10px 0;min-height:100vh}
-      .login-shell{max-width:100%;padding:12px 6px 14px}
-      .brand{margin-bottom:10px}
-      .logo-wrap{width:64px;height:64px;margin-bottom:8px;border-radius:16px}
-      .company-logo{width:42px;height:42px}
-      .app-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;margin-bottom:12px}
-      .app-card{min-width:0;height:76px;padding:6px 2px;border-radius:10px}
-      .app-icon{width:40px;height:33px}
-      .app-name{font-size:9px;line-height:1.1;overflow-wrap:anywhere}
-      #loginPanel input{height:46px;font-size:15px}
-      .field{margin-bottom:10px}
-      .login-btn{height:48px}
-      .login-note{margin-top:10px;font-size:10px}
-      .dhl-bar{gap:5px;padding:8px;font-size:11px}
-      .dhl-user{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-      .dhl-field{margin-bottom:10px}
-      .dhl-actions{grid-template-columns:1fr;gap:6px}
-      .dhl-actions button{width:100%;height:44px}
-      .dhl-modal{padding:8px}
-      .dhl-modalbox{width:100%;max-width:100%;max-height:94vh;border-radius:12px}
-      .dhl-modalhead{padding:10px;font-size:13px}
-      .dhl-search{grid-template-columns:minmax(0,1fr) auto;gap:5px;padding:8px}
-      .dhl-search input{min-width:0;font-size:14px}
-      .dhl-search button{padding:0 9px;font-size:12px}
-      .dhl-showlatest{grid-column:1/-1}
-      .dhl-results{max-height:64vh;padding:0 8px 8px}
-      .dhl-row{padding:9px 7px}
+    html,
+    body {
+      overflow-x: hidden
     }
 
-    @media(max-width:340px){
-      .card{padding:8px}
-      .login-shell{padding-left:2px;padding-right:2px}
-      .app-grid{gap:4px}
-      .app-card{height:72px}
-      .app-icon{width:36px;height:30px}
-      .app-name{font-size:8px}
-      #loginPanel label{font-size:12px}
-      #loginPanel input{font-size:14px;padding-left:38px}
-      .input-icon{left:12px;font-size:15px}
-      .showpass{width:38px}
-      .dhl-search{grid-template-columns:1fr}
-      .dhl-search button,.dhl-showlatest{grid-column:1}
+    .login-shell,
+    #loginPanel,
+    .card {
+      min-width: 0
     }
-  
+
+    #loginPanel input,
+    .dhl-field input,
+    .dhl-field textarea {
+      max-width: 100%
+    }
+
+    .packing-table-wrap {
+      max-width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch
+    }
+
+    .dhl-modalbox {
+      max-width: calc(100vw - 20px)
+    }
+
+    @media(max-width:390px) {
+      body {
+        padding: 0
+      }
+
+      .card {
+        width: 100%;
+        padding: 10px
+      }
+
+      #loginPanel {
+        padding: 10px 0;
+        min-height: 100vh
+      }
+
+      .login-shell {
+        max-width: 100%;
+        padding: 12px 6px 14px
+      }
+
+      .brand {
+        margin-bottom: 10px
+      }
+
+      .logo-wrap {
+        width: 64px;
+        height: 64px;
+        margin-bottom: 8px;
+        border-radius: 16px
+      }
+
+      .company-logo {
+        width: 42px;
+        height: 42px
+      }
+
+      .app-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 5px;
+        margin-bottom: 12px
+      }
+
+      .app-card {
+        min-width: 0;
+        height: 76px;
+        padding: 6px 2px;
+        border-radius: 10px
+      }
+
+      .app-icon {
+        width: 40px;
+        height: 33px
+      }
+
+      .app-name {
+        font-size: 9px;
+        line-height: 1.1;
+        overflow-wrap: anywhere
+      }
+
+      #loginPanel input {
+        height: 46px;
+        font-size: 15px
+      }
+
+      .field {
+        margin-bottom: 10px
+      }
+
+      .login-btn {
+        height: 48px
+      }
+
+      .login-note {
+        margin-top: 10px;
+        font-size: 10px
+      }
+
+      .dhl-bar {
+        gap: 5px;
+        padding: 8px;
+        font-size: 11px
+      }
+
+      .dhl-field {
+        margin-bottom: 10px
+      }
+
+      .dhl-actions {
+        grid-template-columns: 1fr;
+        gap: 6px
+      }
+
+      .dhl-actions button {
+        width: 100%;
+        height: 44px
+      }
+
+      .dhl-modal {
+        padding: 8px
+      }
+
+      .dhl-modalbox {
+        width: 100%;
+        max-width: 100%;
+        max-height: 94vh;
+        border-radius: 12px
+      }
+
+      .dhl-modalhead {
+        padding: 10px;
+        font-size: 13px
+      }
+
+      .dhl-search {
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 5px;
+        padding: 8px
+      }
+
+      .dhl-search input {
+        min-width: 0;
+        font-size: 14px
+      }
+
+      .dhl-search button {
+        padding: 0 9px;
+        font-size: 12px
+      }
+
+      .dhl-showlatest {
+        grid-column: 1/-1
+      }
+
+      .dhl-results {
+        max-height: 64vh;
+        padding: 0 8px 8px
+      }
+
+      .dhl-row {
+        padding: 9px 7px
+      }
+    }
+
+    @media(max-width:340px) {
+      .card {
+        padding: 8px
+      }
+
+      .login-shell {
+        padding-left: 2px;
+        padding-right: 2px
+      }
+
+      .app-grid {
+        gap: 4px
+      }
+
+      .app-card {
+        height: 72px
+      }
+
+      .app-icon {
+        width: 36px;
+        height: 30px
+      }
+
+      .app-name {
+        font-size: 8px
+      }
+
+      #loginPanel label {
+        font-size: 12px
+      }
+
+      #loginPanel input {
+        font-size: 14px;
+        padding-left: 38px
+      }
+
+      .input-icon {
+        left: 12px;
+        font-size: 15px
+      }
+
+      .showpass {
+        width: 38px
+      }
+
+      .dhl-search {
+        grid-template-columns: 1fr
+      }
+
+      .dhl-search button,
+      .dhl-showlatest {
+        grid-column: 1
+      }
+    }
+
+    @media (min-width: 260px) and (max-width: 340px) {
+      .dhl-search {
+        grid-template-columns: minmax(0, 1fr) auto
+      }
+
+      .dhl-search button {
+        grid-column: auto
+      }
+
+      .dhl-search .dhl-showlatest {
+        grid-column: 1 / -1
+      }
+    }
+
     /* Copeland horizontal logo */
-    .logo-wrap{width:190px;height:72px;padding:10px 14px;border-radius:16px}
-    .company-logo{width:100%;height:100%;object-fit:contain;display:block}
-    @media(max-width:390px){.logo-wrap{width:170px;height:64px;padding:9px 12px}}
-    @media(max-width:340px){.logo-wrap{width:150px;height:58px;padding:8px 10px}}
-  
+    .logo-wrap {
+      width: 190px;
+      height: 72px;
+      padding: 10px 14px;
+      border-radius: 16px
+    }
+
+    .company-logo {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block
+    }
+
+    @media(max-width:390px) {
+      .logo-wrap {
+        width: 170px;
+        height: 64px;
+        padding: 9px 12px
+      }
+    }
+
+    @media(max-width:340px) {
+      .logo-wrap {
+        width: 150px;
+        height: 58px;
+        padding: 8px 10px
+      }
+    }
+
     /* Copeland logo reduced by 50 percent */
-    .logo-wrap{width:95px;height:36px;padding:5px 7px;border-radius:8px}
-    @media(max-width:390px){.logo-wrap{width:85px;height:32px;padding:4px 6px}}
-    @media(max-width:340px){.logo-wrap{width:75px;height:29px;padding:4px 5px}}
-  
+    .logo-wrap {
+      width: 95px;
+      height: 36px;
+      padding: 5px 7px;
+      border-radius: 8px
+    }
+
+    @media(max-width:390px) {
+      .logo-wrap {
+        width: 85px;
+        height: 32px;
+        padding: 4px 6px
+      }
+    }
+
+    @media(max-width:340px) {
+      .logo-wrap {
+        width: 75px;
+        height: 29px;
+        padding: 4px 5px
+      }
+    }
+
     /* Clean login without visible field labels */
-    .app-grid{margin-top:0}
-    #loginForm>.field{margin-bottom:12px}
-    .brand{margin-bottom:10px}
-  
+    .app-grid {
+      margin-top: 0
+    }
+
+    #loginForm>.field {
+      margin-bottom: 12px
+    }
+
+    .brand {
+      margin-bottom: 10px
+    }
+
     /* Login background fits content */
-    body{min-height:100%;background:#edf4f8}
-    .card{min-height:0}
-    #loginPanel{
-      min-height:0;
-      height:auto;
-      justify-content:flex-start;
-      padding:12px 0;
-      margin:0;
-      background:#fff
+    body {
+      min-height: 100%;
+      background: #edf4f8
     }
-    .login-shell{
-      height:auto;
-      min-height:0;
-      margin:0 auto;
-      padding-bottom:14px
+
+    .card {
+      min-height: 0
     }
-    @media(max-width:520px){
-      body{min-height:100%;background:#edf4f8}
-      .card{min-height:0;padding:10px}
-      #loginPanel{min-height:0;height:auto;padding:10px 0}
-      .login-shell{min-height:0;height:auto;padding-bottom:12px}
+
+    #loginPanel {
+      min-height: 0;
+      height: auto;
+      justify-content: flex-start;
+      padding: 12px 0;
+      margin: 0;
+      background: #fff
+    }
+
+    .login-shell {
+      height: auto;
+      min-height: 0;
+      margin: 0 auto;
+      padding-bottom: 14px
+    }
+
+    @media(max-width:520px) {
+      body {
+        min-height: 100%;
+        background: #edf4f8
+      }
+
+      .card {
+        min-height: 0;
+        padding: 10px
+      }
+
+      #loginPanel {
+        min-height: 0;
+        height: auto;
+        padding: 10px 0
+      }
+
+      .login-shell {
+        min-height: 0;
+        height: auto;
+        padding-bottom: 12px
+      }
+    }
+
+    /* Stator Stock */
+    #stockPanel {
+      padding: 0
+    }
+
+    .stock-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 14px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: #eaf8ee;
+      color: #0f5132
+    }
+
+    .stock-user {
+      min-width: 0;
+      font-size: 12px;
+      overflow-wrap: anywhere
+    }
+
+    .stock-head .logout {
+      flex-shrink: 0
+    }
+
+    .stock-title {
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 12px;
+      color: #0f5132
+    }
+
+    .stock-search {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px
+    }
+
+    .stock-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin: 2px 0 14px
+    }
+
+    .stock-search-btn {
+      background: #107c10;
+      color: #fff
+    }
+
+    .stock-table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      border: 1px solid #dbe4dc;
+      border-radius: 10px
+    }
+
+    .stock-table {
+      width: 100%;
+      min-width: 360px;
+      border-collapse: collapse;
+      font-size: 13px
+    }
+
+    .stock-table th,
+    .stock-table td {
+      padding: 10px 9px;
+      border-bottom: 1px solid #e5e7eb;
+      text-align: left
+    }
+
+    .stock-table th {
+      background: #dcf2e3;
+      color: #0f5132;
+      white-space: nowrap;
+      cursor: pointer
+    }
+
+    .stock-table tbody tr:nth-child(even) {
+      background: #f4f9f5
+    }
+
+    .stock-table tbody td {
+      vertical-align: middle;
+      line-height: 1.4
+    }
+
+    .stock-table tbody td:last-child:not(.stock-empty) {
+      font-weight: 700;
+      font-variant-numeric: tabular-nums
+    }
+
+    .stock-table th:last-child,
+    .stock-table td:last-child {
+      text-align: right
+    }
+
+    .stock-sort {
+      margin-left: 3px;
+      color: #107c10
+    }
+
+    .stock-empty {
+      text-align: center !important;
+      color: #64748b;
+      padding: 24px !important
+    }
+
+    .stock-count {
+      margin: 0 0 8px;
+      color: #64748b;
+      font-size: 12px
+    }
+
+    @media(max-width:390px) {
+      .stock-search {
+        grid-template-columns: 1fr
+      }
+
+      .stock-table {
+        min-width: 0;
+        table-layout: fixed;
+        font-size: 12px
+      }
+
+      .stock-table th,
+      .stock-table td {
+        padding: 8px 4px;
+        overflow-wrap: anywhere
+      }
+
+      .stock-table th {
+        white-space: normal
+      }
+
+      .stock-table th:nth-child(1) {
+        width: 32%
+      }
+
+      .stock-table th:nth-child(2) {
+        width: 43%
+      }
+
+      .stock-table th:nth-child(3) {
+        width: 25%
+      }
+    }
+
+    @media (max-height: 500px) {
+      .stock-head {
+        padding: 2px 8px;
+        margin-bottom: 4px
+      }
+
+      .stock-title {
+        font-size: 16px;
+        margin-bottom: 4px
+      }
+
+      .stock-search {
+        gap: 4px
+      }
+
+      .stock-search .field {
+        margin-bottom: 0
+      }
+
+      .stock-search input,
+      .stock-actions button {
+        height: 44px
+      }
+
+      .stock-actions {
+        margin: 4px 0
+      }
+
+      .stock-empty {
+        padding: 8px !important
+      }
+
+      .stock-count:empty {
+        margin: 0
+      }
+
+      #entryPanel .userbar {
+        padding: 2px 8px;
+        margin-bottom: 4px
+      }
+
+      #entryPanel .userbar strong {
+        display: inline;
+        white-space: normal;
+        overflow-wrap: anywhere
+      }
+
+      #entryForm .field {
+        margin-bottom: 4px
+      }
+
+      #entryForm input,
+      #entryForm .buttons button {
+        height: 44px
+      }
+
+      .dhl-bar {
+        margin-bottom: 6px;
+        padding: 5px 8px
+      }
+
+      .dhl-field {
+        margin-bottom: 6px
+      }
+
+      .dhl-field input {
+        height: 44px
+      }
+
+      .dhl-field textarea {
+        min-height: 48px;
+        height: 48px;
+        padding: 8px 12px
+      }
+
+      #loginPanel {
+        padding: 4px 0
+      }
+
+      .login-shell {
+        padding: 10px 12px
+      }
+
+      .brand {
+        margin-bottom: 6px
+      }
+
+      .logo-wrap {
+        margin-bottom: 0
+      }
+
+      .app-grid {
+        margin-bottom: 10px
+      }
+
+      .app-card {
+        height: 72px
+      }
+
+      .app-icon {
+        height: 32px
+      }
+
+      #loginForm > .field {
+        margin-bottom: 8px
+      }
+
+      #loginPanel input,
+      .login-btn {
+        height: 48px
+      }
+
+      .showpass {
+        top: 5px
+      }
+    }
+
+    @media (min-width: 260px) and (max-width: 390px) and (max-height: 500px) {
+      .dhl-actions {
+        grid-template-columns: minmax(0, 1.3fr) minmax(0, .65fr) minmax(0, 1.2fr);
+        gap: 4px
+      }
+
+      .dhl-actions button {
+        min-width: 0;
+        padding: 0 2px;
+        font-size: 11px
+      }
+    }
+
+    @media (max-height: 400px) {
+      body {
+        padding: 4px
+      }
+
+      .card {
+        padding: 8px
+      }
+
+      .dhl-bar {
+        padding: 2px 8px;
+        margin-bottom: 2px
+      }
+
+      .dhl-field {
+        margin-bottom: 4px
+      }
+
+      .dhl-field textarea {
+        min-height: 44px;
+        height: 44px
+      }
+
+      .dhl-actions button {
+        height: 44px
+      }
+
+      #loginPanel {
+        padding: 0
+      }
+
+      .login-shell {
+        padding: 8px 12px
+      }
+
+      .logo-wrap {
+        height: 28px
+      }
+
+      .app-card {
+        height: 62px
+      }
+
+      #loginPanel input,
+      .login-btn {
+        height: 44px
+      }
+
+      .showpass {
+        top: 3px
+      }
     }
   </style>
 </head>
@@ -876,7 +1572,9 @@
       <div class="login-shell">
         <div class="brand">
           <div class="logo-wrap">
-            <img src="data:image/png;base64,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" alt="Copeland" class="company-logo">
+            <img
+              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALoAAAAiCAYAAADoO8PfAAAAAXNSR0IArs4c6QAAAAlwSFlzAAAOxAAADsQBlSsOGwAAABl0RVh0U29mdHdhcmUATWljcm9zb2Z0IE9mZmljZX/tNXEAABd5SURBVHhe7VsJlFTVmf7vrVdbLzTPpiE0CURklVacoBGMfQYTYFBjZ6IiE51IhslJyCSoM5kjhON5hkpiHGY5iZwJhjiZUYOGuI0kGhcyMRIkgAhIswY70CwNNN1V3dW1vHrv3TvffVXVXWsDLnBOrHtouqvq3f/+y3f/+////Utbvnw5VUZFA3/uGtD+3AWsyFfRgNJABegVHHwoNFAB+ofCzBUhK0CvYOBDoYEK0D8UZq4IOSjQN236G98Be0IgoCOWD5C3o4O8iXCSB/WAGDmSLEom7WQ4YE3QyJwxI2S+G3WuazWCYSI/Jdx8wXc8TF5FJxgkZ6ROKfxpJ4lSD86jxN69IafcGvffbzB9FgUpnM07QPWchk6kk/jipWTW14eswqn3bzI0vRP0iRhhkXMfoI/R0EDmHdCV4nfsLKrK5EmyBD2GVazwekosXx4q9fmgLPxgw+LqtC50zC3Fr5I3zBo0PQF+lJ6LxppNhs+2YXlXZsryoP4WC5pD0XIMuDYNky+9rk5jx5K5fjWZSo4yNMvKAjoSfIov3qSn6iPFdjlbOxQB3TDuZ403yaENtTShTxPTTZsutftkoxWhocKkWm/Q5xOmsMIdMurT/BEg4uQ+on3tO4wtUGvrt+dRGIAUgzHQ1WV414fpIn9KTOvsta92BB+vcdaQSNEQn6Ra4uSRKRaP9MheL2PdliOOLnuM7xgx3Njc0R4+vKB5ZZGSZ32lzb/r4Niv2UPEpbAINoQycOEQykge911JAj+SOHefw3+MO5T41UHap3cYb+g67W8eFcIeSw89SRNZDX0FvNXglV1M2oUDJyZ4adkFk5DL1vhvNm0y1s77Cnm3tNM/JixxCROK334gqenqWU3303Z9Fv8vvC4LqlJrrTtmjPAz8fVULX0M/MBEpXXBRJ3X1uj1dRuMtS3NoXghrZ4kNTNN3ArOglKQKzP0pHk0nnym1fjpLU2hLYVzDMPg/30jfTkuxTRy6iTXBO+J8leXLKFn8GwinKLPcA99jgkRyNIspCEZbCSVDmCRamH7WV3kxdfoqE9b9sdkwt5NwUD3gqZQ7GxBrp7LA/qjrUbNmpvv+4w0xe0dcT7TEvwiLOiRFsMAQvyU8hJLkpS+hM0DcagQb0v8Fn0mRTUPbVz6mHhSDxovtDSFIqUY2XDs3o8cPGrPM1Oe+ZbNp9mC+SRjXCEQMCFvFcWZJMeRVB03WQY0XCZtcqJxOubT6l5Yu2PZz+yEti3XE43Vde9OIW8RjE+XCrolYA5US+51DSalg1NEDQX3zFBo646TA1nau2L0SDhsrOqXQ9IYgO8OPHIRDFQ8FBVODlPGcQfMlTfwEtoWJJzO0fw5Wye/2SZvS0k+RdEreBizJQODI2sD9HOQOSegd7XTTNvhi7Cth2HBfH/czxNUi3+xhLw6EGS/x9t/LBQq4dDlHg//AmgMycqsxGTKu3XLy9ZuXfaN+Vc9sL1gnscWdCPkmqPsAMSylKDE8QC9MA5AT5h0pdcPPUpeXUqPru08ZDMP/hI4FQABM0Ui2U3CwzyWpnkOBmxav2aH8czUCfRWU1UoUQpnhe/1A30DvEAqIu7rsdiXHGI1AEL/UGtrnE7W+miVXks7owk5NhKlhZbDpihPqFizBA3Fz42Ww2clLXpy7cF7jfnjVhzJXXDtDmNad1SGTJvNFoK8SijmbpU0LHyMttdV0Wqflzp7o+L6mMNvx3NuuAB2NEfQmJTDv5Zw2I1Bv3gInuvhllEZT6QDvIxMPM9c6BYC3cWZ7Axw9hzzUBIguBInyNV4vvBU00xJY2GskAN/Ar08AM8e58IWjoQWwHApAylHUOWlzfBWb2Iezgr1Tj7SYTNW5eUbGtoPmLY+IQhaSRiTKTAW7UtMl1LayaAL1bMe8Khs9Rwx13HYMCgkrYvcwCOHkpIjxWkimLgSodTBohBJkAUccNe75nChSJrErumKa/+2dqtx1/yrQrtzGcTnppJLzZFQNOzsBJWkKlDjlML7iq/SesQjfkYveb2szU7RNUlJV8L2HM6PW8Q0W9JlpkVTNIvmb91Fq9uqjR/BGXWeSUGukRFT1Z3qEw/EbXanLZmGozQvIvNwStYExfcmjeOrZ9SHzNZWw7OT7D3dvZ7/AdhH9FsJHMFd+h2L7qSTPrYhuPie5lErI2qNZ3YYTad7aWXKYTNcpeV6MeXJOR0dUWf/k/EF7XUV+gDErxw/JAKJJLu932DQIPTGhMPGiBh953S7SK4JGD+5YyCmTvvnMkD3eKnNL+jb2iTqGk00fO9e8R+xJL8VhsgPN5QcjLRkSi5qP85+TaNoIzaxAIgH6OcCRm0iwGFEvXj2qqn84dd+ivyl1JhLNKWDRNOMnzsb4oYKoUrSc6emZTgnkKtp0++kCSmLfUookLuzJWlMhm1itdh8eZvaxT9OU8j5mWnz6EW87MljW0G8DI8ShjY1+nS3Kb//yKZl93x5xgNt2bkAZZ4d3NcDQwWMZeWGjqlxhHgs1sCfHx1OjtzT4f9hwmItAjYCHTcohUPjlk2NEUH3CZsueqXVWD6nKdQ9GNhdwbuiYmHc5LfbDnRSqFrlaT1y/7DR/BcK5Or5pqaQs36d8TtfndwGeW9wgZt1Sco7C+Kmze9oO1r32vrVxqPTloQDp2O0FGCZ7p4Uue4L9OFhBTz0834tunnv3pUuB/DU0SfDxmMpi24EX0Nz6avd5HhYVdykZZ422kH19IaukpazGIkEmYvSG+PYqaHG6tRpus5yqKHQS6sjxPaw+liKmpFAbVVhyRnJg/NZS8gcZZZPmsHrBzpOdombED+NdBeBbhEThhvqaNXpKN0GOccVaknJjRDyOuhlVBHQz8CpsiU8+2e93JOEZ/8mPLs6wc/KDoORdmzucZ1XPbVH7WXfbzvpmQJvPr4/ysgAHqxrfSn6h46o2Ann+6jCZTm6Go7mIQlT3oawIFAK5MoveDnbFg1QJJfI1Q1kHdDYPitJf+nYmQRPPZAR00EqkbTkTHiKteHd+uXwGnNxjKWP0pyhXiI9t4bX0oaWppV58dZll9L2116nQ7DXFUXaUwYiNsq0xDwAcdvcuwH/LTgPB9O0+jg4wOvEBjp8sot64CEaihSkTg+FFU4X27XkE2FbcP/g1VgcC3IefkIfKJTLE2+NG8FY0rkO4ViNq2cwFPTR9o9/jP8kvE9cjNN6XJ5TUqQgJGw/FmWXmUM/aRyIbAkVJ9rlllQ6QpzbZ7FbiIsowtVvUSh0SpJxzidR7hIKwNnXN0x6YMuqTmMHnOR4Fd66Xj0zlDMSGmmIRG7elki+3ATnVRbo4SiNwbFwSckES+kKiUFNLR2Yk7Z7/1i4kMS/PEVPh6PiuJNCQMHzPkd4wT1+v2e/KjEJUXc1wrIaN9EoGCqStS2ZikZ5e+FnOzdTL2OynRi7ogjB6uTAj2OzaVowWfXDuYGeJx5UyBwM6fkrhG3UHKQHSi0MpzN0FA4k9tOZTgvFC56Fx2y8/uuoUpGRRFkub1fgc+TBdALx/qBH7HvZI/vbaKqU/PJs6MZVSOiVv75+Ijt68Chfb/XRDUjy6wqdDd6jmEmfffDf6blFzdQxCK6LNaVsYBHvk3yBfcIXWRc0QtBZf7XqvciTnYvN9CfwbAIr/iJHifUtm0207EAdni8P9LbjNAzxnL8cQJSXqquhrmuvJbF37wDbKo7e9pTxB0TfKDHNKwHhp1gc79fdpXuCR8RHexIsXccrAXRszFhb2C5VLpLBAOuxYgpvBXF0hg424vDGRpQkiSLY8Sr+Kz8YE8hs+z3WoRPaJ2ySSGNLT0G4KD1M7J6m8+TLZs6pVSgDXuNUYx1dbNHpHnlneqvlbB64AVU/0jRa3t6OnKJM3fq9gqIrSrNgy3pXHFUlQ/Lt5+L1SOS7dl2dsb43JttxqF5WKK6blKbk9BEXsfGYWRboHi4BNlRhUUjI1ZnysgCjB5W4xd1HUEdjWj2cEDTy/vRSVQUp4iSBZztTKctRlFob/FSHE1Q9mP40BPXMo0ofZaq/Gf9YEgqZLB04LXdYhwg1c896ZehBrcikpmkl10jXZAYZbiIZGJx8ZroU0qsPY0N+0GqYI237E719dJftsCFFKV+m2q5xuUcP8t+q2O/lo8s86aus8gO0qmBgdcFSeEgAHngP4aFf1W0+gBGXxlBhy78C0FXNW53E8OZsIw6WP6nlWsaF2h8+cd8bOB0nuwDMDQHcMI3psYSYvqnL2JzNxbJsqkfVcT4kyNr0WvG7Y528xZLUmBfqqgoLI28k5lmMv1BwzpSM3xdZ3SCySKlZ0rl1jXLLaWMb7cix056UjTJDqaE8KRKyIbgVzXtAlbFmfpUmtx2ly92SXn5oo65NeC2nI6MbaWsyyU+4VdESQ4UfSKerGocyVUYsGqi71pbz5uphHLtd2M19aS0MgiEVixKbcKJHPhnEBc0pyzMRGelw1+DZaZnfAInUGLVV+eTyt59l+2/BPvYiECmX6SgSHsxprKefjhwinjN9yMVzypYanAnCCAYa+9bPQiiUczK+LzgAkefeFDNNh09Kl2zTP0GNXr17NoUjkfQq1X6+3rTlrQ5j9YXuQxkn6bBZO/fQ4zPKhC+QQQwfzh8K94p3YhYzoM/agnqK2jAqvEjfUbxPIxHjtblxey5ZpXtUvOLVXtytDzK0iSO1wye65HGbI8ctYUnc3Gjdp+W4//w1MuEZA8f+xLvhFU7R3+KyaBFKPKrwljdQSWGeABLRNtqGhOFNpUdov2SM5dVYADexKuvPGzOnUtVzW+mjJS+AFKxVOMDZ23qQYg+9hNSYjUfqXB7s2BS1CZtd7S6C2zdMx4GbNrkb2qOEqHnppKaJ3+pe/uMpQb7570Jncf2erm7AXYvdr36Lvxr6efmr6uYPAOSK/2iSrkd854ZhuNgir4cO1/gJYctAcjlpCv1+81Zqd1hx7UdVNGDHaxqGEXK60uELSPvDnRQLcr7SExANUZN9A+FEVSHY3yd895NBFjUaZ4Q/u4lz6SsMoEbQhsM2vzRawIQ271oKbznAnrdMmqQucfJ2ulKaezNOV4ye6l7c9Pez2HvIEyc5FRcTelEmj8U9iJZ9nLZtQ6/GtCW0zXxLbkQ99IZC0CqAAYBaRw+pY/PF3GPz923UBNoXl8wvFcgZReoC9Kzqo9D1BnUdUT7OARGUSQ9X17CHuRA9uPrHhXz6cYEehBovd1DKPFlbTQfJ5odxCdF7rgaD/vhTO8+99l12HZVzJM5M75XDxsdxgkzH0257A04X8gXoV8M1OpRL+6qq0Im3vfe94kg2CTrPu4pSOrYkq4a3vmHDBmNTc3NInZJFo7aBgtCN2Rpf/L3NO+qGRCVbCC/uOzOXZ69NWKbf5eL+ZUpKShQjMAqcqdrQCLul3yd++dlx/MRgK2gqqRzfYPx4z0m6Mi5pLoyFG5mcKW6dlS4/tEvMfvUF4+lQxsPptfa03oh2RfpCPef5jHer8sp1I4Ps2QXphqToM8OWff/EKW08yljpemh2jooPBTZNXH6+/YjzxIx62qmorVlj+HrHiPm25HpRtUYJyMmq9osfBON8g8oVjvkXnyENgFyMTlQJevSrs/npd97JjXM4XXI9ybvmkpOV7+zNMvAkR+TbUXtAQ1hXtrx2LvRV40wgSFyFiaX4ydI6eZquhUrdk0+pFVl/dKifnn/1F4QEf2Cuen7scP707uPyNly6XVwqKbVTbHa7h1aCTEmgI4Jzs7mmqpW9NPze+9446QvGid2B0yQv7n83+svOQR5jK5lnL6UatGTcA2c6sbAqqECuwZsG/PIJ+KynSzXi5fLglsCax4WOHk8a35Q9lMT1Ki4cckIRN6tlNZE4u/+Sz1HV2I8auw4dEpeginKXKqf1AzYTGKrbw6CXXhhRz5bOmRQ6lV1s5xPaxok3ibt7kly1yk3Lu6rHGpZg40/3eFasaTV+NLKWOmNjaG4qxb8IAdNNWNnAE79xixoN+MSqai31UMuMFQPNSCoxLQf39HzeFiZTHef1BRc3EdSOiluU8szlXlu7Zi5YI3MqsXAPm7XqkQnaqlVuFJTme2AgVSNPbcDYeucn6f+oC14ry28JnhVoU5acKGz2tck3iz5UNXLKlZz7qin1FxONtY9/m459ZLa4Uai+pMwAOdN0aNbkW2mKEMKnkhP1Efcayi0F4cgAkWI5lC1x0z05FSQV3rXBS+OMwtwB3eeVLJrGreg6HjS+9U6brDElu1nV1IsAnj6Oc99X9NKvS8itHG1Xj/j8xJtpXDTGp6PPBQl2RvYMHwiL1a6KVfnYY7Wa+eD8q1YcP9PG6lfe/KbQnrVb710U9/k2xpJsAXb2FCWkUrhyT0jcpvREaeWu/ZTAxYMfP3WqgK+yezcNxKUuymf7qnz06LAGehxZft7iypvs/6Xx0pTb6HA0Sn+PS6pbsFNHS8TyWU+Ecvyc7i66KtKF0jqSfKzrlj1VHKZkxI10zO+jDUOr5SPBaM8rLdfkdDGGlcOmgOKnZEyfNlEV2n/PUDsprTLklh5coA8YvfAx6CkcZ7M5LtDSHxUXmtR8y6LHH9sd3qQ36goWAWW0UkOVzUyHje+M0r2uj86BhUpDqhwSSMK3fGohDT1whE9X7iCLR9QVLoIn/IYLsXw+XHwjdAlk2+WKxNCIIwy6CTedL6k1Va7lYlLZAfwiJs8D+5xRoY510Xv/+VhnIGgy3JKrh3OOClc+De3dgcw8NGoh0Ek3F5RySkqPaMtAY8tfY+NUuZdEakUlCcJhhDWn/T75ut8rf6YH2WstTSsiZwK5+jzvUgM74yTi5JXtHfb/oiVgupOiT5gmm8w9bETKlkNRmK/FDVUVGEx5NXlI87IISnanfD65z+ejtzQ//8NonQ7ntrfmMqHAPr+J9qBL8n5dc37Wa2ufxKlwhWXLCShGDcNV/5CUKYdANC8E6vb5ZQ9uvyJYv92ridagxt8Ew2/tfpadCoVW5p+8ug7W6DeOJbvhTxWIcsMHRg4aRjW5j8LovnwXI8Gpw2+Ll+GEUbNH1bzUQDeMw4o8efpJCeBbhAKMbNVJtwBSdRv1Cppo26VEGlgqvXDQCukglXcxMiCOkFw10SXQkNOFfu2GVJJ2IOb+IzCR7iuHBwXB9LbMvYtWnhWv3bbgfP30S4Ow0pt0qNfBjSO42ocuwpfgONxOQ9j6mBbgRcBqmbTi0Doylh45JY6YphwNcKoWC3eTgSefI+X2YJCbmQxvj7Ac0OSozLhyFw/BNTuF/zRyagM8gcpzxDJ5R8BLh31+e3eyxn5nwbgVp8/FjEV32ioZRJx8cLJhtC2dTc/3eahq6mgKvtPOqjstdVuvbhPJ+YimmfjyRfztDhavsVniwYUUG+yLEblMoZdYxX/bUWNv/VVHuDoe1gOX6lTdHraD6TU0CiJO03XHRDtuXyJJ5nC7J94yY6UbpoRKlO1Xo8dEX0//ioYmKBB6loHCEJR5PCwV3obYs+VcVJR+NtlBrTSaLwa80ql22VHGRVOSEYLZPm8gppJn+gWl9G38OwgxIO8g9JwsvTy66u5D2KMp0rGTDplxWuSyEyjIxRWXRYF4hvFyEiTAYwBtscOoGzWcjYEo24UZru+1LGbrHahulOjXaZkU2vVop7G0N5H0UyAwsCvjxOMNLPbjJZRQdvMm6cVEwPN6mubgeqyBGb1oZtAbsW/bKLXkS2Tu3fvAmXuOStimbPPG3lAI3yJx+6DdXujrxpS27KfRZKxG7q3p2cJIJRAL6vN7aM52buFzy1WS3Dx4icmd0/zuVlh+h/stnHPyImVXUjzsBQSb36PsESLUvJVXLPrSxLuTsmiWAtUZW2Czs/CtI3BUemSd0z0tbv/4WfWQ51FC8fndYCxLY/AupfdJWxUyFQ1caA1UgH6hLVBZ/7xooAL086LmyiIXWgMVoF9oC1TWPy8aqAD9vKi5ssiF1kAF6BfaApX1z4sGKkA/L2quLHKhNVAB+oW2QGX986KBCtDPi5ori1xoDfw/bviRJml0ApwAAAAASUVORK5CYII="
+              alt="Copeland" class="company-logo">
           </div>
         </div>
         <div id="loginStatus" class="status" role="status" aria-live="polite"></div>
@@ -966,55 +1664,89 @@
       <div id="entryMessage" class="msg" role="status" aria-live="polite"></div>
     </section>
 
-       <section id="dhlPanel" class="hidden">
-            <div class="dhl-bar">
-                <div class="dhl-user"><span class="dhl-title">🚚 ตรวจสอบพัสดุ DHL</span><span>| User:</span><strong
-                        id="dhlUser"></strong></div><button class="logout" id="dhlLogout">ออก</button>
-            </div>
-            <div id="dhlStatus" class="status"></div>
-            <form id="dhlForm">
-                <div class="dhl-field"><input id="dhlWaybill" placeholder="WAYBILL">
-                    <div id="dhlWaybillErr" class="err">กรุณากรอก WAYBILL</div>
-                </div>
-                <div class="dhl-field"><textarea id="dhlPacking" placeholder="Packing Slip (Invoice)"></textarea></div>
-                <div class="dhl-field"><input id="dhlAttach" type="file" multiple accept="image/*,.pdf">
-                    <div id="dhlAttachErr" class="err">กรุณาแนบไฟล์</div>
-                    <ul id="dhlFiles" class="dhl-files"></ul>
-                </div>
-                <div class="dhl-field"><input id="dhlRemark" list="dhlRemarkList" placeholder="เลือกหรือพิมพ์เพิ่ม"
-                        aria-label="Remark"><datalist id="dhlRemarkList">
-                        <option value="PART">
-                        <option value="Tools Crib">
-                        <option value="SURACHET">
-                        <option value="SAENGJAN">
-                        <option value="BOWORN">
-                        <option value="KANYALUCK">
-                        <option value="SCROLL/ SARINYA">
-                        <option value="WEERAWUT">
-                        <option value="SAMIT">
-                        <option value="CHALERMCHAI">
-                        <option value="THANPISA">
-                        <option value="ITTIRIT">
-                        <option value="WISANU">
-                        <option value="SAKDA">
-                        <option value="Jiravat">
-                    </datalist></div>
-                <div class="dhl-actions"><button id="dhlLatest" type="button" class="dhl-latest">📋 ล่าสุด 10
-                        รายการ</button><button type="reset" class="clear">ล้าง</button><button id="dhlSubmit" class="dhl-submit">Submit /
-                        บันทึก</button></div>
-            </form>
-        </section>
-    <div id="dhlModal" class="dhl-modal" role="dialog" aria-modal="true">
-        <div class="dhl-modalbox">
-            <div class="dhl-modalhead"><strong>📋 รายการล่าสุด 10 รายการ</strong><button id="dhlClose" class="dhl-close"
-                    type="button">✕</button></div>
-            <div class="dhl-search"><input id="dhlSearchInput" type="search" inputmode="numeric" autocomplete="off"
-                    placeholder="ค้นหา WAYBILL..." aria-label="ค้นหา WAYBILL"><button id="dhlSearchBtn"
-                    class="search-btn" type="button">ค้นหา</button><button id="dhlShowLatest" class="dhl-showlatest"
-                    type="button">แสดง 10 รายการล่าสุด</button></div>
-            <div id="dhlResults" class="dhl-results"></div>
+    <section id="dhlPanel" class="hidden">
+      <div class="dhl-bar">
+        <div class="dhl-user"><span class="dhl-title">🚚 ตรวจสอบพัสดุ DHL</span> <span>| User:</span> <strong
+            id="dhlUser"></strong></div><button class="logout" id="dhlLogout">ออก</button>
+      </div>
+      <div id="dhlStatus" class="status"></div>
+      <form id="dhlForm">
+        <div class="dhl-field"><input id="dhlWaybill" placeholder="WAYBILL">
+          <div id="dhlWaybillErr" class="err">กรุณากรอก WAYBILL</div>
         </div>
+        <div class="dhl-field"><textarea id="dhlPacking" placeholder="Packing Slip (Invoice)"></textarea></div>
+        <div class="dhl-field"><input id="dhlAttach" type="file" multiple accept="image/*,.pdf">
+          <div id="dhlAttachErr" class="err">กรุณาแนบไฟล์</div>
+          <ul id="dhlFiles" class="dhl-files"></ul>
+        </div>
+        <div class="dhl-field"><input id="dhlRemark" list="dhlRemarkList" placeholder="เลือกหรือพิมพ์เพิ่ม"
+            aria-label="Remark"><datalist id="dhlRemarkList">
+            <option value="PART">
+            <option value="Tools Crib">
+            <option value="SURACHET">
+            <option value="SAENGJAN">
+            <option value="BOWORN">
+            <option value="KANYALUCK">
+            <option value="SCROLL/ SARINYA">
+            <option value="WEERAWUT">
+            <option value="SAMIT">
+            <option value="CHALERMCHAI">
+            <option value="THANPISA">
+            <option value="ITTIRIT">
+            <option value="WISANU">
+            <option value="SAKDA">
+            <option value="Jiravat">
+          </datalist></div>
+        <div class="dhl-actions"><button id="dhlLatest" type="button" class="dhl-latest">📋 ล่าสุด 10
+            รายการ</button><button type="reset" class="clear">ล้าง</button><button id="dhlSubmit"
+            class="dhl-submit">Submit /
+            บันทึก</button></div>
+      </form>
+    </section>
+    <div id="dhlModal" class="dhl-modal" role="dialog" aria-modal="true">
+      <div class="dhl-modalbox">
+        <div class="dhl-modalhead"><strong>📋 รายการล่าสุด 10 รายการ</strong><button id="dhlClose" class="dhl-close"
+            type="button">✕</button></div>
+        <div class="dhl-search"><input id="dhlSearchInput" type="search" inputmode="numeric" autocomplete="off"
+            placeholder="ค้นหา WAYBILL..." aria-label="ค้นหา WAYBILL"><button id="dhlSearchBtn" class="search-btn"
+            type="button">ค้นหา</button><button id="dhlShowLatest" class="dhl-showlatest" type="button">แสดง 10
+            รายการล่าสุด</button></div>
+        <div id="dhlResults" class="dhl-results"></div>
+      </div>
     </div>
+    <section id="stockPanel" class="hidden">
+      <div class="stock-head">
+        <div class="stock-user">Stator stock | User: <strong id="stockUser"></strong></div><button id="stockLogout"
+          class="logout" type="button">ออก</button>
+      </div>
+      <div class="stock-title">ค้นหา Stator stock</div>
+      <div id="stockStatus" class="status"></div>
+      <form id="stockForm">
+        <div class="stock-search">
+          <div class="field"><input id="stockItem" autocomplete="off" placeholder="ค้นหาจาก Item"></div>
+          <div class="field"><input id="stockLocation" autocomplete="off" placeholder="ค้นหาจาก Location"></div>
+        </div>
+        <div class="stock-actions"><button class="clear" type="reset">ล้างการค้นหา</button><button
+            id="stockSearchButton" class="stock-search-btn" type="submit">ค้นหา</button></div>
+      </form>
+      <div id="stockCount" class="stock-count"></div>
+      <div class="stock-table-wrap">
+        <table class="stock-table">
+          <thead>
+            <tr>
+              <th data-stock-sort="location">Location <span class="stock-sort"></span></th>
+              <th data-stock-sort="item">Item <span class="stock-sort"></span></th>
+              <th data-stock-sort="quantity">จำนวน <span class="stock-sort"></span></th>
+            </tr>
+          </thead>
+          <tbody id="stockTableBody">
+            <tr>
+              <td class="stock-empty" colspan="3">กรอก Item หรือ Location แล้วกดค้นหา</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
   </main>
   <script>
     "use strict";
@@ -1026,7 +1758,7 @@
 
     const loginPanel = document.querySelector("#loginPanel"), entryPanel = document.querySelector("#entryPanel"), loginForm = document.querySelector("#loginForm"), entryForm = document.querySelector("#entryForm"), username = document.querySelector("#username"), password = document.querySelector("#password"), loginButton = document.querySelector("#loginButton"), loginStatus = document.querySelector("#loginStatus"), showPassword = document.querySelector("#showPassword"), signedInUser = document.querySelector("#signedInUser"), logoutButton = document.querySelector("#logoutButton"), item = document.querySelector("#item"), quantity = document.querySelector("#quantity"), locationInput = document.querySelector("#location"), scanStatus = document.querySelector("#scanStatus"), entryMessage = document.querySelector("#entryMessage"), sendButton = document.querySelector("#sendButton");
     const ITEM_PATTERN = /^\d{3}-\d{4}-\d{2}$/;
-    let currentUser = null, scanBuffer = "", scanTimer = 0, scanStarted = 0, isApplying = false, dhlFiles = [], dhlLatestRows = [];
+    let currentUser = null, scanBuffer = "", scanTimer = 0, scanStarted = 0, isApplying = false, dhlFiles = [], dhlLatestRows = [], stockRows = [], stockSortKey = "location", stockSortDirection = 1, stockScanBuffer = "", stockScanTimer = 0, stockScanStarted = 0;
     let selectedApp = "";
     const appCards = [...document.querySelectorAll(".app-card")];
     appCards.forEach(card => card.addEventListener("click", () => { selectedApp = card.dataset.app; appCards.forEach(c => { const active = c === card; c.classList.toggle("selected", active); c.setAttribute("aria-checked", String(active)) }); document.getElementById("appErr").style.display = "none" }));
@@ -1038,6 +1770,7 @@
 
     showPassword.addEventListener("click", () => { const hidden = password.type === "password"; password.type = hidden ? "text" : "password"; showPassword.textContent = hidden ? "🙈" : "👁"; showPassword.setAttribute("aria-label", hidden ? "ซ่อนรหัสผ่าน" : "แสดงรหัสผ่าน"); password.focus() });
 
+    function openStock(user) { currentUser = { username: user.username, displayName: user.displayName || user.username, role: user.role || "User", flowUrl: user.flowUrl || "" }; ENTRY_FLOW_URL = currentUser.flowUrl; sessionStorage.setItem("statorStockUser", JSON.stringify(currentUser)); loginPanel.classList.add("hidden"); entryPanel.classList.add("hidden"); document.querySelector("#dhlPanel")?.classList.add("hidden"); stockPanel.classList.remove("hidden"); stockUser.textContent = currentUser.displayName; password.value = ""; setTimeout(() => stockItem.focus(), 50) }
     function openDHL(user) { currentUser = { username: user.username, displayName: user.displayName || user.username, role: user.role || "User", flowUrl: user.flowUrl || "" }; ENTRY_FLOW_URL = currentUser.flowUrl; sessionStorage.setItem("warehouseApp", JSON.stringify({ ...currentUser, app: "DHLurl" })); loginPanel.classList.add("hidden"); entryPanel.classList.add("hidden"); document.querySelector("#dhlPanel").classList.remove("hidden"); document.querySelector("#dhlUser").textContent = currentUser.displayName; password.value = ""; setTimeout(() => document.querySelector("#dhlWaybill").focus(), 50) }
     function openEntry(user) { currentUser = { username: user.username, displayName: user.displayName || user.username, role: user.role || "User", flowUrl: user.flowUrl || "" }; ENTRY_FLOW_URL = currentUser.flowUrl; sessionStorage.setItem("ck65User", JSON.stringify(currentUser)); signedInUser.textContent = currentUser.displayName; loginPanel.classList.add("hidden"); entryPanel.classList.remove("hidden"); password.value = ""; setTimeout(() => item.focus(), 50) }
     function logout() { currentUser = null; ENTRY_FLOW_URL = ""; sessionStorage.removeItem("ck65User"); entryForm.reset(); entryPanel.classList.add("hidden"); loginPanel.classList.remove("hidden"); clearStatus(loginStatus); username.focus() }
@@ -1047,7 +1780,7 @@
       e.preventDefault(); const u = username.value.trim(), p = password.value; if (!selectedApp) { document.getElementById("appErr").style.display = "block"; return; } setInvalid(username, "#usernameErr", !u); setInvalid(password, "#passwordErr", !p); if (!u || !p) return;
       if (!LOGIN_FLOW_URL) { setStatus(loginStatus, "ยังไม่ได้กำหนด LOGIN_FLOW_URL", "fail"); return }
       loginButton.disabled = true; loginButton.innerHTML = '<span class="spinner"></span>กำลังตรวจสอบ'; setStatus(loginStatus, "กำลังตรวจสอบบัญชีจาก Microsoft Lists...", "checking");
-      try { const response = await fetch(LOGIN_FLOW_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ appName: selectedApp, employeeId: u, password: p }) }); const result = await readJson(response); if (!response.ok) throw new Error(result.message || "HTTP " + response.status); if (result.valid === true || result.authorized === true) { if (!result.flowUrl) throw new Error("Login Flow ไม่ได้ส่ง flowUrl จาก varUrl กลับมา"); setStatus(loginStatus, result.message || "เข้าสู่ระบบสำเร็จ", "ok"); if (selectedApp === "DHLurl") { openDHL({ username: u, displayName: result.displayName || u, role: result.role || "User", flowUrl: result.flowUrl }) } else if (selectedApp === "Statorchecker") { openEntry({ username: u, displayName: result.displayName || u, role: result.role || "User", flowUrl: result.flowUrl }) } else { window.location.assign(result.flowUrl) } } else { password.value = ""; setStatus(loginStatus, result.message || "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง", "fail"); password.focus() } }
+      try { const response = await fetch(LOGIN_FLOW_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ appName: selectedApp, employeeId: u, password: p }) }); const result = await readJson(response); if (!response.ok) throw new Error(result.message || "HTTP " + response.status); if (result.valid === true || result.authorized === true) { if (!result.flowUrl) throw new Error("Login Flow ไม่ได้ส่ง flowUrl จาก varUrl กลับมา"); setStatus(loginStatus, result.message || "เข้าสู่ระบบสำเร็จ", "ok"); if (selectedApp === "DHLurl") { openDHL({ username: u, displayName: result.displayName || u, role: result.role || "User", flowUrl: result.flowUrl }) } else if (selectedApp === "Statorchecker") { openEntry({ username: u, displayName: result.displayName || u, role: result.role || "User", flowUrl: result.flowUrl }) } else if (selectedApp === "Statorstock") { openStock({ username: u, displayName: result.displayName || u, role: result.role || "User", flowUrl: result.flowUrl }) } else { window.location.assign(result.flowUrl) } } else { password.value = ""; setStatus(loginStatus, result.message || "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง", "fail"); password.focus() } }
       catch (err) { setStatus(loginStatus, "เชื่อมต่อระบบลงชื่อเข้าใช้ไม่สำเร็จ: " + err.message, "fail") }
       finally { loginButton.disabled = false; loginButton.textContent = "เข้าสู่ระบบ" }
     });
@@ -1131,11 +1864,11 @@
     function fileBase64(f) { return new Promise((resolve, reject) => { const r = new FileReader(); r.onload = () => resolve(String(r.result).split(",")[1] || ""); r.onerror = reject; r.readAsDataURL(f) }) }
     function renderDhlFiles() { dhlFileList.innerHTML = dhlFiles.map((f, i) => `<li><span>${escapeHtml(f.name)} (${Math.ceil(f.size / 1024)} KB)</span><button class="dhl-remove" type="button" data-remove="${i}">ลบ</button></li>`).join(""); dhlFileList.querySelectorAll("[data-remove]").forEach(b => b.onclick = () => { dhlFiles.splice(Number(b.dataset.remove), 1); renderDhlFiles() }) }
     dhlAttach?.addEventListener("change", () => { dhlFiles.push(...Array.from(dhlAttach.files || [])); dhlAttach.value = ""; document.querySelector("#dhlAttachErr").style.display = "none"; renderDhlFiles() });
-    function displayValue(value){if(value===undefined||value===null)return "";if(Array.isArray(value))return value.map(displayValue).filter(Boolean).join(", ");if(typeof value==="object"){for(const key of ["Value","value","Label","label","Title","title","Name","name","DisplayName","displayName"]){const result=displayValue(value[key]);if(result)return result}if(Array.isArray(value.results))return value.results.map(displayValue).filter(Boolean).join(", ");return ""}return String(value).trim()}
-    function responseValue(r,...keys){for(const k of keys){if(r&&r[k]!==undefined&&r[k]!==null){const value=displayValue(r[k]);if(value)return value}}return ""}
-    function splitPackingSlips(value){return String(value??"").replace(/<br\s*\/?>/gi,"\n").split(/\r?\n/).map(v=>v.trim()).filter(Boolean)}
-    function dhlRows(x){if(Array.isArray(x))return x;if(Array.isArray(x?.data))return x.data;if(Array.isArray(x?.items))return x.items;if(Array.isArray(x?.value))return x.value;if(x?.data&&typeof x.data==="object")return[x.data];return[]}
-    function renderDhlRows(rows){dhlResults.innerHTML=rows.length?rows.map((r,i)=>{const waybill=responseValue(r,"Waybill","waybill","WAYBILL","Title")||"-";const rawPacking=responseValue(r,"PackingSlip","packingSlip","Packing_x0020_Slip_x0020__x0028_","Packing_x0020_Slip","Packing Slip");const slips=splitPackingSlips(rawPacking);const slipRows=(slips.length?slips:["-"]).map((slip,n)=>`<tr><td>${n+1}</td><td>${escapeHtml(slip)}</td></tr>`).join("");const remark=responseValue(r,"Remark","remark")||"-";const verifiedBy=responseValue(r,"VerifiedBy","verifiedBy","VerifiedByName")||"-";const date=responseValue(r,"VerifiedDate","verifiedDate","Modified","Created");return `<div class="dhl-row"><strong>${i+1}. WAYBILL: ${escapeHtml(waybill)}</strong><div class="packing-table-wrap"><table class="packing-table"><thead><tr><th>ลำดับ</th><th>Packing Slip</th></tr></thead><tbody>${slipRows}</tbody></table></div><div class="dhl-info"><div><strong>Remark:</strong> ${escapeHtml(remark)}</div><div><strong>ผู้ตรวจสอบ:</strong> ${escapeHtml(verifiedBy)}</div><div><strong>วันที่:</strong> ${escapeHtml(thaiDate(date))}</div></div></div>`}).join(""):'<div class="dhl-empty">ไม่พบข้อมูล</div>'}
+    function displayValue(value) { if (value === undefined || value === null) return ""; if (Array.isArray(value)) return value.map(displayValue).filter(Boolean).join(", "); if (typeof value === "object") { for (const key of ["Value", "value", "Label", "label", "Title", "title", "Name", "name", "DisplayName", "displayName"]) { const result = displayValue(value[key]); if (result) return result } if (Array.isArray(value.results)) return value.results.map(displayValue).filter(Boolean).join(", "); return "" } return String(value).trim() }
+    function responseValue(r, ...keys) { for (const k of keys) { if (r && r[k] !== undefined && r[k] !== null) { const value = displayValue(r[k]); if (value) return value } } return "" }
+    function splitPackingSlips(value) { return String(value ?? "").replace(/<br\s*\/?>/gi, "\n").split(/\r?\n/).map(v => v.trim()).filter(Boolean) }
+    function dhlRows(x) { if (Array.isArray(x)) return x; if (Array.isArray(x?.data)) return x.data; if (Array.isArray(x?.items)) return x.items; if (Array.isArray(x?.value)) return x.value; if (x?.data && typeof x.data === "object") return [x.data]; return [] }
+    function renderDhlRows(rows) { dhlResults.innerHTML = rows.length ? rows.map((r, i) => { const waybill = responseValue(r, "Waybill", "waybill", "WAYBILL", "Title") || "-"; const rawPacking = responseValue(r, "PackingSlip", "packingSlip", "Packing_x0020_Slip_x0020__x0028_", "Packing_x0020_Slip", "Packing Slip"); const slips = splitPackingSlips(rawPacking); const slipRows = (slips.length ? slips : ["-"]).map((slip, n) => `<tr><td>${n + 1}</td><td>${escapeHtml(slip)}</td></tr>`).join(""); const remark = responseValue(r, "Remark", "remark") || "-"; const verifiedBy = responseValue(r, "VerifiedBy", "verifiedBy", "VerifiedByName") || "-"; const date = responseValue(r, "VerifiedDate", "verifiedDate", "Modified", "Created"); return `<div class="dhl-row"><strong>${i + 1}. WAYBILL: ${escapeHtml(waybill)}</strong><div class="packing-table-wrap"><table class="packing-table"><thead><tr><th>ลำดับ</th><th>Packing Slip</th></tr></thead><tbody>${slipRows}</tbody></table></div><div class="dhl-info"><div><strong>Remark:</strong> ${escapeHtml(remark)}</div><div><strong>ผู้ตรวจสอบ:</strong> ${escapeHtml(verifiedBy)}</div><div><strong>วันที่:</strong> ${escapeHtml(thaiDate(date))}</div></div></div>` }).join("") : '<div class="dhl-empty">ไม่พบข้อมูล</div>' }
     async function dhlRequest(body) { if (!ENTRY_FLOW_URL) throw Error("ไม่พบ flowUrl สำหรับ DHL"); const r = await fetch(ENTRY_FLOW_URL, { method: "POST", headers: { "Content-Type": "application/json", "Accept": "application/json" }, body: JSON.stringify(body) }); const x = await readJson(r); if (!r.ok || x.success === false) throw Error(x.message || "HTTP " + r.status); return x }
     async function loadDhlLatest() { dhlResults.innerHTML = '<div class="dhl-empty">กำลังโหลด...</div>'; try { const x = await dhlRequest({ action: "GetLatest10DHLInspections", top: 10 }); dhlLatestRows = dhlRows(x).slice(0, 10); renderDhlRows(dhlLatestRows) } catch (e) { dhlResults.innerHTML = '<div class="dhl-empty">ตรวจสอบไม่สำเร็จ: ' + escapeHtml(e.message) + '</div>' } }
     document.querySelector("#dhlLatest").onclick = () => { dhlModal.classList.add("show"); loadDhlLatest() }; document.querySelector("#dhlShowLatest").onclick = loadDhlLatest; document.querySelector("#dhlClose").onclick = () => dhlModal.classList.remove("show"); dhlModal.onclick = e => { if (e.target === dhlModal) dhlModal.classList.remove("show") };
@@ -1143,7 +1876,24 @@
     dhlForm.onreset = () => setTimeout(() => { dhlFiles = []; renderDhlFiles(); clearStatus(dhlStatus) }, 0); dhlForm.onsubmit = async e => { e.preventDefault(); const waybill = dhlWaybill.value.trim(), badWay = !waybill, badFiles = !dhlFiles.length; setInvalid(dhlWaybill, "#dhlWaybillErr", badWay); document.querySelector("#dhlAttachErr").style.display = badFiles ? "block" : "none"; if (badWay || badFiles) return; const btn = document.querySelector("#dhlSubmit"); btn.disabled = true; setStatus(dhlStatus, "กำลังบันทึกข้อมูล...", "checking"); try { const attachments = await Promise.all(dhlFiles.map(async f => ({ fileName: f.name, contentType: f.type || "application/octet-stream", contentBytes: await fileBase64(f) }))); const x = await dhlRequest({ action: "CreateDHLInspection", waybill, packingSlip: document.querySelector("#dhlPacking").value.trim(), remark: document.querySelector("#dhlRemark").value.trim(), verifiedBy: currentUser.displayName, verifiedByLogin: currentUser.username, verifiedDate: new Date().toISOString(), attachments }); setStatus(dhlStatus, x.message || "บันทึกเรียบร้อย", "ok"); dhlForm.reset() } catch (err) { setStatus(dhlStatus, "บันทึกไม่สำเร็จ: " + err.message, "fail") } finally { btn.disabled = false } };
     document.querySelector("#dhlLogout").onclick = () => { currentUser = null; ENTRY_FLOW_URL = ""; sessionStorage.removeItem("warehouseApp"); dhlFiles = []; renderDhlFiles(); dhlForm.reset(); dhlPanel.classList.add("hidden"); loginPanel.classList.remove("hidden"); selectedApp = ""; appCards.forEach(c => { c.classList.remove("selected"); c.setAttribute("aria-checked", "false") }); username.focus() };
 
-    window.addEventListener("load", () => { let dhlSaved = null, saved = null; try { dhlSaved = JSON.parse(sessionStorage.getItem("warehouseApp") || "null"); saved = JSON.parse(sessionStorage.getItem("ck65User") || "null") } catch { } if (dhlSaved && dhlSaved.app === "DHLurl" && dhlSaved.username) openDHL(dhlSaved); else if (saved && saved.username) openEntry(saved); else username.focus() });
+
+    const stockPanel = document.querySelector("#stockPanel"), stockForm = document.querySelector("#stockForm"), stockItem = document.querySelector("#stockItem"), stockLocation = document.querySelector("#stockLocation"), stockStatus = document.querySelector("#stockStatus"), stockTableBody = document.querySelector("#stockTableBody"), stockCount = document.querySelector("#stockCount"), stockUser = document.querySelector("#stockUser");
+    function stockDisplayValue(value) { if (value == null) return ""; if (Array.isArray(value)) return value.map(stockDisplayValue).filter(Boolean).join(", "); if (typeof value === "object") { for (const key of ["Value", "value", "Title", "title", "Label", "label", "Name", "name"]) { const result = stockDisplayValue(value[key]); if (result) return result } return "" } return String(value).trim() }
+    function stockValue(row, ...keys) { for (const key of keys) { if (row?.[key] != null) { const value = stockDisplayValue(row[key]); if (value) return value } } return "" }
+    function stockList(x) { if (Array.isArray(x)) return x; if (Array.isArray(x?.data)) return x.data; if (Array.isArray(x?.items)) return x.items; if (Array.isArray(x?.value)) return x.value; if (x?.data && typeof x.data === "object") return [x.data]; return [] }
+    function normalizedStockRows(x) { return stockList(x).map(row => ({ location: stockValue(row, "SLocation", "Location", "location"), item: stockValue(row, "Item", "item", "Title"), quantity: Number(stockValue(row, "OData__x0e08__x0e33__x0e19__x0e27__x0e", "Quantity", "quantity", "Qty", "qty") || 0) })) }
+    function renderStock() { const rows = [...stockRows].sort((a, b) => stockSortKey === "quantity" ? (a.quantity - b.quantity) * stockSortDirection : String(a[stockSortKey]).localeCompare(String(b[stockSortKey]), "th", { numeric: true }) * stockSortDirection); document.querySelectorAll("[data-stock-sort]").forEach(th => th.querySelector(".stock-sort").textContent = th.dataset.stockSort === stockSortKey ? (stockSortDirection === 1 ? "▲" : "▼") : ""); stockCount.textContent = rows.length ? `พบ ${rows.length} รายการ` : ""; stockTableBody.innerHTML = rows.length ? rows.map(r => `<tr><td>${escapeHtml(r.location || "-")}</td><td>${escapeHtml(r.item || "-")}</td><td>${r.quantity.toLocaleString("th-TH")}</td></tr>`).join("") : '<tr><td class="stock-empty" colspan="3">ไม่พบข้อมูล</td></tr>' }
+    function extractStockItem(value) { const t = String(value ?? "").replace(/[\x00-\x1f\x7f-\x9f]/g, " "); let m = t.match(/P\s*(\d{3})[\s-]?(\d{4})[\s-]?(\d{2})/i); if (!m) m = t.match(/(?:^|\D)(\d{3})[\s-]?(\d{4})[\s-]?(\d{2})(?:\D|$)/); return m ? `${m[1]}-${m[2]}-${m[3]}` : "" }
+    function applyStockScan(v) { const parsed = extractStockItem(v); if (!parsed) return false; stockItem.value = parsed; setTimeout(() => stockLocation.focus(), 40); return true }
+    function finishStockScan() { const v = stockScanBuffer; stockScanBuffer = ""; stockScanStarted = 0; if (v) applyStockScan(v) }
+    document.addEventListener("keydown", e => { if (stockPanel.classList.contains("hidden") || e.ctrlKey || e.altKey || e.metaKey) return; const now = Date.now(); if (e.key === "Enter" || e.key === "Tab") { if (stockScanBuffer.length > 3) { e.preventDefault(); clearTimeout(stockScanTimer); stockScanTimer = setTimeout(finishStockScan, 40) } return } if (e.key.length !== 1) return; if (!stockScanStarted || now - stockScanStarted > 180) stockScanBuffer = ""; stockScanStarted = now; stockScanBuffer += e.key; clearTimeout(stockScanTimer); stockScanTimer = setTimeout(finishStockScan, 450) }, true);
+    stockItem.addEventListener("input", () => { const p = extractStockItem(stockItem.value); if (p) stockItem.value = p }); stockItem.addEventListener("paste", e => { const v = e.clipboardData.getData("text"); if (extractStockItem(v)) { e.preventDefault(); applyStockScan(v) } });
+    document.querySelectorAll("[data-stock-sort]").forEach(th => th.onclick = () => { const k = th.dataset.stockSort; if (stockSortKey === k) stockSortDirection *= -1; else { stockSortKey = k; stockSortDirection = 1 } renderStock() });
+    stockForm.onsubmit = async e => { e.preventDefault(); const item = stockItem.value.trim(), location = stockLocation.value.trim(); if (!item && !location) { setStatus(stockStatus, "กรุณากรอก Item หรือ Location อย่างน้อย 1 ช่อง", "fail"); return } const btn = document.querySelector("#stockSearchButton"); btn.disabled = true; setStatus(stockStatus, "กำลังค้นหา...", "checking"); try { const response = await fetch(ENTRY_FLOW_URL, { method: "POST", headers: { "Content-Type": "application/json", "Accept": "application/json" }, body: JSON.stringify({ action: "SearchStatorStock", item, location }) }); const result = await readJson(response); if (!response.ok || result.success === false) throw Error(result.message || "HTTP " + response.status); stockRows = normalizedStockRows(result); renderStock(); setStatus(stockStatus, result.message || "ค้นหาสำเร็จ", "ok") } catch (err) { stockRows = []; renderStock(); setStatus(stockStatus, "ค้นหาไม่สำเร็จ: " + err.message, "fail") } finally { btn.disabled = false } };
+    stockForm.onreset = () => setTimeout(() => { stockRows = []; stockCount.textContent = ""; clearStatus(stockStatus); stockTableBody.innerHTML = '<tr><td class="stock-empty" colspan="3">กรอก Item หรือ Location แล้วกดค้นหา</td></tr>'; stockItem.focus() }, 0);
+    document.querySelector("#stockLogout").onclick = () => { sessionStorage.removeItem("statorStockUser"); stockRows = []; stockPanel.classList.add("hidden"); loginPanel.classList.remove("hidden"); selectedApp = ""; appCards.forEach(c => { c.classList.remove("selected"); c.setAttribute("aria-checked", "false") }); username.focus() };
+
+    window.addEventListener("load", () => { let stockSaved = null, dhlSaved = null, saved = null; try { stockSaved = JSON.parse(sessionStorage.getItem("statorStockUser") || "null"); dhlSaved = JSON.parse(sessionStorage.getItem("warehouseApp") || "null"); saved = JSON.parse(sessionStorage.getItem("ck65User") || "null") } catch { } if (stockSaved?.username) openStock(stockSaved); else if (dhlSaved?.app === "DHLurl" && dhlSaved.username) openDHL(dhlSaved); else if (saved?.username) openEntry(saved); else username.focus() });
   </script>
 </body>
 
