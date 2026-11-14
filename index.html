@@ -90,7 +90,8 @@
       color: #c50f1f
     }
 
-    #entryForm label {
+    #entryForm label,
+    #checkerPartForm label {
       position: absolute;
       width: 1px;
       height: 1px;
@@ -260,7 +261,7 @@
 
     .app-grid {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 8px;
       margin-bottom: 15px
     }
@@ -513,7 +514,7 @@
 
     @media(max-width:520px) {
       .app-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-columns: repeat(4, minmax(0, 1fr));
         gap: 6px
       }
 
@@ -1290,6 +1291,86 @@
       border-radius: 10px
     }
 
+    /* Checker Part */
+    #checkerPartPanel {
+      padding: 0
+    }
+
+    .checker-part-title {
+      margin: 0 0 12px;
+      color: #0f5132;
+      font-size: 18px;
+      font-weight: 800
+    }
+
+    .checker-part-actions {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px
+    }
+
+    .checker-part-submit {
+      background: #107c10;
+      color: #fff
+    }
+
+    .checker-part-view {
+      background: #dbeafe;
+      color: #1e3a8a
+    }
+
+    .checker-part-data {
+      margin-top: 14px;
+      padding: 12px;
+      border: 1px solid #dbe4dc;
+      border-radius: 10px;
+      background: #f8fbf9
+    }
+
+    .checker-part-data-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 8px;
+      color: #0f5132
+    }
+
+    .checker-part-data-close {
+      width: 36px;
+      height: 34px;
+      background: #e2e8f0;
+      color: #1e293b
+    }
+
+    .checker-part-data-list {
+      max-height: 340px;
+      overflow-y: auto
+    }
+
+    .checker-part-record {
+      padding: 9px;
+      border-bottom: 1px solid #dbe4dc;
+      overflow-wrap: anywhere
+    }
+
+    .checker-part-record:last-child {
+      border-bottom: 0
+    }
+
+    .checker-part-record strong {
+      color: #0f5132
+    }
+
+    .checker-part-record-meta {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px 10px;
+      margin-top: 5px;
+      color: #475569;
+      font-size: 12px
+    }
+
     .stock-table {
       width: 100%;
       min-width: 360px;
@@ -1609,6 +1690,16 @@
                   <circle cx="44" cy="39" r="9" fill="none" stroke="#D69E2E" stroke-width="4" />
                   <circle cx="44" cy="39" r="4" fill="none" stroke="#8A5A00" stroke-width="3" />
                 </svg></span><span class="app-name">Stator stock</span></button>
+            <button class="app-card" type="button" role="radio" aria-checked="false" data-app="CheckerPart"><span
+                class="app-check">✓</span><span class="app-icon"><svg viewBox="0 0 64 64" aria-hidden="true">
+                  <path d="M12 9h27l13 13v33H12z" fill="#eaf8ee" stroke="#0f6b3a" stroke-width="4"
+                    stroke-linejoin="round" />
+                  <path d="M39 9v14h13M21 34h21M21 42h15" fill="none" stroke="#0f6b3a" stroke-width="4"
+                    stroke-linecap="round" stroke-linejoin="round" />
+                  <circle cx="45" cy="47" r="11" fill="#107c10" />
+                  <path d="M40 47l4 4 7-8" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                </svg></span><span class="app-name">Checker Part</span></button>
           </div>
           <div id="appErr" class="app-error">กรุณาเลือก App</div>
           <div class="field">
@@ -1747,6 +1838,46 @@
         </table>
       </div>
     </section>
+    <section id="checkerPartPanel" class="hidden">
+      <div class="stock-head">
+        <div class="stock-user">Checker Part | User: <strong id="checkerPartUser"></strong></div>
+        <button id="checkerPartLogout" class="logout" type="button">ออก</button>
+      </div>
+      <h2 class="checker-part-title">ตรวจสอบ Part</h2>
+      <div id="checkerPartStatus" class="status" role="status" aria-live="polite"></div>
+      <form id="checkerPartForm" novalidate>
+        <div class="field">
+          <label for="checkerPartItem">Part <span class="req">*</span></label>
+          <input id="checkerPartItem" type="text" autocomplete="off" autocapitalize="off" spellcheck="false"
+            placeholder="กรอกหรือสแกน Part">
+          <div id="checkerPartItemErr" class="err">Part ต้องเป็นรูปแบบ 000-0000-00</div>
+        </div>
+        <div class="field">
+          <label for="checkerPartQuantity">จำนวน <span class="req">*</span></label>
+          <input id="checkerPartQuantity" type="number" min="0.01" step="0.01" inputmode="decimal"
+            autocomplete="off" placeholder="กรอกจำนวน">
+          <div id="checkerPartQuantityErr" class="err">กรุณากรอกจำนวนที่มากกว่า 0</div>
+        </div>
+        <div class="field">
+          <label for="checkerPartLocation">Location <span class="req">*</span></label>
+          <input id="checkerPartLocation" maxlength="100" autocomplete="off" placeholder="กรอกหรือสแกน Location">
+          <div id="checkerPartLocationErr" class="err">กรุณากรอก Location</div>
+        </div>
+        <div class="checker-part-actions">
+          <button class="clear" type="reset">ล้างข้อมูล</button>
+          <button id="checkerPartViewButton" class="checker-part-view" type="button">ดูข้อมูลล่าสุด</button>
+          <button id="checkerPartSubmit" class="checker-part-submit" type="submit">ตรวจสอบและส่ง</button>
+        </div>
+      </form>
+      <section id="checkerPartDataPanel" class="checker-part-data hidden" aria-label="ข้อมูล Stock Warehouse">
+        <div class="checker-part-data-head">
+          <strong>ข้อมูล Stock Warehouse</strong>
+          <button id="checkerPartDataClose" class="checker-part-data-close" type="button" aria-label="ปิด">✕</button>
+        </div>
+        <div id="checkerPartDataStatus" class="status" role="status" aria-live="polite"></div>
+        <div id="checkerPartDataList" class="checker-part-data-list"></div>
+      </section>
+    </section>
   </main>
   <script>
     "use strict";
@@ -1766,6 +1897,49 @@
     function setInvalid(el, errorId, bad) { el.classList.toggle("bad", bad); document.querySelector(errorId).style.display = bad ? "block" : "none" }
     function setStatus(el, text, type) { el.textContent = text; el.className = "status " + type }
     function clearStatus(el) { el.textContent = ""; el.className = "status" }
+    function isItemNotFound(result) {
+      const message = String(result?.message || "");
+      return result?.valid === false || result?.exists === false || /ไม่พบข้อมูล|ไม่พบ\s*(?:Part|Item)|not found/i.test(message);
+    }
+    let successAudioContext = null;
+    function unlockSuccessSound() {
+      const AudioContextType = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContextType) return;
+      if (!successAudioContext) successAudioContext = new AudioContextType();
+      if (successAudioContext.state === "suspended") {
+        successAudioContext.resume().catch(error => console.warn("เปิดเสียงแจ้งเตือนไม่สำเร็จ:", error));
+      }
+    }
+    function playSuccessSound() {
+      if (!successAudioContext || successAudioContext.state !== "running") return;
+      const oscillator = successAudioContext.createOscillator(), gain = successAudioContext.createGain(), start = successAudioContext.currentTime;
+      oscillator.type = "sine";
+      oscillator.frequency.setValueAtTime(880, start);
+      oscillator.frequency.linearRampToValueAtTime(1174, start + 0.12);
+      gain.gain.setValueAtTime(0.0001, start);
+      gain.gain.exponentialRampToValueAtTime(0.16, start + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.25);
+      oscillator.connect(gain);
+      gain.connect(successAudioContext.destination);
+      oscillator.start(start);
+      oscillator.stop(start + 0.26);
+    }
+    function playWarningSound() {
+      if (!successAudioContext || successAudioContext.state !== "running") return;
+      const oscillator = successAudioContext.createOscillator(), gain = successAudioContext.createGain(), start = successAudioContext.currentTime;
+      oscillator.type = "sine";
+      oscillator.frequency.setValueAtTime(440, start);
+      oscillator.frequency.setValueAtTime(330, start + 0.15);
+      gain.gain.setValueAtTime(0.0001, start);
+      gain.gain.exponentialRampToValueAtTime(0.16, start + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.12);
+      gain.gain.exponentialRampToValueAtTime(0.16, start + 0.17);
+      gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.3);
+      oscillator.connect(gain);
+      gain.connect(successAudioContext.destination);
+      oscillator.start(start);
+      oscillator.stop(start + 0.31);
+    }
     async function readJson(response) { try { return await response.json() } catch { return { valid: false, message: "Power Automate ไม่ได้ส่ง JSON กลับมา" } } }
 
     showPassword.addEventListener("click", () => { const hidden = password.type === "password"; password.type = hidden ? "text" : "password"; showPassword.textContent = hidden ? "🙈" : "👁"; showPassword.setAttribute("aria-label", hidden ? "ซ่อนรหัสผ่าน" : "แสดงรหัสผ่าน"); password.focus() });
@@ -1780,7 +1954,7 @@
       e.preventDefault(); const u = username.value.trim(), p = password.value; if (!selectedApp) { document.getElementById("appErr").style.display = "block"; return; } setInvalid(username, "#usernameErr", !u); setInvalid(password, "#passwordErr", !p); if (!u || !p) return;
       if (!LOGIN_FLOW_URL) { setStatus(loginStatus, "ยังไม่ได้กำหนด LOGIN_FLOW_URL", "fail"); return }
       loginButton.disabled = true; loginButton.innerHTML = '<span class="spinner"></span>กำลังตรวจสอบ'; setStatus(loginStatus, "กำลังตรวจสอบบัญชีจาก Microsoft Lists...", "checking");
-      try { const response = await fetch(LOGIN_FLOW_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ appName: selectedApp, employeeId: u, password: p }) }); const result = await readJson(response); if (!response.ok) throw new Error(result.message || "HTTP " + response.status); if (result.valid === true || result.authorized === true) { if (!result.flowUrl) throw new Error("Login Flow ไม่ได้ส่ง flowUrl จาก varUrl กลับมา"); setStatus(loginStatus, result.message || "เข้าสู่ระบบสำเร็จ", "ok"); if (selectedApp === "DHLurl") { openDHL({ username: u, displayName: result.displayName || u, role: result.role || "User", flowUrl: result.flowUrl }) } else if (selectedApp === "Statorchecker") { openEntry({ username: u, displayName: result.displayName || u, role: result.role || "User", flowUrl: result.flowUrl }) } else if (selectedApp === "Statorstock") { openStock({ username: u, displayName: result.displayName || u, role: result.role || "User", flowUrl: result.flowUrl }) } else { window.location.assign(result.flowUrl) } } else { password.value = ""; setStatus(loginStatus, result.message || "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง", "fail"); password.focus() } }
+      try { const response = await fetch(LOGIN_FLOW_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ appName: selectedApp, employeeId: u, password: p }) }); const result = await readJson(response); if (!response.ok) throw new Error(result.message || "HTTP " + response.status); if (result.valid === true || result.authorized === true) { if (!result.flowUrl) throw new Error("Login Flow ไม่ได้ส่ง flowUrl จาก varUrl กลับมา"); setStatus(loginStatus, result.message || "เข้าสู่ระบบสำเร็จ", "ok"); if (selectedApp === "DHLurl") { openDHL({ username: u, displayName: result.displayName || u, role: result.role || "User", flowUrl: result.flowUrl }) } else if (selectedApp === "Statorchecker") { openEntry({ username: u, displayName: result.displayName || u, role: result.role || "User", flowUrl: result.flowUrl }) } else if (selectedApp === "Statorstock") { openStock({ username: u, displayName: result.displayName || u, role: result.role || "User", flowUrl: result.flowUrl }) } else if (selectedApp === "CheckerPart") { openCheckerPart({ username: u, displayName: result.displayName || u, role: result.role || "User", flowUrl: result.flowUrl }) } else { window.location.assign(result.flowUrl) } } else { password.value = ""; setStatus(loginStatus, result.message || "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง", "fail"); password.focus() } }
       catch (err) { setStatus(loginStatus, "เชื่อมต่อระบบลงชื่อเข้าใช้ไม่สำเร็จ: " + err.message, "fail") }
       finally { loginButton.disabled = false; loginButton.textContent = "เข้าสู่ระบบ" }
     });
@@ -1852,7 +2026,8 @@
       e.preventDefault(); if (!currentUser) { logout(); return } const q = Number(quantity.value), badItem = !ITEM_PATTERN.test(item.value), badQty = !Number.isFinite(q) || q <= 0, badLoc = !locationInput.value.trim(); setInvalid(item, "#itemErr", badItem); setInvalid(quantity, "#quantityErr", badQty); setInvalid(locationInput, "#locationErr", badLoc); if (badItem || badQty || badLoc) return;
       if (!ENTRY_FLOW_URL) { setStatus(scanStatus, "ยังไม่ได้กำหนด ENTRY_FLOW_URL", "fail"); return }
       const payload = { Item: item.value, Quantity: q, Location: locationInput.value.trim(), UserName: currentUser.displayName, UserLogin: currentUser.username, SubmittedAt: new Date().toISOString() }; sendButton.disabled = true; sendButton.innerHTML = '<span class="spinner"></span>กำลังตรวจสอบ'; setStatus(scanStatus, "กำลังตรวจสอบ Item จาก Microsoft Lists...", "checking");
-      try { const response = await fetch(ENTRY_FLOW_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }); const result = await readJson(response); if (!response.ok) throw new Error(result.message || "HTTP " + response.status); if (result.valid === false) { item.classList.add("bad"); setStatus(scanStatus, result.message || "ไม่พบ Item นี้ใน Microsoft Lists", "fail"); item.focus(); return } item.classList.add("valid"); entryMessage.textContent = result.message || "ตรวจสอบและบันทึกข้อมูลเรียบร้อยแล้ว"; entryMessage.className = "msg ok"; entryForm.reset() }
+      unlockSuccessSound();
+      try { const response = await fetch(ENTRY_FLOW_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }); const result = await readJson(response); if (!response.ok) throw new Error(result.message || "HTTP " + response.status); if (isItemNotFound(result)) { playWarningSound(); item.classList.add("bad"); setStatus(scanStatus, result.message || "ไม่พบ Item นี้ใน Microsoft Lists", "fail"); item.focus(); return } if (result.success === false) throw new Error(result.message || "บันทึกข้อมูลไม่สำเร็จ"); playSuccessSound(); item.classList.add("valid"); entryMessage.textContent = result.message || "ตรวจสอบและบันทึกข้อมูลเรียบร้อยแล้ว"; entryMessage.className = "msg ok"; entryForm.reset() }
       catch (err) { setStatus(scanStatus, "เชื่อมต่อ Power Automate ไม่สำเร็จ: " + err.message, "fail") }
       finally { sendButton.disabled = false; sendButton.textContent = "ตรวจสอบและส่ง" }
     });
@@ -1878,6 +2053,182 @@
 
 
     const stockPanel = document.querySelector("#stockPanel"), stockForm = document.querySelector("#stockForm"), stockItem = document.querySelector("#stockItem"), stockLocation = document.querySelector("#stockLocation"), stockStatus = document.querySelector("#stockStatus"), stockTableBody = document.querySelector("#stockTableBody"), stockCount = document.querySelector("#stockCount"), stockUser = document.querySelector("#stockUser");
+    const checkerPartPanel = document.querySelector("#checkerPartPanel"), checkerPartForm = document.querySelector("#checkerPartForm"), checkerPartItem = document.querySelector("#checkerPartItem"), checkerPartQuantity = document.querySelector("#checkerPartQuantity"), checkerPartLocation = document.querySelector("#checkerPartLocation"), checkerPartStatus = document.querySelector("#checkerPartStatus"), checkerPartSubmit = document.querySelector("#checkerPartSubmit"), checkerPartUser = document.querySelector("#checkerPartUser"), checkerPartViewButton = document.querySelector("#checkerPartViewButton"), checkerPartDataPanel = document.querySelector("#checkerPartDataPanel"), checkerPartDataStatus = document.querySelector("#checkerPartDataStatus"), checkerPartDataList = document.querySelector("#checkerPartDataList");
+    let checkerPartScanBuffer = "", checkerPartScanTimer = 0, checkerPartScanStarted = 0, isApplyingCheckerPartScan = false;
+    function openCheckerPart(user) {
+      currentUser = { username: user.username, displayName: user.displayName || user.username, role: user.role || "User", flowUrl: user.flowUrl || "" };
+      ENTRY_FLOW_URL = currentUser.flowUrl;
+      sessionStorage.setItem("checkerPartUser", JSON.stringify(currentUser));
+      loginPanel.classList.add("hidden");
+      entryPanel.classList.add("hidden");
+      document.querySelector("#dhlPanel").classList.add("hidden");
+      stockPanel.classList.add("hidden");
+      checkerPartPanel.classList.remove("hidden");
+      checkerPartUser.textContent = currentUser.displayName;
+      password.value = "";
+      setTimeout(() => checkerPartItem.focus(), 50);
+    }
+    function checkerPartStockRows(value) {
+      if (Array.isArray(value)) return value;
+      if (Array.isArray(value?.value)) return value.value;
+      if (Array.isArray(value?.results)) return value.results;
+      if (value && typeof value === "object") return [value];
+      return [];
+    }
+    function renderCheckerPartStockData(rows) {
+      checkerPartDataList.innerHTML = rows.length ? rows.map(row => {
+        const id = responseValue(row, "ID", "Id", "id") || "-";
+        const part = responseValue(row, "Item", "item", "Title", "Part") || "-";
+        const quantity = responseValue(row, "Quantity", "quantity", "Qty", "qty", "OData__x0e08__x0e33__x0e19__x0e27__x0e") || "-";
+        const location = responseValue(row, "Location", "location", "SLocation", "OData__x0e17__x0e35__x0e48__x0e2d__x0e") || "-";
+        const userLogin = responseValue(row, "UserLogin", "userLogin") || "-";
+        return `<article class="checker-part-record"><strong>${escapeHtml(part)}</strong><div class="checker-part-record-meta"><div>ID: ${escapeHtml(id)}</div><div>จำนวน: ${escapeHtml(quantity)}</div><div>Location: ${escapeHtml(location)}</div><div>UserLogin: ${escapeHtml(userLogin)}</div></div></article>`;
+      }).join("") : '<div class="dhl-empty">ไม่พบข้อมูล</div>';
+    }
+    async function showCheckerPartStockData() {
+      checkerPartDataPanel.classList.remove("hidden");
+      checkerPartDataList.innerHTML = "";
+      setInvalid(checkerPartItem, "#checkerPartItemErr", false);
+      if (!currentUser || !ENTRY_FLOW_URL) {
+        setStatus(checkerPartDataStatus, "ไม่พบ Flow URL สำหรับ Checker Part", "fail");
+        return;
+      }
+      checkerPartViewButton.disabled = true;
+      checkerPartViewButton.textContent = "กำลังโหลด...";
+      setStatus(checkerPartDataStatus, "กำลังค้นหา Stock Warehouse...", "checking");
+      unlockSuccessSound();
+      try {
+        const payload = {
+          action: "GetLatestCheckerPartEntries",
+          Item: "",
+          Quantity: 0,
+          Location: "",
+          UserName: currentUser.displayName,
+          UserLogin: currentUser.username,
+          SubmittedAt: new Date().toISOString()
+        };
+        const response = await fetch(ENTRY_FLOW_URL, { method: "POST", headers: { "Content-Type": "application/json", "Accept": "application/json" }, body: JSON.stringify(payload) });
+        const result = await readJson(response);
+        if (!response.ok || result.success === false) throw new Error(result.message || "HTTP " + response.status);
+        const rows = checkerPartStockRows(result.stockData).slice(0, 10);
+        if (!rows.length) {
+          setStatus(checkerPartDataStatus, "ไม่พบข้อมูลล่าสุดใน Stock Warehouse", "fail");
+          return;
+        }
+        renderCheckerPartStockData(rows);
+        setStatus(checkerPartDataStatus, `พบ ${rows.length} รายการล่าสุด`, "ok");
+      } catch (err) {
+        setStatus(checkerPartDataStatus, "โหลดข้อมูลไม่สำเร็จ: " + err.message, "fail");
+      } finally {
+        checkerPartViewButton.disabled = false;
+        checkerPartViewButton.textContent = "ดูข้อมูลล่าสุด";
+      }
+    }
+    function clearCheckerPartDataPanel() {
+      checkerPartDataPanel.classList.add("hidden");
+      checkerPartDataList.innerHTML = "";
+      clearStatus(checkerPartDataStatus);
+    }
+    checkerPartViewButton.addEventListener("click", showCheckerPartStockData);
+    document.querySelector("#checkerPartDataClose").addEventListener("click", () => checkerPartDataPanel.classList.add("hidden"));
+    function applyCheckerPartScan(value) {
+      const data = extractScan(value);
+      if (!data.item) return false;
+      isApplyingCheckerPartScan = true;
+      checkerPartItem.value = data.item;
+      checkerPartItem.classList.remove("bad", "valid");
+      if (data.quantity) checkerPartQuantity.value = data.quantity;
+      if (checkerPartLocation.value && (/P\s*\d/i.test(checkerPartLocation.value) || clean(checkerPartLocation.value).includes(data.item))) checkerPartLocation.value = "";
+      setStatus(checkerPartStatus, "อ่าน Data Matrix ได้: " + data.item + (data.quantity ? " | จำนวน " + data.quantity : ""), "ok");
+      setTimeout(() => { isApplyingCheckerPartScan = false; (data.quantity ? checkerPartLocation : checkerPartQuantity).focus(); if (!data.quantity) checkerPartQuantity.select() }, 50);
+      return true;
+    }
+    function finishCheckerPartScan() {
+      const value = checkerPartScanBuffer;
+      checkerPartScanBuffer = "";
+      checkerPartScanStarted = 0;
+      if (!value) return false;
+      const valid = applyCheckerPartScan(value);
+      if (!valid && clean(value).length > 7) setStatus(checkerPartStatus, "ไม่พบ Part กรุณาสแกนใหม่", "fail");
+      return valid;
+    }
+    document.addEventListener("keydown", e => { if (checkerPartPanel.classList.contains("hidden") || e.ctrlKey || e.altKey || e.metaKey) return; const now = Date.now(); if (e.key === "Enter" || e.key === "Tab") { if (checkerPartScanBuffer.length > 3) { e.preventDefault(); clearTimeout(checkerPartScanTimer); checkerPartScanTimer = setTimeout(finishCheckerPartScan, 40) } return } if (e.key.length !== 1) return; if (!checkerPartScanStarted || now - checkerPartScanStarted > 180) checkerPartScanBuffer = ""; checkerPartScanStarted = now; checkerPartScanBuffer += e.key; clearTimeout(checkerPartScanTimer); checkerPartScanTimer = setTimeout(finishCheckerPartScan, 450) }, true);
+    [checkerPartItem, checkerPartQuantity, checkerPartLocation].forEach(el => el.addEventListener("input", () => {
+      if (isApplyingCheckerPartScan) return;
+      const raw = el.value;
+      if (/[Pp][\s\d-]{7,}|[Qq]\s*\d+|[)>\x1d\x1e\x1d]/.test(raw)) {
+        clearTimeout(checkerPartScanTimer);
+        checkerPartScanBuffer += raw;
+        if (el !== checkerPartItem) el.value = "";
+        checkerPartScanTimer = setTimeout(finishCheckerPartScan, 500);
+      }
+    }));
+    checkerPartItem.addEventListener("input", () => {
+      checkerPartItem.classList.remove("valid");
+      if (isApplyingCheckerPartScan) return;
+      const current = checkerPartItem.value, data = extractScan(current);
+      if (data.item) { applyCheckerPartScan(current); return }
+      const digits = current.replace(/\D/g, "").slice(0, 9);
+      let formatted = digits.slice(0, 3);
+      if (digits.length > 3) formatted += "-" + digits.slice(3, 7);
+      if (digits.length > 7) formatted += "-" + digits.slice(7);
+      if (!/[A-Za-z,>.\[\]()]/.test(current)) checkerPartItem.value = formatted;
+    });
+    checkerPartItem.addEventListener("paste", e => {
+      const value = e.clipboardData.getData("text");
+      if (extractScan(value).item) { e.preventDefault(); applyCheckerPartScan(value) }
+    });
+    checkerPartForm.addEventListener("reset", () => setTimeout(() => {
+      clearStatus(checkerPartStatus);
+      clearCheckerPartDataPanel();
+      document.querySelectorAll("#checkerPartPanel .err").forEach(el => el.style.display = "none");
+      document.querySelectorAll("#checkerPartPanel input").forEach(el => el.classList.remove("bad", "valid"));
+      checkerPartItem.focus();
+    }, 0));
+    checkerPartForm.addEventListener("submit", async e => {
+      e.preventDefault();
+      if (!currentUser) { document.querySelector("#checkerPartLogout").click(); return }
+      const part = checkerPartItem.value.trim(), q = Number(checkerPartQuantity.value), location = checkerPartLocation.value.trim();
+      const badPart = !ITEM_PATTERN.test(part), badQuantity = !Number.isFinite(q) || q <= 0, badLocation = !location;
+      setInvalid(checkerPartItem, "#checkerPartItemErr", badPart);
+      setInvalid(checkerPartQuantity, "#checkerPartQuantityErr", badQuantity);
+      setInvalid(checkerPartLocation, "#checkerPartLocationErr", badLocation);
+      if (badPart || badQuantity || badLocation) return;
+      if (!ENTRY_FLOW_URL) { setStatus(checkerPartStatus, "ยังไม่ได้กำหนด ENTRY_FLOW_URL", "fail"); return }
+      const payload = { action: "CheckPartExists", Item: part, Quantity: q, Location: location, UserName: currentUser.displayName, UserLogin: currentUser.username, SubmittedAt: new Date().toISOString() };
+      checkerPartSubmit.disabled = true;
+      checkerPartSubmit.innerHTML = '<span class="spinner"></span>กำลังตรวจสอบ';
+      setStatus(checkerPartStatus, "กำลังตรวจสอบ Part จาก Microsoft Lists...", "checking");
+      unlockSuccessSound();
+      try {
+        const response = await fetch(ENTRY_FLOW_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+        const result = await readJson(response);
+        if (!response.ok) throw new Error(result.message || "HTTP " + response.status);
+        if (isItemNotFound(result)) {
+          playWarningSound();
+          checkerPartItem.classList.add("bad");
+          setStatus(checkerPartStatus, result.message || "ไม่พบข้อมูล กรุณาตรวจสอบ Part ก่อนบันทึก", "fail");
+          checkerPartItem.focus();
+          return;
+        }
+        if (result.success === false) throw new Error(result.message || "บันทึกข้อมูลไม่สำเร็จ");
+        if (result.valid !== true && result.success !== true) throw new Error("Flow ต้องส่ง valid:true หรือ success:true เพื่อยืนยันว่าตรวจพบและบันทึกข้อมูลแล้ว");
+        playSuccessSound();
+        setStatus(checkerPartStatus, result.message || "ตรวจสอบและบันทึกข้อมูลเรียบร้อยแล้ว", "ok");
+        checkerPartItem.value = "";
+        checkerPartQuantity.value = "";
+        checkerPartLocation.value = "";
+        document.querySelectorAll("#checkerPartPanel .err").forEach(el => el.style.display = "none");
+        document.querySelectorAll("#checkerPartPanel input").forEach(el => el.classList.remove("bad", "valid"));
+        checkerPartItem.focus();
+      } catch (err) {
+        setStatus(checkerPartStatus, "ตรวจสอบ/บันทึกไม่สำเร็จ: " + err.message, "fail");
+      } finally {
+        checkerPartSubmit.disabled = false;
+        checkerPartSubmit.textContent = "ตรวจสอบและส่ง";
+      }
+    });
+    document.querySelector("#checkerPartLogout").onclick = () => { currentUser = null; ENTRY_FLOW_URL = ""; sessionStorage.removeItem("checkerPartUser"); checkerPartForm.reset(); checkerPartPanel.classList.add("hidden"); loginPanel.classList.remove("hidden"); selectedApp = ""; appCards.forEach(c => { c.classList.remove("selected"); c.setAttribute("aria-checked", "false") }); username.focus() };
     function stockDisplayValue(value) { if (value == null) return ""; if (Array.isArray(value)) return value.map(stockDisplayValue).filter(Boolean).join(", "); if (typeof value === "object") { for (const key of ["Value", "value", "Title", "title", "Label", "label", "Name", "name"]) { const result = stockDisplayValue(value[key]); if (result) return result } return "" } return String(value).trim() }
     function stockValue(row, ...keys) { for (const key of keys) { if (row?.[key] != null) { const value = stockDisplayValue(row[key]); if (value) return value } } return "" }
     function stockList(x) { if (Array.isArray(x)) return x; if (Array.isArray(x?.data)) return x.data; if (Array.isArray(x?.items)) return x.items; if (Array.isArray(x?.value)) return x.value; if (x?.data && typeof x.data === "object") return [x.data]; return [] }
@@ -1893,7 +2244,7 @@
     stockForm.onreset = () => setTimeout(() => { stockRows = []; stockCount.textContent = ""; clearStatus(stockStatus); stockTableBody.innerHTML = '<tr><td class="stock-empty" colspan="3">กรอก Item หรือ Location แล้วกดค้นหา</td></tr>'; stockItem.focus() }, 0);
     document.querySelector("#stockLogout").onclick = () => { sessionStorage.removeItem("statorStockUser"); stockRows = []; stockPanel.classList.add("hidden"); loginPanel.classList.remove("hidden"); selectedApp = ""; appCards.forEach(c => { c.classList.remove("selected"); c.setAttribute("aria-checked", "false") }); username.focus() };
 
-    window.addEventListener("load", () => { let stockSaved = null, dhlSaved = null, saved = null; try { stockSaved = JSON.parse(sessionStorage.getItem("statorStockUser") || "null"); dhlSaved = JSON.parse(sessionStorage.getItem("warehouseApp") || "null"); saved = JSON.parse(sessionStorage.getItem("ck65User") || "null") } catch { } if (stockSaved?.username) openStock(stockSaved); else if (dhlSaved?.app === "DHLurl" && dhlSaved.username) openDHL(dhlSaved); else if (saved?.username) openEntry(saved); else username.focus() });
+    window.addEventListener("load", () => { let stockSaved = null, checkerPartSaved = null, dhlSaved = null, saved = null; try { stockSaved = JSON.parse(sessionStorage.getItem("statorStockUser") || "null"); checkerPartSaved = JSON.parse(sessionStorage.getItem("checkerPartUser") || "null"); dhlSaved = JSON.parse(sessionStorage.getItem("warehouseApp") || "null"); saved = JSON.parse(sessionStorage.getItem("ck65User") || "null") } catch { } if (checkerPartSaved?.username) openCheckerPart(checkerPartSaved); else if (stockSaved?.username) openStock(stockSaved); else if (dhlSaved?.app === "DHLurl" && dhlSaved.username) openDHL(dhlSaved); else if (saved?.username) openEntry(saved); else username.focus() });
   </script>
 </body>
 
