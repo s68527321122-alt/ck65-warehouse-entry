@@ -938,7 +938,7 @@
       }
 
       .app-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 5px;
         margin-bottom: 12px
       }
@@ -1069,7 +1069,7 @@
       }
 
       .app-name {
-        font-size: 8px
+        font-size: 9px
       }
 
       #loginPanel label {
@@ -1311,11 +1311,70 @@
     }
 
     .checker-part-actions button {
-      width: auto;
+      display: grid;
+      place-items: center;
+      width: 36px;
       height: 36px;
-      padding: 0 12px;
+      padding: 0;
       border-radius: 7px;
       font-size: 13px
+    }
+
+    .checker-part-location-row {
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .checker-part-location-row input {
+      flex: 1;
+      min-width: 0
+    }
+
+    .checker-part-location-lock {
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+      width: 36px;
+      height: 36px;
+      padding: 0;
+      border-radius: 7px;
+      background: #e5ebf1;
+      color: #111827;
+      cursor: pointer
+    }
+
+    .checker-part-actions button svg,
+    .checker-part-location-lock svg {
+      width: 18px;
+      height: 18px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round
+    }
+
+    .checker-part-actions .spinner {
+      display: none
+    }
+
+    .checker-part-actions button[aria-busy="true"] svg {
+      display: none
+    }
+
+    .checker-part-actions button[aria-busy="true"] .spinner {
+      display: inline-block
+    }
+
+    .checker-part-location-lock[aria-pressed="false"] .checker-part-lock-on,
+    .checker-part-location-lock[aria-pressed="true"] .checker-part-lock-off {
+      display: none
+    }
+
+    .checker-part-location-lock[aria-pressed="true"] {
+      background: #dcf2e3;
+      color: #0f5132
     }
 
     .checker-part-submit {
@@ -1371,10 +1430,15 @@
 
     .checker-part-stock-table th,
     .checker-part-stock-table td {
-      padding: 9px;
+      padding: 9px 5px;
       border-bottom: 1px solid #dbe4dc;
       text-align: left;
       overflow-wrap: anywhere
+    }
+
+    .checker-part-stock-table th:first-child,
+    .checker-part-stock-table td:first-child {
+      white-space: nowrap
     }
 
     .checker-part-stock-table th {
@@ -1875,13 +1939,27 @@
         </div>
         <div class="field">
           <label for="checkerPartLocation">Location <span class="req">*</span></label>
-          <input id="checkerPartLocation" maxlength="100" autocomplete="off" placeholder="กรอกหรือสแกน Location">
+          <div class="checker-part-location-row">
+            <input id="checkerPartLocation" maxlength="100" autocomplete="off" placeholder="กรอกหรือสแกน Location">
+            <button id="checkerPartLocationLock" class="checker-part-location-lock" type="button" aria-label="ล็อก Location: ปิด" title="ล็อก Location: ปิด" aria-pressed="false">
+              <svg class="checker-part-lock-off" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"></rect><path d="M8 10V7a4 4 0 0 1 7.5-2"></path><circle cx="12" cy="15.5" r="1"></circle></svg>
+              <svg class="checker-part-lock-on" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"></rect><path d="M8 10V7a4 4 0 1 1 8 0v3"></path><circle cx="12" cy="15.5" r="1"></circle></svg>
+            </button>
+          </div>
           <div id="checkerPartLocationErr" class="err">กรุณากรอก Location</div>
         </div>
         <div class="checker-part-actions">
-          <button class="clear" type="reset">ล้างข้อมูล</button>
-          <button id="checkerPartViewButton" class="checker-part-view" type="button">ดูข้อมูลล่าสุด</button>
-          <button id="checkerPartSubmit" class="checker-part-submit" type="submit">ตรวจสอบและส่ง</button>
+          <button class="clear" type="reset" aria-label="ล้างข้อมูล" title="ล้างข้อมูล">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 2.64-6.36L3 8"></path><path d="M3 3v5h5"></path></svg>
+          </button>
+          <button id="checkerPartViewButton" class="checker-part-view" type="button" aria-label="ดูข้อมูลล่าสุด" title="ดูข้อมูลล่าสุด">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>
+            <span class="spinner" aria-hidden="true"></span>
+          </button>
+          <button id="checkerPartSubmit" class="checker-part-submit" type="submit" aria-label="ตรวจสอบและส่ง" title="ตรวจสอบและส่ง">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="m8 12 3 3 5-6"></path></svg>
+            <span class="spinner" aria-hidden="true"></span>
+          </button>
         </div>
       </form>
       <section id="checkerPartDataPanel" class="checker-part-data hidden" aria-label="ข้อมูล Stock Warehouse">
@@ -2068,9 +2146,18 @@
 
 
     const stockPanel = document.querySelector("#stockPanel"), stockForm = document.querySelector("#stockForm"), stockItem = document.querySelector("#stockItem"), stockLocation = document.querySelector("#stockLocation"), stockStatus = document.querySelector("#stockStatus"), stockTableBody = document.querySelector("#stockTableBody"), stockCount = document.querySelector("#stockCount"), stockUser = document.querySelector("#stockUser");
-    const checkerPartPanel = document.querySelector("#checkerPartPanel"), checkerPartForm = document.querySelector("#checkerPartForm"), checkerPartItem = document.querySelector("#checkerPartItem"), checkerPartQuantity = document.querySelector("#checkerPartQuantity"), checkerPartLocation = document.querySelector("#checkerPartLocation"), checkerPartStatus = document.querySelector("#checkerPartStatus"), checkerPartSubmit = document.querySelector("#checkerPartSubmit"), checkerPartUser = document.querySelector("#checkerPartUser"), checkerPartViewButton = document.querySelector("#checkerPartViewButton"), checkerPartDataPanel = document.querySelector("#checkerPartDataPanel"), checkerPartDataStatus = document.querySelector("#checkerPartDataStatus"), checkerPartDataList = document.querySelector("#checkerPartDataList");
+    const checkerPartPanel = document.querySelector("#checkerPartPanel"), checkerPartForm = document.querySelector("#checkerPartForm"), checkerPartItem = document.querySelector("#checkerPartItem"), checkerPartQuantity = document.querySelector("#checkerPartQuantity"), checkerPartLocation = document.querySelector("#checkerPartLocation"), checkerPartLocationLock = document.querySelector("#checkerPartLocationLock"), checkerPartStatus = document.querySelector("#checkerPartStatus"), checkerPartSubmit = document.querySelector("#checkerPartSubmit"), checkerPartUser = document.querySelector("#checkerPartUser"), checkerPartViewButton = document.querySelector("#checkerPartViewButton"), checkerPartDataPanel = document.querySelector("#checkerPartDataPanel"), checkerPartDataStatus = document.querySelector("#checkerPartDataStatus"), checkerPartDataList = document.querySelector("#checkerPartDataList");
     let checkerPartScanBuffer = "", checkerPartScanTimer = 0, checkerPartScanStarted = 0, isApplyingCheckerPartScan = false;
+    let isCheckerPartLocationLocked = false;
+    function updateCheckerPartLocationLock() {
+      const stateLabel = `ล็อก Location: ${isCheckerPartLocationLocked ? "เปิด" : "ปิด"}`;
+      checkerPartLocationLock.setAttribute("aria-pressed", String(isCheckerPartLocationLocked));
+      checkerPartLocationLock.setAttribute("aria-label", stateLabel);
+      checkerPartLocationLock.title = stateLabel;
+    }
     function openCheckerPart(user) {
+      isCheckerPartLocationLocked = false;
+      updateCheckerPartLocationLock();
       currentUser = { username: user.username, displayName: user.displayName || user.username, role: user.role || "User", flowUrl: user.flowUrl || "" };
       ENTRY_FLOW_URL = currentUser.flowUrl;
       sessionStorage.setItem("checkerPartUser", JSON.stringify(currentUser));
@@ -2083,6 +2170,10 @@
       password.value = "";
       setTimeout(() => checkerPartItem.focus(), 50);
     }
+    checkerPartLocationLock.addEventListener("click", () => {
+      isCheckerPartLocationLocked = !isCheckerPartLocationLocked;
+      updateCheckerPartLocationLock();
+    });
     function checkerPartStockRows(value) {
       if (Array.isArray(value)) return value;
       if (Array.isArray(value?.value)) return value.value;
@@ -2091,7 +2182,7 @@
       return [];
     }
     function renderCheckerPartStockData(rows) {
-      checkerPartDataList.innerHTML = rows.length ? `<div class="checker-part-table-wrap"><table class="checker-part-stock-table"><thead><tr><th>Part No.</th><th>จำนวน</th><th>Location</th><th>UserLogin</th></tr></thead><tbody>${rows.map(row => {
+      checkerPartDataList.innerHTML = rows.length ? `<div class="checker-part-table-wrap"><table class="checker-part-stock-table"><colgroup><col style="width:42%"><col style="width:17%"><col style="width:17%"><col style="width:24%"></colgroup><thead><tr><th>Part No.</th><th>จำนวน</th><th>Location</th><th>UserLogin</th></tr></thead><tbody>${rows.map(row => {
         const part = responseValue(row, "Item", "item", "Title", "Part", "PartNo_x002e_") || "-";
         const quantity = responseValue(row, "Quantity", "quantity", "Qty", "qty", "OData__x0e08__x0e33__x0e19__x0e27__x0e") || "-";
         const location = responseValue(row, "Location", "location", "SLocation", "OData__x0e17__x0e35__x0e48__x0e2d__x0e") || "-";
@@ -2108,7 +2199,9 @@
         return;
       }
       checkerPartViewButton.disabled = true;
-      checkerPartViewButton.textContent = "กำลังโหลด...";
+      checkerPartViewButton.setAttribute("aria-busy", "true");
+      checkerPartViewButton.setAttribute("aria-label", "กำลังโหลดข้อมูลล่าสุด");
+      checkerPartViewButton.title = "กำลังโหลดข้อมูลล่าสุด";
       setStatus(checkerPartDataStatus, "กำลังค้นหา Stock Warehouse...", "checking");
       unlockSuccessSound();
       try {
@@ -2135,7 +2228,9 @@
         setStatus(checkerPartDataStatus, "โหลดข้อมูลไม่สำเร็จ: " + err.message, "fail");
       } finally {
         checkerPartViewButton.disabled = false;
-        checkerPartViewButton.textContent = "ดูข้อมูลล่าสุด";
+        checkerPartViewButton.removeAttribute("aria-busy");
+        checkerPartViewButton.setAttribute("aria-label", "ดูข้อมูลล่าสุด");
+        checkerPartViewButton.title = "ดูข้อมูลล่าสุด";
       }
     }
     function clearCheckerPartDataPanel() {
@@ -2211,7 +2306,9 @@
       if (!ENTRY_FLOW_URL) { setStatus(checkerPartStatus, "ยังไม่ได้กำหนด ENTRY_FLOW_URL", "fail"); return }
       const payload = { action: "CheckPartExists", Item: part, Quantity: q, Location: location, UserName: currentUser.displayName, UserLogin: currentUser.username, SubmittedAt: new Date().toISOString() };
       checkerPartSubmit.disabled = true;
-      checkerPartSubmit.innerHTML = '<span class="spinner"></span>กำลังตรวจสอบ';
+      checkerPartSubmit.setAttribute("aria-busy", "true");
+      checkerPartSubmit.setAttribute("aria-label", "กำลังตรวจสอบและส่ง");
+      checkerPartSubmit.title = "กำลังตรวจสอบและส่ง";
       setStatus(checkerPartStatus, "กำลังตรวจสอบ Part จาก Microsoft Lists...", "checking");
       unlockSuccessSound();
       try {
@@ -2231,7 +2328,7 @@
         setStatus(checkerPartStatus, result.message || "ตรวจสอบและบันทึกข้อมูลเรียบร้อยแล้ว", "ok");
         checkerPartItem.value = "";
         checkerPartQuantity.value = "";
-        checkerPartLocation.value = "";
+        if (!isCheckerPartLocationLocked) checkerPartLocation.value = "";
         document.querySelectorAll("#checkerPartPanel .err").forEach(el => el.style.display = "none");
         document.querySelectorAll("#checkerPartPanel input").forEach(el => el.classList.remove("bad", "valid"));
         checkerPartItem.focus();
@@ -2239,7 +2336,9 @@
         setStatus(checkerPartStatus, "ตรวจสอบ/บันทึกไม่สำเร็จ: " + err.message, "fail");
       } finally {
         checkerPartSubmit.disabled = false;
-        checkerPartSubmit.textContent = "ตรวจสอบและส่ง";
+        checkerPartSubmit.removeAttribute("aria-busy");
+        checkerPartSubmit.setAttribute("aria-label", "ตรวจสอบและส่ง");
+        checkerPartSubmit.title = "ตรวจสอบและส่ง";
       }
     });
     document.querySelector("#checkerPartLogout").onclick = () => { currentUser = null; ENTRY_FLOW_URL = ""; sessionStorage.removeItem("checkerPartUser"); checkerPartForm.reset(); checkerPartPanel.classList.add("hidden"); loginPanel.classList.remove("hidden"); selectedApp = ""; appCards.forEach(c => { c.classList.remove("selected"); c.setAttribute("aria-checked", "false") }); username.focus() };
