@@ -1304,9 +1304,18 @@
     }
 
     .checker-part-actions {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
       gap: 8px
+    }
+
+    .checker-part-actions button {
+      width: auto;
+      height: 36px;
+      padding: 0 12px;
+      border-radius: 7px;
+      font-size: 13px
     }
 
     .checker-part-submit {
@@ -1348,27 +1357,33 @@
       overflow-y: auto
     }
 
-    .checker-part-record {
+    .checker-part-table-wrap {
+      width: 100%
+    }
+
+    .checker-part-stock-table {
+      width: 100%;
+      min-width: 0;
+      table-layout: fixed;
+      border-collapse: collapse;
+      font-size: 13px
+    }
+
+    .checker-part-stock-table th,
+    .checker-part-stock-table td {
       padding: 9px;
       border-bottom: 1px solid #dbe4dc;
+      text-align: left;
       overflow-wrap: anywhere
     }
 
-    .checker-part-record:last-child {
-      border-bottom: 0
-    }
-
-    .checker-part-record strong {
+    .checker-part-stock-table th {
+      background: #dcf2e3;
       color: #0f5132
     }
 
-    .checker-part-record-meta {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4px 10px;
-      margin-top: 5px;
-      color: #475569;
-      font-size: 12px
+    .checker-part-stock-table tbody tr:nth-child(even) {
+      background: #f4f9f5
     }
 
     .stock-table {
@@ -2076,14 +2091,13 @@
       return [];
     }
     function renderCheckerPartStockData(rows) {
-      checkerPartDataList.innerHTML = rows.length ? rows.map(row => {
-        const id = responseValue(row, "ID", "Id", "id") || "-";
-        const part = responseValue(row, "Item", "item", "Title", "Part") || "-";
+      checkerPartDataList.innerHTML = rows.length ? `<div class="checker-part-table-wrap"><table class="checker-part-stock-table"><thead><tr><th>Part No.</th><th>จำนวน</th><th>Location</th><th>UserLogin</th></tr></thead><tbody>${rows.map(row => {
+        const part = responseValue(row, "Item", "item", "Title", "Part", "PartNo_x002e_") || "-";
         const quantity = responseValue(row, "Quantity", "quantity", "Qty", "qty", "OData__x0e08__x0e33__x0e19__x0e27__x0e") || "-";
         const location = responseValue(row, "Location", "location", "SLocation", "OData__x0e17__x0e35__x0e48__x0e2d__x0e") || "-";
-        const userLogin = responseValue(row, "UserLogin", "userLogin") || "-";
-        return `<article class="checker-part-record"><strong>${escapeHtml(part)}</strong><div class="checker-part-record-meta"><div>ID: ${escapeHtml(id)}</div><div>จำนวน: ${escapeHtml(quantity)}</div><div>Location: ${escapeHtml(location)}</div><div>UserLogin: ${escapeHtml(userLogin)}</div></div></article>`;
-      }).join("") : '<div class="dhl-empty">ไม่พบข้อมูล</div>';
+        const userLogin = responseValue(row, "UserLogin", "userLogin", "Usernames") || "-";
+        return `<tr><td>${escapeHtml(part)}</td><td>${escapeHtml(quantity)}</td><td>${escapeHtml(location)}</td><td>${escapeHtml(userLogin)}</td></tr>`;
+      }).join("")}</tbody></table></div>` : '<div class="dhl-empty">ไม่พบข้อมูล</div>';
     }
     async function showCheckerPartStockData() {
       checkerPartDataPanel.classList.remove("hidden");
